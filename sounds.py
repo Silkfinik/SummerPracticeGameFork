@@ -16,6 +16,15 @@ def play_sound(sounds, sound_name):
     else:
         print(f"Sound '{sound_name}' not found in loaded sounds.")
 
+def stop_sound(sounds, sound_name):
+    if sound_name in sounds:
+        sounds[sound_name].stop()
+    else:
+        print(f"Sound '{sound_name}' not found in loaded sounds.")
+
 def play_music(music_file):
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play(-1)  # -1 означает зацикливание музыки
+
+def stop_music():
+    pygame.mixer.music.stop()

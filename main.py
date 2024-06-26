@@ -2,7 +2,7 @@ import pygame
 import sys
 import os
 from sprites import Player, load_images
-from sounds import load_sounds, play_sound, play_music
+from sounds import load_sounds, play_sound, stop_sound, play_music, stop_music
 
 # Инициализация Pygame
 pygame.init()
@@ -58,11 +58,13 @@ while running:
         player.move_right()
         play_sound(sounds, 'walk')  # Воспроизведение звука ходьбы
     else:
+        stop_sound(sounds, 'walk')  # Остановка звука ходьбы при отпускании клавиши
         if player.on_ground:
             player.change_animation(f"idle_idle_{player.direction}")
 
     if keys[pygame.K_UP]:
         player.jump()
+        play_sound(sounds, 'jump')  # Воспроизведение звука прыжка
 
     # Обновление всех спрайтов
     all_sprites.update(dt)
