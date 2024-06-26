@@ -12,7 +12,7 @@ pygame.mixer.init()  # Инициализация микшера для звук
 screen_info = pygame.display.Info()
 screen_width = screen_info.current_w
 screen_height = screen_info.current_h
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
 
 pygame.display.set_caption("Sound Integration")
 
@@ -38,7 +38,7 @@ all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 
 # Загрузка изображения фона
-background_image = pygame.image.load('background.jpg')
+background_image = pygame.image.load('img/background1.png')
 background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
 
 # Основной игровой цикл
