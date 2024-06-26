@@ -52,6 +52,15 @@ class Player(pygame.sprite.Sprite):
         if self.rect.right > self.screen_width:
             self.rect.right = self.screen_width
 
+        # Ограничение по вертикали
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > self.screen_height:
+            self.rect.bottom = self.screen_height
+            self.on_ground = True
+
+
+
     def move_left(self):
         self.rect.x -= 5
         if self.on_ground:
