@@ -5,7 +5,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, animations, x, y):
         super().__init__()
         self.animations = animations
-        self.current_animation = "idle"
+        self.current_animation = "idle_idle_right"
         self.images = self.animations[self.current_animation]
         self.current_image = 0
         self.image = self.images[self.current_image]
@@ -18,6 +18,8 @@ class Player(pygame.sprite.Sprite):
 
         self.animation_speed = 0.07  # скорость анимации в секундах на кадр
         self.animation_timer = 0
+
+        self.direction = "right"  # направление игрока
 
     def update(self, dt):
         # Обновление анимации
@@ -36,8 +38,8 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = 600
             self.velocity.y = 0
             self.on_ground = True
-            if self.current_animation == "jump":
-                self.change_animation("idle")
+            if self.current_animation.startswith("jump"):
+                self.change_animation(f"idle_idle_{self.direction}")
 
         # Ограничение по горизонтали
         if self.rect.left < 0:
@@ -48,18 +50,20 @@ class Player(pygame.sprite.Sprite):
     def move_left(self):
         self.rect.x -= 5
         if self.on_ground:
-            self.change_animation("walk_left")
+            self.direction = "left"
+            self.change_animation("walk_walk_left")
 
     def move_right(self):
         self.rect.x += 5
         if self.on_ground:
-            self.change_animation("walk_right")
+            self.direction = "right"
+            self.change_animation("walk_walk_right")
 
     def jump(self):
         if self.on_ground:
             self.velocity.y = self.jump_power
             self.on_ground = False
-            self.change_animation("jump")
+            self.change_animation(f"jump_jump_{self.direction}")
 
     def change_animation(self, animation):
         if self.current_animation != animation:
@@ -75,9 +79,13 @@ def load_images(sprite_dir):
     for animation in os.listdir(sprite_dir):
         animation_path = os.path.join(sprite_dir, animation)
         if os.path.isdir(animation_path):
-            frames = []
-            for img_file in sorted(os.listdir(animation_path)):
-                img_path = os.path.join(animation_path, img_file)
-                frames.append(pygame.image.load(img_path).convert_alpha())
-            animations[animation] = frames
+            for sub_animation in os.listdir(animation_path):
+                sub_animation_path = os.path.join(animation_path, sub_animation)
+                if os.path.isdir(sub_animation_path):
+                    frames = []
+                    for img_file in sorted(os.listdir(sub_animation_path)):
+                        img_path = os.path.join(sub_animation_path, img_file)
+                        frames.append(pygame.image.load(img_path).convert_alpha())
+                    animations[f"{animation}_{sub_animation}"] = frames
+    print("Loaded animations:", animations.keys())  # Временный вывод ключей
     return animations

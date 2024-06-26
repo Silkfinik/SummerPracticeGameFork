@@ -6,8 +6,8 @@ from sprites import Player, load_images
 pygame.init()
 
 # Размеры окна
-screen_width = 800
-screen_height = 600
+screen_width = 1920
+screen_height = 1080
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 pygame.display.set_caption("Анимация спрайтов")
@@ -49,7 +49,7 @@ while running:
         player.move_right()
     else:
         if player.on_ground:
-            player.change_animation("idle")
+            player.change_animation(f"idle_idle_{player.direction}")
 
     if keys[pygame.K_UP]:
         player.jump()
