@@ -1,6 +1,6 @@
 import pygame
 import os
-from sounds import play_sound  # Импортируем функцию play_sound
+from sounds import play_sound
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, animations, sounds, x, y, screen_width, screen_height):
@@ -19,11 +19,9 @@ class Player(pygame.sprite.Sprite):
         self.on_ground = False
         self.screen_width = screen_width
         self.screen_height = screen_height
-
-        self.animation_speed = 0.07  # скорость анимации в секундах на кадр
+        self.animation_speed = 0.07
         self.animation_timer = 0
-
-        self.direction = "right"  # направление игрока
+        self.direction = "right"
 
     def update(self, dt, platforms):
         # Обновление анимации
@@ -41,7 +39,7 @@ class Player(pygame.sprite.Sprite):
         # Проверка столкновения с платформами
         collisions = pygame.sprite.spritecollide(self, platforms, False)
         for platform in collisions:
-            if self.velocity.y > 0:  # Только когда игрок падает
+            if self.velocity.y > 0:
                 self.rect.bottom = platform.rect.top
                 self.velocity.y = 0
                 self.on_ground = True
@@ -58,8 +56,6 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom > self.screen_height:
             self.rect.bottom = self.screen_height
             self.on_ground = True
-
-
 
     def move_left(self):
         self.rect.x -= 5
@@ -78,7 +74,7 @@ class Player(pygame.sprite.Sprite):
             self.velocity.y = self.jump_power
             self.on_ground = False
             self.change_animation(f"jump_jump_{self.direction}")
-            play_sound(self.sounds, 'jump')  # Воспроизведение звука прыжка
+            play_sound(self.sounds, 'jump')
 
     def change_animation(self, animation):
         if self.current_animation != animation:
@@ -107,8 +103,7 @@ def load_images(sprite_dir, scale_factor=0.6):
                             try:
                                 image = pygame.image.load(img_path).convert_alpha()
                                 width, height = image.get_size()
-                                image = pygame.transform.scale(image,
-                                                               (int(width * scale_factor), int(height * scale_factor)))
+                                image = pygame.transform.scale(image, (int(width * scale_factor), int(height * scale_factor)))
                                 frames.append(image)
                             except pygame.error:
                                 pass

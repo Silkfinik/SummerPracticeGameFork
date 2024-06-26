@@ -1,6 +1,5 @@
 import pygame
 
-
 class Platform(pygame.sprite.Sprite):
     def __init__(self, image_path, x, y, width=None, height=None):
         super().__init__()
@@ -13,4 +12,4 @@ class Platform(pygame.sprite.Sprite):
         self.rect.topleft = (x, y)
 
     def update(self):
-        pass  # Здесь можно добавить логику обновления платформы, если потребуется
+        pass
