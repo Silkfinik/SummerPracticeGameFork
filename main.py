@@ -15,7 +15,7 @@ pygame.display.set_caption("Анимация спрайтов")
 # Основной цикл
 clock = pygame.time.Clock()
 
-# Путь к директории с анимациями спрайтов
+# Путь к директории с анимациями спрайтовa
 sprite_dir = 'sprites'
 
 # Загрузка изображений спрайта
@@ -43,15 +43,15 @@ while running:
 
     # Обработка нажатий клавиш
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
+    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
         player.move_left()
-    elif keys[pygame.K_RIGHT]:
+    elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
         player.move_right()
     else:
         if player.on_ground:
             player.change_animation(f"idle_idle_{player.direction}")
 
-    if keys[pygame.K_UP]:
+    if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
         player.jump()
 
     # Обновление всех спрайтов
