@@ -55,7 +55,6 @@ while running:
     if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
         player.jump()
 
-
     # Обновление всех спрайтов
     all_sprites.update(dt)
 
