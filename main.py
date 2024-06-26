@@ -84,6 +84,7 @@ while running:
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
 
+
     # Обновление игрока и платформ
     player.update(dt, platforms)
     platforms.update()
