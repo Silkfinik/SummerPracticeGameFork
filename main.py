@@ -48,6 +48,9 @@ platform_image_path = 'img/platform.png'
 platform_width = 200
 platform_height = 50
 platforms.add(Platform(platform_image_path, 200, screen_height - platform_height, platform_width, platform_height))
+platforms.add(Platform(platform_image_path, 600, 600, platform_width, platform_height))
+# platforms.add(Platform(platform_image_path, 200, 600, platform_width, platform_height))
+# platforms.add(Platform(platform_image_path, 200, screen_height - platform_height, platform_width, platform_height))
 
 # Добавляем платформы в общую группу спрайтов для отрисовки
 all_sprites.add(platforms)
@@ -68,10 +71,10 @@ while running:
     # Обработка нажатий клавиш
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-        player.move_left()
+        player.move_left(platforms)  # Передача platforms
         play_sound(sounds, 'walk')
     elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-        player.move_right()
+        player.move_right(platforms)  # Передача platforms
         play_sound(sounds, 'walk')
     else:
         stop_sound(sounds, 'walk')

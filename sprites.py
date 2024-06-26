@@ -38,12 +38,17 @@ class Player(pygame.sprite.Sprite):
 
         # Проверка столкновения с платформами
         collisions = pygame.sprite.spritecollide(self, platforms, False)
+
         for platform in collisions:
             if self.velocity.y > 0:
+                # Обработка коллизий по вертикали (падение на платформу)
                 self.rect.bottom = platform.rect.top
                 self.velocity.y = 0
                 self.on_ground = True
-
+            elif self.velocity.y < 0:
+                # Обработка коллизий по вертикали (удар головой о платформу)
+                self.rect.top = platform.rect.bottom
+                self.velocity.y = 0
 
         # Ограничение по горизонтали
         if self.rect.left < 0:
@@ -58,14 +63,22 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = self.screen_height
             self.on_ground = True
 
-    def move_left(self):
+    def move_left(self, platforms):
         self.rect.x -= 5
+        collisions = pygame.sprite.spritecollide(self, platforms, False)
+        for platform in collisions:
+            if self.rect.colliderect(platform.rect):
+                self.rect.left = platform.rect.right
         if self.on_ground:
             self.direction = "left"
             self.change_animation("walk_walk_left")
 
-    def move_right(self):
+    def move_right(self, platforms):
         self.rect.x += 5
+        collisions = pygame.sprite.spritecollide(self, platforms, False)
+        for platform in collisions:
+            if self.rect.colliderect(platform.rect):
+                self.rect.right = platform.rect.left
         if self.on_ground:
             self.direction = "right"
             self.change_animation("walk_walk_right")
@@ -84,7 +97,6 @@ class Player(pygame.sprite.Sprite):
             self.current_image = 0
             self.animation_timer = 0
             self.image = self.images[self.current_image]
-
 
 def load_images(sprite_dir, scale_factor=0.6):
     animations = {}
