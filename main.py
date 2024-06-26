@@ -1,28 +1,32 @@
 import pygame
 import sys
 from sprites import Player, load_images
+from sounds import load_sounds, play_sound
 
 # Инициализация Pygame
 pygame.init()
+pygame.mixer.init()  # Инициализация микшера для звуков
 
 # Размеры окна
-screen_width = 1920
-screen_height = 1080
+screen_width = 800
+screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 
-pygame.display.set_caption("Анимация спрайтов")
+pygame.display.set_caption("Sound Integration")
 
 # Основной цикл
 clock = pygame.time.Clock()
 
-# Путь к директории с анимациями спрайтов
+# Путь к директории с анимациями спрайтов и звуками
 sprite_dir = 'sprites'
+sound_dir = 'sounds'
 
-# Загрузка изображений спрайта
+# Загрузка изображений спрайта и звуков
 animations = load_images(sprite_dir)
+sounds = load_sounds(sound_dir)
 
 # Создание игрока
-player = Player(animations, 100, screen_height - 100)
+player = Player(animations, sounds, 100, screen_height - 100)
 
 # Группа спрайтов
 all_sprites = pygame.sprite.Group()
