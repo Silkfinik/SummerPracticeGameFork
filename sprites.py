@@ -44,6 +44,7 @@ class Player(pygame.sprite.Sprite):
                 self.velocity.y = 0
                 self.on_ground = True
 
+
         # Ограничение по горизонтали
         if self.rect.left < 0:
             self.rect.left = 0
