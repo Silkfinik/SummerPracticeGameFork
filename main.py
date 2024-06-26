@@ -6,8 +6,9 @@ from sprites import Player, load_images
 pygame.init()
 
 # Размеры окна
-screen_width = 1920
-screen_height = 1080
+screen_info = pygame.display.Info()
+screen_width = screen_info.current_w
+screen_height = screen_info.current_h
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 pygame.display.set_caption("Анимация спрайтов")
