@@ -1,6 +1,5 @@
 import pygame
 import os
-
 from sounds import play_sound  # Импортируем функцию play_sound
 
 class Player(pygame.sprite.Sprite):
@@ -26,7 +25,7 @@ class Player(pygame.sprite.Sprite):
 
         self.direction = "right"  # направление игрока
 
-    def update(self, dt):
+    def update(self, dt, platforms):
         # Обновление анимации
         self.animation_timer += dt
         if self.animation_timer >= self.animation_speed:
@@ -37,20 +36,30 @@ class Player(pygame.sprite.Sprite):
         # Обновление положения
         self.velocity.y += self.gravity
         self.rect.y += self.velocity.y
+        self.on_ground = False
 
-        # Обработка столкновения с землей
-        if self.rect.bottom >= self.screen_height:  # screen_height передано в init
-            self.rect.bottom = self.screen_height
-            self.velocity.y = 0
-            self.on_ground = True
-            if self.current_animation.startswith("jump"):
-                self.change_animation(f"idle_idle_{self.direction}")
+        # Проверка столкновения с платформами
+        collisions = pygame.sprite.spritecollide(self, platforms, False)
+        for platform in collisions:
+            if self.velocity.y > 0:  # Только когда игрок падает
+                self.rect.bottom = platform.rect.top
+                self.velocity.y = 0
+                self.on_ground = True
 
         # Ограничение по горизонтали
         if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.right > self.screen_width:  # screen_width передано в init
+        if self.rect.right > self.screen_width:
             self.rect.right = self.screen_width
+
+        # Ограничение по вертикали
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > self.screen_height:
+            self.rect.bottom = self.screen_height
+            self.on_ground = True
+
+
 
     def move_left(self):
         self.rect.x -= 5

@@ -3,6 +3,7 @@ import sys
 import os
 from sprites import Player, load_images
 from sounds import load_sounds, play_sound, stop_sound, play_music, stop_music
+from game_platform import Platform  # Импортируем класс Platform
 
 # Инициализация Pygame
 pygame.init()
@@ -23,8 +24,9 @@ clock = pygame.time.Clock()
 sprite_dir = 'sprites'
 sound_dir = 'sounds'
 
-# Загрузка изображений спрайта и звуков
-animations = load_images(sprite_dir)
+# Загрузка изображений спрайта и звуков, с изменением размера изображений
+scale_factor = 0.6  # Измените этот параметр на нужное значение
+animations = load_images(sprite_dir, scale_factor)
 sounds = load_sounds(sound_dir)
 
 # Воспроизведение фоновой музыки
@@ -36,6 +38,14 @@ player = Player(animations, sounds, 100, screen_height - 100, screen_width, scre
 # Группа спрайтов
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
+
+# Создание платформ
+platforms = pygame.sprite.Group()
+platform_image_path = 'img/platform.png'  # Замените на путь к вашему изображению платформы
+platforms.add(Platform(platform_image_path, 200, screen_height - 50, 300, 30))  # Пример платформы
+
+# Добавляем платформы в общую группу спрайтов для отрисовки
+all_sprites.add(platforms)
 
 # Загрузка изображения фона
 background_image = pygame.image.load('img/background1.png')
@@ -68,8 +78,9 @@ while running:
         player.jump()
         play_sound(sounds, 'jump')  # Воспроизведение звука прыжка
 
-    # Обновление всех спрайтов
-    all_sprites.update(dt)
+    # Обновление игрока и платформ
+    player.update(dt, platforms)
+    platforms.update()
 
     # Отрисовка фона
     screen.blit(background_image, (0, 0))
