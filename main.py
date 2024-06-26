@@ -31,7 +31,7 @@ sounds = load_sounds(sound_dir)
 play_music(os.path.join(sound_dir, 'background_music.mp3'))
 
 # Создание игрока
-player = Player(animations, sounds, 100, screen_height - 100)
+player = Player(animations, sounds, 100, screen_height - 100, screen_width, screen_height)
 
 # Группа спрайтов
 all_sprites = pygame.sprite.Group()
@@ -43,6 +43,7 @@ background_image = pygame.transform.scale(background_image, (screen_width, scree
 
 # Основной игровой цикл
 running = True
+velocity = 10
 while running:
     dt = clock.tick(60) / 1000  # Время, прошедшее с последнего кадра (в секундах)
 
