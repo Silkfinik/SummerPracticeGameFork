@@ -1,9 +1,10 @@
 import pygame
 import os
+
 from sounds import play_sound  # Импортируем функцию play_sound
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, animations, sounds, x, y):
+    def __init__(self, animations, sounds, x, y, screen_width, screen_height):
         super().__init__()
         self.animations = animations
         self.sounds = sounds
@@ -17,6 +18,8 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 0.5
         self.jump_power = -10
         self.on_ground = False
+        self.screen_width = screen_width
+        self.screen_height = screen_height
 
         self.animation_speed = 0.07  # скорость анимации в секундах на кадр
         self.animation_timer = 0
@@ -36,8 +39,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.velocity.y
 
         # Обработка столкновения с землей
-        if self.rect.bottom >= 600:  # screen_height должно быть передано или жестко закодировано
-            self.rect.bottom = 600
+        if self.rect.bottom >= self.screen_height:  # screen_height передано в init
+            self.rect.bottom = self.screen_height
             self.velocity.y = 0
             self.on_ground = True
             if self.current_animation.startswith("jump"):
@@ -46,8 +49,8 @@ class Player(pygame.sprite.Sprite):
         # Ограничение по горизонтали
         if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.right > 800:  # screen_width должно быть передано или жестко закодировано
-            self.rect.right = 800
+        if self.rect.right > self.screen_width:  # screen_width передано в init
+            self.rect.right = self.screen_width
 
     def move_left(self):
         self.rect.x -= 5
@@ -77,8 +80,10 @@ class Player(pygame.sprite.Sprite):
             self.image = self.images[self.current_image]
 
 
-def load_images(sprite_dir):
+def load_images(sprite_dir, scale_factor=0.6):
     animations = {}
+    supported_extensions = {".png", ".jpg", ".jpeg", ".bmp", ".gif"}
+
     for animation in os.listdir(sprite_dir):
         animation_path = os.path.join(sprite_dir, animation)
         if os.path.isdir(animation_path):
@@ -88,7 +93,16 @@ def load_images(sprite_dir):
                     frames = []
                     for img_file in sorted(os.listdir(sub_animation_path)):
                         img_path = os.path.join(sub_animation_path, img_file)
-                        frames.append(pygame.image.load(img_path).convert_alpha())
-                    animations[f"{animation}_{sub_animation}"] = frames
-    print("Loaded animations:", animations.keys())  # Временный вывод ключей
+                        _, ext = os.path.splitext(img_file)
+                        if ext.lower() in supported_extensions:
+                            try:
+                                image = pygame.image.load(img_path).convert_alpha()
+                                width, height = image.get_size()
+                                image = pygame.transform.scale(image,
+                                                               (int(width * scale_factor), int(height * scale_factor)))
+                                frames.append(image)
+                            except pygame.error:
+                                pass
+                    if frames:
+                        animations[f"{animation}_{sub_animation}"] = frames
     return animations
