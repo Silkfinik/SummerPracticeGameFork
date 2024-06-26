@@ -9,8 +9,10 @@ pygame.init()
 pygame.mixer.init()  # Инициализация микшера для звуков
 
 # Размеры окна
-screen_width = 800
-screen_height = 600
+screen_info = pygame.display.Info()
+screen_width = screen_info.current_w
+screen_height = screen_info.current_h
+
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 pygame.display.set_caption("Sound Integration")
@@ -51,10 +53,10 @@ while running:
 
     # Обработка нажатий клавиш
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
+    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
         player.move_left()
         play_sound(sounds, 'walk')  # Воспроизведение звука ходьбы
-    elif keys[pygame.K_RIGHT]:
+    elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
         player.move_right()
         play_sound(sounds, 'walk')  # Воспроизведение звука ходьбы
     else:
@@ -62,7 +64,7 @@ while running:
         if player.on_ground:
             player.change_animation(f"idle_idle_{player.direction}")
 
-    if keys[pygame.K_UP]:
+    if keys[pygame.K_UP] or keys[pygame.K_w]:
         player.jump()
         play_sound(sounds, 'jump')  # Воспроизведение звука прыжка
 
