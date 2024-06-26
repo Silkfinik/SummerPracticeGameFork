@@ -1,10 +1,12 @@
 import pygame
 import os
+from sounds import play_sound  # Импортируем функцию play_sound
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, animations, x, y):
+    def __init__(self, animations, sounds, x, y):
         super().__init__()
         self.animations = animations
+        self.sounds = sounds
         self.current_animation = "idle_idle_right"
         self.images = self.animations[self.current_animation]
         self.current_image = 0
@@ -64,6 +66,7 @@ class Player(pygame.sprite.Sprite):
             self.velocity.y = self.jump_power
             self.on_ground = False
             self.change_animation(f"jump_jump_{self.direction}")
+            play_sound(self.sounds, 'jump')  # Воспроизведение звука прыжка
 
     def change_animation(self, animation):
         if self.current_animation != animation:
