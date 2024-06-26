@@ -78,8 +78,9 @@ while running:
         player.jump()
         play_sound(sounds, 'jump')  # Воспроизведение звука прыжка
 
-    # Обновление всех спрайтов
-    all_sprites.update(dt)
+    # Обновление игрока и платформ
+    player.update(dt, platforms)
+    platforms.update()
 
     # Отрисовка фона
     screen.blit(background_image, (0, 0))
