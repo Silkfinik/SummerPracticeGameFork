@@ -12,7 +12,6 @@ pygame.mixer.init()  # Инициализация микшера для звук
 screen_info = pygame.display.Info()
 screen_width = screen_info.current_w
 screen_height = screen_info.current_h
-
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 pygame.display.set_caption("Sound Integration")
@@ -64,7 +63,7 @@ while running:
         if player.on_ground:
             player.change_animation(f"idle_idle_{player.direction}")
 
-    if keys[pygame.K_UP] or keys[pygame.K_w]:
+    if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
         player.jump()
         play_sound(sounds, 'jump')  # Воспроизведение звука прыжка
 
