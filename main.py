@@ -1,7 +1,8 @@
 import pygame
 import sys
+import os
 from sprites import Player, load_images
-from sounds import load_sounds, play_sound
+from sounds import load_sounds, play_sound, play_music
 
 # Инициализация Pygame
 pygame.init()
@@ -24,6 +25,9 @@ sound_dir = 'sounds'
 # Загрузка изображений спрайта и звуков
 animations = load_images(sprite_dir)
 sounds = load_sounds(sound_dir)
+
+# Воспроизведение фоновой музыки
+play_music(os.path.join(sound_dir, 'background_music.mp3'))
 
 # Создание игрока
 player = Player(animations, sounds, 100, screen_height - 100)
@@ -49,8 +53,10 @@ while running:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
         player.move_left()
+        play_sound(sounds, 'walk')  # Воспроизведение звука ходьбы
     elif keys[pygame.K_RIGHT]:
         player.move_right()
+        play_sound(sounds, 'walk')  # Воспроизведение звука ходьбы
     else:
         if player.on_ground:
             player.change_animation(f"idle_idle_{player.direction}")
