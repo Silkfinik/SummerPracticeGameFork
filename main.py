@@ -14,9 +14,7 @@ debug_mode = False  # Отключение отладочного режима
 # Размеры окна
 screen_info = pygame.display.Info()
 screen_width = screen_info.current_w
-
 screen_height = screen_info.current_h - 200
-
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 pygame.display.set_caption("Sound Integration")
@@ -55,11 +53,7 @@ platform_width = 200
 platform_height = 50
 
 width_counter = 0
-# while width_counter + platform_width < screen_width:
-#     platforms.add(Platform(platform_image_path, width_counter - 3, screen_height - platform_height - bar_height, platform_width, platform_height))
-#     width_counter += platform_width
-platforms.add(Platform(platform_image_path, 0, screen_height - platform_height - bar_height, screen_width,platform_height))
-
+platforms.add(Platform(platform_image_path, 0, screen_height - platform_height - bar_height, screen_width, platform_height))
 
 # Добавляем платформы в общую группу спрайтов для отрисовки
 all_sprites.add(platforms)
@@ -96,11 +90,13 @@ while running:
 
     # Обработка нажатий клавиш
     keys = pygame.key.get_pressed()
+    sprinting = keys[pygame.K_LSHIFT]
+
     if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-        player.move_left(platforms)  # Передача platforms
+        player.move_left(platforms, sprinting)  # Передача platforms и sprinting
         play_sound(sounds, 'walk')
     elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-        player.move_right(platforms)  # Передача platforms
+        player.move_right(platforms, sprinting)  # Передача platforms и sprinting
         play_sound(sounds, 'walk')
     else:
         stop_sound(sounds, 'walk')
@@ -125,16 +121,10 @@ while running:
     # Отрисовка всех спрайтов
     all_sprites.draw(screen)
 
-
     draw_hud()
 
     # Отрисовка черной полосы внизу экрана
     pygame.draw.rect(screen, bar_color, (bar_position[0], bar_position[1], screen_width, bar_height))
-
-    # Отрисовка границ прямоугольников в отладочном режиме
-    # if debug_mode:
-    #     for sprite in all_sprites:
-    #         pygame.draw.rect(screen, (255, 0, 0), sprite.rect, 2)
 
     pygame.display.flip()
 
