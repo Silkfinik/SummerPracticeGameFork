@@ -69,9 +69,11 @@ class Player(pygame.sprite.Sprite):
         for platform in collisions:
             if self.rect.colliderect(platform.rect):
                 self.rect.left = platform.rect.right
+        self.direction = "left"
         if self.on_ground:
-            self.direction = "left"
             self.change_animation("walk_walk_left")
+        else:
+            self.change_animation("jump_jump_left")
 
     def move_right(self, platforms):
         self.rect.x += 5
@@ -79,9 +81,11 @@ class Player(pygame.sprite.Sprite):
         for platform in collisions:
             if self.rect.colliderect(platform.rect):
                 self.rect.right = platform.rect.left
+        self.direction = "right"
         if self.on_ground:
-            self.direction = "right"
             self.change_animation("walk_walk_right")
+        else:
+            self.change_animation("jump_jump_right")
 
     def jump(self):
         if self.on_ground:

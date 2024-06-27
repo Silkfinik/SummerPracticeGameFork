@@ -9,12 +9,11 @@ from game_platform import Platform
 pygame.init()
 pygame.mixer.init()
 
-debug_mode = True  # Включение отладочного режима
+debug_mode = False  # Отключение отладочного режима
 
 # Размеры окна
 screen_info = pygame.display.Info()
 screen_width = screen_info.current_w
-
 screen_height = screen_info.current_h - 200
 screen = pygame.display.set_mode((screen_width, screen_height))
 
@@ -33,7 +32,7 @@ animations = load_images(sprite_dir, scale_factor)
 sounds = load_sounds(sound_dir)
 
 # Воспроизведение фоновой музыки
-# play_music(os.path.join(sound_dir, 'background_music.mp3'))
+play_music(os.path.join(sound_dir, 'background_music.mp3'))
 
 # Создание игрока
 player = Player(animations, sounds, 100, screen_height - 100, screen_width, screen_height)
@@ -49,8 +48,6 @@ platform_width = 200
 platform_height = 50
 platforms.add(Platform(platform_image_path, 200, screen_height - platform_height, platform_width, platform_height))
 platforms.add(Platform(platform_image_path, 600, 600, platform_width, platform_height))
-# platforms.add(Platform(platform_image_path, 200, 600, platform_width, platform_height))
-# platforms.add(Platform(platform_image_path, 200, screen_height - platform_height, platform_width, platform_height))
 
 # Добавляем платформы в общую группу спрайтов для отрисовки
 all_sprites.add(platforms)
@@ -59,14 +56,31 @@ all_sprites.add(platforms)
 background_image = pygame.image.load('img/background1.png')
 background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
 
+# Счетчик очков
+score = 0
+font = pygame.font.Font(None, 36)
+
+def draw_hud():
+    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+    screen.blit(score_text, (10, 10))
+
 # Основной игровой цикл
 running = True
+paused = False
 while running:
     dt = clock.tick(60) / 1000
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+            elif event.key == pygame.K_p:
+                paused = not paused
+
+    if paused:
+        continue
 
     # Обработка нажатий клавиш
     keys = pygame.key.get_pressed()
@@ -85,9 +99,6 @@ while running:
         player.jump()
         if player.on_ground:
             play_sound(sounds, 'jump')
-    if keys[pygame.K_ESCAPE]:
-        pygame.quit()
-
 
     # Обновление игрока и платформ
     player.update(dt, platforms)
@@ -99,10 +110,8 @@ while running:
     # Отрисовка всех спрайтов
     all_sprites.draw(screen)
 
-    # Отрисовка границ прямоугольников в отладочном режиме
-    if debug_mode:
-        for sprite in all_sprites:
-            pygame.draw.rect(screen, (255, 0, 0), sprite.rect, 2)
+    # Отрисовка HUD
+    draw_hud()
 
     pygame.display.flip()
 
