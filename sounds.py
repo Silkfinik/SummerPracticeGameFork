@@ -1,4 +1,3 @@
-
 import pygame
 import os
 
@@ -11,9 +10,9 @@ def load_sounds(sound_dir):
             sounds[sound_name] = pygame.mixer.Sound(sound_path)
     return sounds
 
-def play_sound(sounds, sound_name):
+def play_sound(sounds, sound_name, loops=0):
     if sound_name in sounds:
-        sounds[sound_name].play()
+        sounds[sound_name].play(loops=loops)
     else:
         print(f"Sound '{sound_name}' not found in loaded sounds.")
 

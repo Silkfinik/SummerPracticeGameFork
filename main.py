@@ -32,9 +32,12 @@ sprite_dir = 'sprites'
 sound_dir = 'sounds'
 
 # Загрузка изображений спрайта и звуков, с изменением размера изображений
-scale_factor = 0.4
+scale_factor = 5
 animations = load_images(sprite_dir, scale_factor)
 sounds = load_sounds(sound_dir)
+
+# Отладочный вывод для проверки загруженных анимаций
+print("Loaded animations:", animations.keys())
 
 # Воспроизведение фоновой музыки
 play_music(os.path.join(sound_dir, 'background_music.mp3'))
@@ -91,17 +94,20 @@ while running:
     # Обработка нажатий клавиш
     keys = pygame.key.get_pressed()
     sprinting = keys[pygame.K_LSHIFT]
+    is_moving = False
 
     if keys[pygame.K_LEFT] or keys[pygame.K_a]:
         player.move_left(platforms, sprinting)  # Передача platforms и sprinting
-        play_sound(sounds, 'walk')
+        is_moving = True
     elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
         player.move_right(platforms, sprinting)  # Передача platforms и sprinting
-        play_sound(sounds, 'walk')
+        is_moving = True
     else:
-        stop_sound(sounds, 'walk')
+        if player.is_walking:
+            stop_sound(sounds, 'walk')
+            player.is_walking = False
         if player.on_ground:
-            player.change_animation(f"idle_idle_{player.direction}")
+            player.change_animation(f"idle_{player.direction}")
 
     if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
         player.jump(sprinting)  # Передача sprinting
@@ -110,6 +116,10 @@ while running:
 
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
+
+    if is_moving and not player.is_walking:
+        play_sound(sounds, 'walk', -1)
+        player.is_walking = True
 
     # Обновление игрока и платформ
     player.update(dt, platforms)
