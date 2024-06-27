@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.on_ground = False
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.animation_speed = 0.07
+        self.animation_speed = 0.14
         self.animation_timer = 0
         self.direction = "right"
         self.walk_speed = 5

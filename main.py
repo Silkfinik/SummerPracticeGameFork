@@ -76,6 +76,8 @@ def draw_hud():
 # Основной игровой цикл
 running = True
 paused = False
+was_sprinting = False
+
 while running:
     dt = clock.tick(60) / 1000
 
@@ -121,12 +123,20 @@ while running:
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
 
-    if is_moving and not player.is_walking:
+    if is_moving:
         if sprinting:
-            play_sound(sounds, 'sprint', -1)
+            if not was_sprinting:
+                stop_sound(sounds, 'walk')
+                play_sound(sounds, 'sprint', -1)
+                was_sprinting = True
         else:
-            play_sound(sounds, 'walk', -1)
+            if was_sprinting:
+                stop_sound(sounds, 'sprint')
+                play_sound(sounds, 'walk', -1)
+                was_sprinting = False
         player.is_walking = True
+    else:
+        was_sprinting = False
 
     # Обновление игрока и платформ
     player.update(dt, platforms)
