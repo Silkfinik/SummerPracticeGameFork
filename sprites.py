@@ -24,8 +24,9 @@ class Player(pygame.sprite.Sprite):
         self.direction = "right"
         self.walk_speed = 5
         self.sprint_multiplier = 1.7
+        self.jump_multiplier = 1.3  # Множитель высоты прыжка в спринте
         self.normal_animation_speed = 0.07
-        self.sprint_animation_speed = 0.07 / 1.2
+        self.sprint_animation_speed = self.normal_animation_speed / 1.2  # Уменьшение для увеличения скорости анимации
 
     def update(self, dt, platforms):
         # Обновление анимации
@@ -97,9 +98,10 @@ class Player(pygame.sprite.Sprite):
         else:
             self.change_animation("jump_jump_right")
 
-    def jump(self):
+    def jump(self, sprinting=False):
+        jump_power = self.jump_power * self.jump_multiplier if sprinting else self.jump_power
         if self.on_ground:
-            self.velocity.y = self.jump_power
+            self.velocity.y = jump_power
             self.on_ground = False
             self.change_animation(f"jump_jump_{self.direction}")
             play_sound(self.sounds, 'jump')
