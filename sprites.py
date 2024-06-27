@@ -25,7 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.walk_speed = 5
         self.sprint_multiplier = 1.7
         self.jump_multiplier = 1.3  # Множитель высоты прыжка в спринте
-        self.normal_animation_speed = 0.2
+        self.normal_animation_speed = 0.14
         self.sprint_animation_speed = self.normal_animation_speed / 2  # Уменьшение для увеличения скорости анимации
         self.is_walking = False
 

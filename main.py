@@ -77,6 +77,7 @@ def draw_hud():
 running = True
 paused = False
 was_sprinting = False
+was_walking = False
 
 while running:
     dt = clock.tick(60) / 1000
@@ -129,14 +130,19 @@ while running:
                 stop_sound(sounds, 'walk')
                 play_sound(sounds, 'sprint', -1)
                 was_sprinting = True
+            was_walking = False
         else:
             if was_sprinting:
                 stop_sound(sounds, 'sprint')
                 play_sound(sounds, 'walk', -1)
                 was_sprinting = False
+            elif not was_walking:
+                play_sound(sounds, 'walk', -1)
+                was_walking = True
         player.is_walking = True
     else:
         was_sprinting = False
+        was_walking = False
 
     # Обновление игрока и платформ
     player.update(dt, platforms)
