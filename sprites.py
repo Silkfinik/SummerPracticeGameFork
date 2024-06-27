@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.animations = animations
         self.sounds = sounds
-        self.current_animation = "idle_idle_right"
+        self.current_animation = "idle_right"
         self.images = self.animations[self.current_animation]
         self.current_image = 0
         self.image = self.images[self.current_image]
@@ -25,7 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.walk_speed = 5
         self.sprint_multiplier = 1.7
         self.jump_multiplier = 1.3  # Множитель высоты прыжка в спринте
-        self.normal_animation_speed = 0.07
+        self.normal_animation_speed = 0.2
         self.sprint_animation_speed = self.normal_animation_speed / 1.2  # Уменьшение для увеличения скорости анимации
 
     def update(self, dt, platforms):
@@ -79,9 +79,9 @@ class Player(pygame.sprite.Sprite):
                 self.rect.left = platform.rect.right
         self.direction = "left"
         if self.on_ground:
-            self.change_animation("walk_walk_left")
+            self.change_animation("walk_left")
         else:
-            self.change_animation("jump_jump_left")
+            self.change_animation("jump_left")
 
     def move_right(self, platforms, sprinting):
         speed = self.walk_speed * self.sprint_multiplier if sprinting else self.walk_speed
@@ -94,16 +94,16 @@ class Player(pygame.sprite.Sprite):
                 self.rect.right = platform.rect.left
         self.direction = "right"
         if self.on_ground:
-            self.change_animation("walk_walk_right")
+            self.change_animation("walk_right")
         else:
-            self.change_animation("jump_jump_right")
+            self.change_animation("jump_right")
 
     def jump(self, sprinting=False):
         jump_power = self.jump_power * self.jump_multiplier if sprinting else self.jump_power
         if self.on_ground:
             self.velocity.y = jump_power
             self.on_ground = False
-            self.change_animation(f"jump_jump_{self.direction}")
+            self.change_animation(f"jump_{self.direction}")
             play_sound(self.sounds, 'jump')
 
     def change_animation(self, animation):
@@ -114,28 +114,35 @@ class Player(pygame.sprite.Sprite):
             self.animation_timer = 0
             self.image = self.images[self.current_image]
 
-def load_images(sprite_dir, scale_factor=0.4):
+def load_images(sprite_dir, scale_factor=1):
     animations = {}
     supported_extensions = {".png", ".jpg", ".jpeg", ".bmp", ".gif"}
 
-    for animation in os.listdir(sprite_dir):
-        animation_path = os.path.join(sprite_dir, animation)
-        if os.path.isdir(animation_path):
-            for sub_animation in os.listdir(animation_path):
-                sub_animation_path = os.path.join(animation_path, sub_animation)
-                if os.path.isdir(sub_animation_path):
-                    frames = []
-                    for img_file in sorted(os.listdir(sub_animation_path)):
-                        img_path = os.path.join(sub_animation_path, img_file)
-                        _, ext = os.path.splitext(img_file)
-                        if ext.lower() in supported_extensions:
-                            try:
-                                image = pygame.image.load(img_path).convert_alpha()
-                                width, height = image.get_size()
-                                image = pygame.transform.scale(image, (int(width * scale_factor), int(height * scale_factor)))
-                                frames.append(image)
-                            except pygame.error:
-                                pass
-                    if frames:
-                        animations[f"{animation}_{sub_animation}"] = frames
+    def load_frames_from_directory(directory):
+        frames = []
+        for img_file in sorted(os.listdir(directory)):
+            img_path = os.path.join(directory, img_file)
+            _, ext = os.path.splitext(img_file)
+            if ext.lower() in supported_extensions:
+                try:
+                    image = pygame.image.load(img_path).convert_alpha()
+                    width, height = image.get_size()
+                    image = pygame.transform.scale(image, (int(width * scale_factor), int(height * scale_factor)))
+                    frames.append(image)
+                except pygame.error:
+                    pass
+        return frames
+
+    def load_animation_paths(base_dir, prefix=""):
+        for entry in os.listdir(base_dir):
+            entry_path = os.path.join(base_dir, entry)
+            if os.path.isdir(entry_path):
+                new_prefix = f"{prefix}_{entry}" if prefix else entry
+                load_animation_paths(entry_path, new_prefix)
+            else:
+                frames = load_frames_from_directory(base_dir)
+                if frames:
+                    animations[prefix] = frames
+
+    load_animation_paths(sprite_dir)
     return animations

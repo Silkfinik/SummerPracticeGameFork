@@ -32,8 +32,12 @@ sprite_dir = 'sprites'
 sound_dir = 'sounds'
 
 # Загрузка изображений спрайта и звуков, с изменением размера изображений
-scale_factor = 0.4
+scale_factor = 5
 animations = load_images(sprite_dir, scale_factor)
+
+# Отладочный вывод для проверки загруженных анимаций
+print("Loaded animations:", animations.keys())
+
 sounds = load_sounds(sound_dir)
 
 # Воспроизведение фоновой музыки
@@ -101,7 +105,7 @@ while running:
     else:
         stop_sound(sounds, 'walk')
         if player.on_ground:
-            player.change_animation(f"idle_idle_{player.direction}")
+            player.change_animation(f"idle_{player.direction}")
 
     if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
         player.jump(sprinting)  # Передача sprinting
