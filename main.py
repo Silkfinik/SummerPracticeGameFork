@@ -105,6 +105,7 @@ while running:
     else:
         if player.is_walking:
             stop_sound(sounds, 'walk')
+            stop_sound(sounds, 'sprint')
             player.is_walking = False
         if player.on_ground:
             player.change_animation(f"idle_{player.direction}")
@@ -118,7 +119,10 @@ while running:
         pygame.quit()
 
     if is_moving and not player.is_walking:
-        play_sound(sounds, 'walk', -1)
+        if sprinting:
+            play_sound(sounds, 'sprint', -1)
+        else:
+            play_sound(sounds, 'walk', -1)
         player.is_walking = True
 
     # Обновление игрока и платформ
