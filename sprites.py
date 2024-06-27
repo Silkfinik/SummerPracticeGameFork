@@ -19,14 +19,15 @@ class Player(pygame.sprite.Sprite):
         self.on_ground = False
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.animation_speed = 0.07
+        self.animation_speed = 0.13
         self.animation_timer = 0
         self.direction = "right"
         self.walk_speed = 5
         self.sprint_multiplier = 1.7
         self.jump_multiplier = 1.3  # Множитель высоты прыжка в спринте
-        self.normal_animation_speed = 0.2
+        self.normal_animation_speed = 0.13
         self.sprint_animation_speed = self.normal_animation_speed / 1.2  # Уменьшение для увеличения скорости анимации
+        self.is_walking = False
 
     def update(self, dt, platforms):
         # Обновление анимации
