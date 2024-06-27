@@ -52,9 +52,9 @@ all_sprites.add(player)
 
 # Создание пола (застилание платформами)
 platforms = pygame.sprite.Group()
-platform_image_path = 'img/1_normal_grass.png'
-platform_width = 32
-platform_height = 16
+platform_image_path = 'img/platform.png'
+platform_width = 200
+platform_height = 50
 
 width_counter = 0
 platforms.add(Platform(platform_image_path, 0, screen_height - platform_height - bar_height, screen_width, platform_height))
@@ -121,14 +121,16 @@ while running:
         player.reset_animation_speed()
 
     if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
-        player.jump(sprinting)  # Передача sprinting
         if player.on_ground:
+            player.jump(sprinting)  # Передача sprinting
+            stop_sound(sounds, 'walk')
+            stop_sound(sounds, 'sprint')
             play_sound(sounds, 'jump')
 
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
 
-    if is_moving:
+    if is_moving and player.on_ground:
         if sprinting:
             if not was_sprinting:
                 stop_sound(sounds, 'walk')
