@@ -30,6 +30,7 @@ clock = pygame.time.Clock()
 # Путь к директории с анимациями спрайтов и звуками
 sprite_dir = 'sprites'
 sound_dir = 'sounds'
+font_path = 'default_font.ttf'  # Путь к шрифту по умолчанию
 
 # Загрузка изображений спрайта и звуков, с изменением размера изображений
 scale_factor = 5
@@ -51,9 +52,9 @@ all_sprites.add(player)
 
 # Создание пола (застилание платформами)
 platforms = pygame.sprite.Group()
-platform_image_path = 'img/platform.png'
-platform_width = 200
-platform_height = 50
+platform_image_path = 'img/1_normal_grass.png'
+platform_width = 32
+platform_height = 16
 
 width_counter = 0
 platforms.add(Platform(platform_image_path, 0, screen_height - platform_height - bar_height, screen_width, platform_height))
@@ -67,7 +68,10 @@ background_image = pygame.transform.scale(background_image, (screen_width, scree
 
 # Счетчик очков
 score = 0
-font = pygame.font.Font(None, 36)
+
+# Установка шрифта по умолчанию
+font_size = 36
+font = pygame.font.Font(font_path, font_size)
 
 def draw_hud():
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
