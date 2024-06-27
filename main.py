@@ -30,6 +30,7 @@ clock = pygame.time.Clock()
 # Путь к директории с анимациями спрайтов и звуками
 sprite_dir = 'sprites'
 sound_dir = 'sounds'
+font_path = 'default_font.ttf'  # Путь к шрифту по умолчанию
 
 # Загрузка изображений спрайта и звуков, с изменением размера изображений
 scale_factor = 5
@@ -67,7 +68,10 @@ background_image = pygame.transform.scale(background_image, (screen_width, scree
 
 # Счетчик очков
 score = 0
-font = pygame.font.Font(None, 36)
+
+# Установка шрифта по умолчанию
+font_size = 36
+font = pygame.font.Font(font_path, font_size)
 
 def draw_hud():
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
@@ -117,14 +121,16 @@ while running:
         player.reset_animation_speed()
 
     if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
-        player.jump(sprinting)  # Передача sprinting
         if player.on_ground:
+            player.jump(sprinting)  # Передача sprinting
+            stop_sound(sounds, 'walk')
+            stop_sound(sounds, 'sprint')
             play_sound(sounds, 'jump')
 
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
 
-    if is_moving:
+    if is_moving and player.on_ground:
         if sprinting:
             if not was_sprinting:
                 stop_sound(sounds, 'walk')
