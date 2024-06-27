@@ -110,6 +110,9 @@ while running:
         if player.on_ground:
             player.change_animation(f"idle_{player.direction}")
 
+        # Сбрасываем скорость анимации к нормальной, если спринт закончился
+        player.reset_animation_speed()
+
     if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
         player.jump(sprinting)  # Передача sprinting
         if player.on_ground:

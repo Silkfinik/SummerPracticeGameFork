@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.sprint_multiplier = 1.7
         self.jump_multiplier = 1.3  # Множитель высоты прыжка в спринте
         self.normal_animation_speed = 0.2
-        self.sprint_animation_speed = self.normal_animation_speed / 2 # Уменьшение для увеличения скорости анимации
+        self.sprint_animation_speed = self.normal_animation_speed / 2  # Уменьшение для увеличения скорости анимации
         self.is_walking = False
 
     def update(self, dt, platforms):
@@ -120,6 +120,9 @@ class Player(pygame.sprite.Sprite):
             self.current_image = 0
             self.animation_timer = 0
             self.image = self.images[self.current_image]
+
+    def reset_animation_speed(self):
+        self.animation_speed = self.normal_animation_speed
 
 def load_images(sprite_dir, scale_factor=1):
     animations = {}
