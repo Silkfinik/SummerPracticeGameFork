@@ -76,6 +76,9 @@ def draw_hud():
 # Основной игровой цикл
 running = True
 paused = False
+was_sprinting = False
+was_walking = False
+
 while running:
     dt = clock.tick(60) / 1000
 
@@ -110,6 +113,9 @@ while running:
         if player.on_ground:
             player.change_animation(f"idle_{player.direction}")
 
+        # Сбрасываем скорость анимации к нормальной, если спринт закончился
+        player.reset_animation_speed()
+
     if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
         player.jump(sprinting)  # Передача sprinting
         if player.on_ground:
@@ -118,12 +124,25 @@ while running:
     if keys[pygame.K_ESCAPE]:
         pygame.quit()
 
-    if is_moving and not player.is_walking:
+    if is_moving:
         if sprinting:
-            play_sound(sounds, 'sprint', -1)
+            if not was_sprinting:
+                stop_sound(sounds, 'walk')
+                play_sound(sounds, 'sprint', -1)
+                was_sprinting = True
+            was_walking = False
         else:
-            play_sound(sounds, 'walk', -1)
+            if was_sprinting:
+                stop_sound(sounds, 'sprint')
+                play_sound(sounds, 'walk', -1)
+                was_sprinting = False
+            elif not was_walking:
+                play_sound(sounds, 'walk', -1)
+                was_walking = True
         player.is_walking = True
+    else:
+        was_sprinting = False
+        was_walking = False
 
     # Обновление игрока и платформ
     player.update(dt, platforms)
