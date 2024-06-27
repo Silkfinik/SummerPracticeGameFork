@@ -1,7 +1,8 @@
 import pygame
 import sys
 import os
-from sprites import Player, load_images
+from player import Player  # Импортируем класс Player из player.py
+from sprites import load_images  # Импортируем функцию load_images из sprites.py
 from sounds import load_sounds, play_sound, stop_sound, play_music, stop_music
 from game_platform import Platform
 
