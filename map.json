@@ -2,8 +2,8 @@
     "placed_sprites": [
         {
             "sprite": "giant.png",
-            "x": 550,
-            "y": 450,
+            "x": 240,
+            "y": 432,
             "original_size": [
                 48,
                 48
@@ -11,8 +11,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 600,
-            "y": 450,
+            "x": 384,
+            "y": 384,
             "original_size": [
                 48,
                 48
@@ -20,8 +20,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 650,
-            "y": 450,
+            "x": 480,
+            "y": 336,
             "original_size": [
                 48,
                 48
@@ -29,8 +29,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 700,
-            "y": 400,
+            "x": 576,
+            "y": 240,
             "original_size": [
                 48,
                 48
@@ -38,8 +38,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 700,
-            "y": 350,
+            "x": 672,
+            "y": 432,
             "original_size": [
                 48,
                 48
@@ -47,8 +47,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 700,
-            "y": 300,
+            "x": 672,
+            "y": 384,
             "original_size": [
                 48,
                 48
@@ -56,8 +56,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 700,
-            "y": 250,
+            "x": 576,
+            "y": 432,
             "original_size": [
                 48,
                 48
@@ -65,8 +65,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 650,
-            "y": 250,
+            "x": 480,
+            "y": 432,
             "original_size": [
                 48,
                 48
@@ -74,44 +74,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 600,
-            "y": 250,
-            "original_size": [
-                48,
-                48
-            ]
-        },
-        {
-            "sprite": "giant.png",
-            "x": 550,
-            "y": 250,
-            "original_size": [
-                48,
-                48
-            ]
-        },
-        {
-            "sprite": "giant.png",
-            "x": 550,
-            "y": 350,
-            "original_size": [
-                48,
-                48
-            ]
-        },
-        {
-            "sprite": "giant.png",
-            "x": 550,
-            "y": 400,
-            "original_size": [
-                48,
-                48
-            ]
-        },
-        {
-            "sprite": "giant.png",
-            "x": 550,
-            "y": 300,
+            "x": 720,
+            "y": 288,
             "original_size": [
                 48,
                 48
@@ -119,7 +83,7 @@
         }
     ],
     "canvas_size": {
-        "width": 802,
-        "height": 602
+        "width": 762,
+        "height": 488
     }
 }

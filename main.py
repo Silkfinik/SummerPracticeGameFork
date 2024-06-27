@@ -11,7 +11,7 @@ from game_platform import Platform
 pygame.init()
 pygame.mixer.init()
 
-debug_mode = False
+debug_mode = True  # Включаем режим отладки для отображения хитбоксов
 
 # Размеры окна
 screen_info = pygame.display.Info()
@@ -199,6 +199,12 @@ while running:
         screen.blit(background_image, (x, 0))
 
     all_sprites.draw(screen)
+
+    # Отрисовка хитбоксов
+    if debug_mode:
+        for sprite in all_sprites:
+            if hasattr(sprite, 'rect'):
+                pygame.draw.rect(screen, (255, 0, 0), sprite.rect, 1)
 
     draw_hud()
 
