@@ -104,7 +104,7 @@ while running:
             player.change_animation(f"idle_idle_{player.direction}")
 
     if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
-        player.jump()
+        player.jump(sprinting)  # Передача sprinting
         if player.on_ground:
             play_sound(sounds, 'jump')
 
