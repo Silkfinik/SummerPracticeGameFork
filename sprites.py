@@ -102,7 +102,7 @@ class Player(pygame.sprite.Sprite):
             self.animation_timer = 0
             self.image = self.images[self.current_image]
 
-def load_images(sprite_dir, scale_factor=0.6):
+def load_images(sprite_dir, scale_factor=0.4):
     animations = {}
     supported_extensions = {".png", ".jpg", ".jpeg", ".bmp", ".gif"}
 
