@@ -1,8 +1,9 @@
 import pygame
 import sys
 import os
-from player import Player  # Импортируем класс Player из player.py
-from sprites import load_images  # Импортируем функцию load_images из sprites.py
+import json
+from player import Player
+from sprites import load_images
 from sounds import load_sounds, play_sound, stop_sound, play_music, stop_music
 from game_platform import Platform
 
@@ -10,7 +11,7 @@ from game_platform import Platform
 pygame.init()
 pygame.mixer.init()
 
-debug_mode = False  # Отключение отладочного режима
+debug_mode = True  # Включаем режим отладки для отображения хитбоксов
 
 # Размеры окна
 screen_info = pygame.display.Info()
@@ -21,9 +22,9 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Sound Integration")
 
 # создание черной полосы внизу экрана
-bar_height = 15  # Высота черной полосы
-bar_color = (0, 0, 0)  # Черный цвет
-bar_position = (0, screen_height - bar_height)  # Позиция черной полосы
+bar_height = 15
+bar_color = (0, 0, 0)
+bar_position = (0, screen_height - bar_height)
 
 # Основной цикл
 clock = pygame.time.Clock()
@@ -31,17 +32,15 @@ clock = pygame.time.Clock()
 # Путь к директории с анимациями спрайтов и звуками
 sprite_dir = 'sprites'
 sound_dir = 'sounds'
-font_path = 'default_font.ttf'  # Путь к шрифту по умолчанию
+font_path = 'default_font.ttf'
 
 # Загрузка изображений спрайта и звуков, с изменением размера изображений
 scale_factor = 5
 animations = load_images(sprite_dir, scale_factor)
 sounds = load_sounds(sound_dir)
 
-# Отладочный вывод для проверки загруженных анимаций
 print("Loaded animations:", animations.keys())
 
-# Воспроизведение фоновой музыки
 play_music(os.path.join(sound_dir, 'background_music.mp3'))
 
 # Создание игрока
@@ -59,13 +58,22 @@ platform_height = 50
 
 width_counter = 0
 platforms.add(Platform(platform_image_path, 0, screen_height - platform_height - bar_height, screen_width, platform_height))
-
-# Добавляем платформы в общую группу спрайтов для отрисовки
 all_sprites.add(platforms)
 
 # Загрузка изображения фона
-background_image = pygame.image.load('img/background1.png')
-background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
+def load_and_scale_background(image_path, screen_width, screen_height):
+    image = pygame.image.load(image_path).convert_alpha()
+    image_width, image_height = image.get_size()
+
+    # Вычисляем новый размер для масштабирования по высоте
+    scale_factor = screen_height / image_height
+    new_width = int(image_width * scale_factor)
+    scaled_image = pygame.transform.scale(image, (new_width, screen_height))
+
+    return scaled_image
+
+background_image_path = 'img/sky_blue.png'
+background_image = load_and_scale_background(background_image_path, screen_width, screen_height)
 
 # Счетчик очков
 score = 0
@@ -78,11 +86,47 @@ def draw_hud():
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
     screen.blit(score_text, (10, 10))
 
+# Класс для платформ с масштабированием
+class ScaledPlatform(Platform):
+    def __init__(self, image_path, x, y, original_size, canvas_size, screen_height):
+        super().__init__(image_path, x, y)
+        image = pygame.image.load(image_path).convert_alpha()
+        original_width, original_height = original_size
+        canvas_width, canvas_height = canvas_size
+
+        # Масштабирование платформы по высоте экрана
+        scale_factor = screen_height / canvas_height
+        new_width = int(original_width * scale_factor)
+        new_height = int(original_height * scale_factor)
+        self.image = pygame.transform.scale(image, (new_width, new_height))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (int(x * scale_factor), int(y * scale_factor))
+
+# Функция для загрузки и размещения платформ из .json файла
+def load_sprite_positions(json_file, platforms_group, screen_height):
+    with open(json_file, 'r') as f:
+        data = json.load(f)
+    placed_sprites = data["placed_sprites"]
+    canvas_size = data["canvas_size"]
+    for item in placed_sprites:
+        sprite_name = item['sprite']
+        x, y = item['x'], item['y']
+        original_size = item['original_size']
+        sprite_image_path = os.path.join(sprite_dir, sprite_name)
+        # Создание объекта ScaledPlatform
+        platform = ScaledPlatform(sprite_image_path, x, y, original_size, (canvas_size["width"], canvas_size["height"]), screen_height)
+        platforms_group.add(platform)
+
 # Основной игровой цикл
 running = True
 paused = False
 was_sprinting = False
 was_walking = False
+
+# Загрузка карты из json файла
+json_file_path = 'map.json'  # Укажите правильный путь к вашему json файлу
+load_sprite_positions(json_file_path, platforms, screen_height)
+all_sprites.add(platforms)
 
 while running:
     dt = clock.tick(60) / 1000
@@ -99,16 +143,15 @@ while running:
     if paused:
         continue
 
-    # Обработка нажатий клавиш
     keys = pygame.key.get_pressed()
     sprinting = keys[pygame.K_LSHIFT]
     is_moving = False
 
     if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-        player.move_left(platforms, sprinting)  # Передача platforms и sprinting
+        player.move_left(platforms, sprinting)
         is_moving = True
     elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-        player.move_right(platforms, sprinting)  # Передача platforms и sprinting
+        player.move_right(platforms, sprinting)
         is_moving = True
     else:
         if player.is_walking:
@@ -117,13 +160,11 @@ while running:
             player.is_walking = False
         if player.on_ground:
             player.change_animation(f"idle_{player.direction}")
-
-        # Сбрасываем скорость анимации к нормальной, если спринт закончился
         player.reset_animation_speed()
 
     if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
         if player.on_ground:
-            player.jump(sprinting)  # Передача sprinting
+            player.jump(sprinting)
             stop_sound(sounds, 'walk')
             stop_sound(sounds, 'sprint')
             play_sound(sounds, 'jump')
@@ -151,19 +192,22 @@ while running:
         was_sprinting = False
         was_walking = False
 
-    # Обновление игрока и платформ
     player.update(dt, platforms)
     platforms.update()
 
-    # Отрисовка фона
-    screen.blit(background_image, (0, 0))
+    for x in range(0, screen_width, background_image.get_width()):
+        screen.blit(background_image, (x, 0))
 
-    # Отрисовка всех спрайтов
     all_sprites.draw(screen)
+
+    # Отрисовка хитбоксов
+    if debug_mode:
+        for sprite in all_sprites:
+            if hasattr(sprite, 'rect'):
+                pygame.draw.rect(screen, (255, 0, 0), sprite.rect, 1)
 
     draw_hud()
 
-    # Отрисовка черной полосы внизу экрана
     pygame.draw.rect(screen, bar_color, (bar_position[0], bar_position[1], screen_width, bar_height))
 
     pygame.display.flip()
