@@ -78,9 +78,16 @@ def draw_hud():
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
     screen.blit(score_text, (10, 10))
 
+def draw_menu():
+    menu_text = font.render("Menu", True, (255, 255, 255))
+    quit_text = font.render("Press Q to Quit", True, (255, 255, 255))
+    screen.blit(menu_text, (screen_width // 2 - menu_text.get_width() // 2, screen_height // 2 - menu_text.get_height() // 2 - 40))
+    screen.blit(quit_text, (screen_width // 2 - quit_text.get_width() // 2, screen_height // 2 - quit_text.get_height() // 2))
+
 # Основной игровой цикл
 running = True
 paused = False
+menu_active = False
 was_sprinting = False
 was_walking = False
 
@@ -92,11 +99,15 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
+                menu_active = not menu_active
+            elif event.key == pygame.K_q and menu_active:
                 running = False
-            elif event.key == pygame.K_p:
-                paused = not paused
 
-    if paused:
+    if menu_active:
+        # Отрисовка меню
+        screen.fill((0, 0, 0))  # Заливка экрана черным цветом
+        draw_menu()
+        pygame.display.flip()
         continue
 
     # Обработка нажатий клавиш
@@ -127,9 +138,6 @@ while running:
             stop_sound(sounds, 'walk')
             stop_sound(sounds, 'sprint')
             play_sound(sounds, 'jump')
-
-    if keys[pygame.K_ESCAPE]:
-        pygame.quit()
 
     if is_moving and player.on_ground:
         if sprinting:
