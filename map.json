@@ -2,7 +2,7 @@
     "placed_sprites": [
         {
             "sprite": "giant.png",
-            "x": 240,
+            "x": 0,
             "y": 432,
             "original_size": [
                 48,
@@ -11,7 +11,16 @@
         },
         {
             "sprite": "giant.png",
-            "x": 384,
+            "x": 240,
+            "y": 384,
+            "original_size": [
+                48,
+                48
+            ]
+        },
+        {
+            "sprite": "giant.png",
+            "x": 336,
             "y": 384,
             "original_size": [
                 48,
@@ -29,8 +38,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 576,
-            "y": 240,
+            "x": 528,
+            "y": 144,
             "original_size": [
                 48,
                 48
@@ -38,8 +47,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 672,
-            "y": 432,
+            "x": 624,
+            "y": 192,
             "original_size": [
                 48,
                 48
@@ -47,35 +56,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 672,
-            "y": 384,
-            "original_size": [
-                48,
-                48
-            ]
-        },
-        {
-            "sprite": "giant.png",
-            "x": 576,
-            "y": 432,
-            "original_size": [
-                48,
-                48
-            ]
-        },
-        {
-            "sprite": "giant.png",
-            "x": 480,
-            "y": 432,
-            "original_size": [
-                48,
-                48
-            ]
-        },
-        {
-            "sprite": "giant.png",
-            "x": 720,
-            "y": 288,
+            "x": 432,
+            "y": 144,
             "original_size": [
                 48,
                 48
