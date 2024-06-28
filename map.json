@@ -1,0 +1,71 @@
+{
+    "placed_sprites": [
+        {
+            "sprite": "giant.png",
+            "x": 0,
+            "y": 432,
+            "original_size": [
+                48,
+                48
+            ]
+        },
+        {
+            "sprite": "giant.png",
+            "x": 240,
+            "y": 384,
+            "original_size": [
+                48,
+                48
+            ]
+        },
+        {
+            "sprite": "giant.png",
+            "x": 336,
+            "y": 384,
+            "original_size": [
+                48,
+                48
+            ]
+        },
+        {
+            "sprite": "giant.png",
+            "x": 480,
+            "y": 336,
+            "original_size": [
+                48,
+                48
+            ]
+        },
+        {
+            "sprite": "giant.png",
+            "x": 528,
+            "y": 144,
+            "original_size": [
+                48,
+                48
+            ]
+        },
+        {
+            "sprite": "giant.png",
+            "x": 624,
+            "y": 192,
+            "original_size": [
+                48,
+                48
+            ]
+        },
+        {
+            "sprite": "giant.png",
+            "x": 432,
+            "y": 144,
+            "original_size": [
+                48,
+                48
+            ]
+        }
+    ],
+    "canvas_size": {
+        "width": 762,
+        "height": 488
+    }
+}
