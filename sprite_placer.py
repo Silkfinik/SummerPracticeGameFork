@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, ttk
+from tkinter import filedialog, ttk, messagebox
 import os
 import json
 from PIL import Image, ImageTk
@@ -25,10 +25,13 @@ class SpritePlacerApp:
         self.canvas.bind("<Button-1>", self.place_sprite)
         self.canvas.bind("<Button-3>", self.select_sprite)  # Right-click to select sprite
         self.root.bind("<Escape>", self.deselect_sprite)  # Bind Esc key to deselect sprite
+        self.root.bind("<KeyPress-h>", self.show_highlight_sprites)  # Bind key press 'h'
+        self.root.bind("<KeyRelease-h>", self.hide_highlight_sprites)  # Bind key release 'h'
         self.root.bind("<KeyPress>", self.move_sprite)  # Bind arrow keys to move sprite
 
         self.selected_sprite_id = None  # Track the selected sprite's ID
         self.selected_sprite_outline = None  # Track the outline rectangle ID
+        self.status_outlines = []  # Track status outlines
 
     def setup_ui(self):
         self.main_frame = tk.Frame(self.root)
@@ -79,6 +82,9 @@ class SpritePlacerApp:
 
         self.set_grid_size_button = tk.Button(self.control_frame, text="Set Grid Size", command=self.set_grid_size)
         self.set_grid_size_button.pack(pady=10, padx=10)
+
+        self.help_button = tk.Button(self.control_frame, text="Help", command=self.show_help)
+        self.help_button.pack(pady=10, padx=10)
 
         self.sprite_image_label = tk.Label(self.info_frame, bg="lightgray")
         self.sprite_image_label.pack(pady=10, padx=10)
@@ -236,6 +242,38 @@ class SpritePlacerApp:
             self.canvas.move(self.selected_sprite_id, dx, dy)
             self.canvas.move(self.selected_sprite_outline, dx, dy)
             print(f"Sprite {self.selected_sprite_id} moved {event.keysym}.")
+
+    def highlight_sprites(self):
+        for outline in self.status_outlines:
+            self.canvas.delete(outline)
+        self.status_outlines.clear()
+
+        for sprite_id, sprite_name, x, y, original_size, active in self.placed_sprites:
+            sprite_bbox = self.canvas.bbox(sprite_id)
+            outline_color = "blue" if active else "green"
+            outline_id = self.canvas.create_rectangle(sprite_bbox, outline=outline_color, width=2)
+            self.status_outlines.append(outline_id)
+
+    def show_highlight_sprites(self, event):
+        self.highlight_sprites()
+
+    def hide_highlight_sprites(self, event):
+        for outline in self.status_outlines:
+            self.canvas.delete(outline)
+        self.status_outlines.clear()
+
+    def key_press(self, event):
+        if event.keysym in ("Up", "Down", "Left", "Right"):
+            self.move_sprite(event)
+
+    def show_help(self):
+        help_text = (
+            "Keyboard Controls:\n"
+            " - Arrow Keys: Move selected sprite\n"
+            " - h: Highlight sprites by status (hold)\n"
+            " - Esc: Deselect sprite\n"
+        )
+        messagebox.showinfo("Help", help_text)
 
     def delete_selected_sprite(self):
         if self.selected_sprite_id is not None:
