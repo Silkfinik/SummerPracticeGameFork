@@ -10,6 +10,8 @@ class SpritePlacerApp:
         self.root = root
         self.root.title("Sprite Placer")
 
+        self.active_state = tk.BooleanVar(value=True)  # Default to active
+
         self.setup_ui()
 
         self.sprite_images = {}
@@ -50,6 +52,9 @@ class SpritePlacerApp:
         self.sprite_var = tk.StringVar()
         self.sprite_menu = ttk.Combobox(self.control_frame, textvariable=self.sprite_var)
         self.sprite_menu.pack(pady=10, padx=10)
+
+        self.active_checkbox = tk.Checkbutton(self.control_frame, text="status", variable=self.active_state)
+        self.active_checkbox.pack(pady=10, padx=10)
 
         self.width_label = tk.Label(self.control_frame, text="Canvas Width:")
         self.width_label.pack(pady=5, padx=10)
@@ -129,7 +134,7 @@ class SpritePlacerApp:
         grid_y = (event.y // self.grid_size) * self.grid_size
 
         sprite_id = self.canvas.create_image(grid_x, grid_y, image=image, anchor=tk.NW, tags="sprite")
-        self.placed_sprites.append((sprite_id, sprite_name, grid_x, grid_y, original_size))
+        self.placed_sprites.append((sprite_id, sprite_name, grid_x, grid_y, original_size, self.active_state.get()))
 
     def select_sprite(self, event):
         # Find the item under the cursor
@@ -159,8 +164,8 @@ class SpritePlacerApp:
         if not file_path:
             return
 
-        data = {"placed_sprites": [{"sprite": sprite, "x": x, "y": y, "original_size": original_size} for
-                                   _, sprite, x, y, original_size in self.placed_sprites],
+        data = {"placed_sprites": [{"sprite": sprite, "x": x, "y": y, "original_size": original_size, "active": active} for
+                                   _, sprite, x, y, original_size, active in self.placed_sprites],
                 "canvas_size": {"width": self.canvas.winfo_width(), "height": self.canvas.winfo_height()}}
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=4)

@@ -18,16 +18,26 @@ class ScaledPlatform(Platform):
         self.rect = self.image.get_rect()
         self.rect.topleft = (int(x * scale_factor), int(y * scale_factor))
 
-def load_sprite_positions(json_file, platforms_group, screen_height):
+
+def load_sprite_positions(json_file, platforms_group, screen_height, platforms_passive_group):
     with open(json_file, 'r') as f:
         data = json.load(f)
     placed_sprites = data["placed_sprites"]
     canvas_size = data["canvas_size"]
+
     for item in placed_sprites:
         sprite_name = item['sprite']
         x, y = item['x'], item['y']
         original_size = item['original_size']
+        active = item.get('active', True)  # Default to True if 'active' key is not present
         sprite_image_path = os.path.join('sprites', sprite_name)
+
         # Создание объекта ScaledPlatform
-        platform = ScaledPlatform(sprite_image_path, x, y, original_size, (canvas_size["width"], canvas_size["height"]), screen_height)
-        platforms_group.add(platform)
+        platform = ScaledPlatform(sprite_image_path, x, y, original_size, (canvas_size["width"], canvas_size["height"]),
+                                  screen_height)
+
+        if active:
+            platforms_group.add(platform)
+        else:
+            platforms_passive_group.add(platform)
+
