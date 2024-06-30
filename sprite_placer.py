@@ -24,8 +24,10 @@ class SpritePlacerApp:
 
         self.canvas.bind("<Button-1>", self.place_sprite)
         self.canvas.bind("<Button-3>", self.select_sprite)  # Right-click to select sprite
+        self.root.bind("<Escape>", self.deselect_sprite)  # Bind Esc key to deselect sprite
 
         self.selected_sprite_id = None  # Track the selected sprite's ID
+        self.selected_sprite_outline = None  # Track the outline rectangle ID
 
     def setup_ui(self):
         self.main_frame = tk.Frame(self.root)
@@ -189,18 +191,33 @@ class SpritePlacerApp:
         sprite_id = self.canvas.create_image(grid_x, grid_y, image=image, anchor=tk.NW, tags="sprite")
         self.placed_sprites.append((sprite_id, sprite_name, grid_x, grid_y, original_size, self.active_state.get()))
 
+        self.select_sprite_by_id(sprite_id)
+
     def select_sprite(self, event):
         # Find the item under the cursor
         selected_items = self.canvas.find_withtag("current")
         if selected_items:
-            # Deselect previous sprite
-            if self.selected_sprite_id is not None:
-                self.canvas.itemconfig(self.selected_sprite_id, outline="")
+            self.select_sprite_by_id(selected_items[0])
 
-            # Select new sprite
-            self.selected_sprite_id = selected_items[0]
-            self.canvas.itemconfig(self.selected_sprite_id, outline="red")
-            print(f"Sprite {self.selected_sprite_id} selected.")
+    def select_sprite_by_id(self, sprite_id):
+        # Deselect previous sprite
+        if self.selected_sprite_outline is not None:
+            self.canvas.delete(self.selected_sprite_outline)
+            self.selected_sprite_outline = None
+
+        # Select new sprite
+        self.selected_sprite_id = sprite_id
+        sprite_coords = self.canvas.coords(self.selected_sprite_id)
+        sprite_bbox = self.canvas.bbox(self.selected_sprite_id)
+        self.selected_sprite_outline = self.canvas.create_rectangle(sprite_bbox, outline="red", width=2)
+        print(f"Sprite {self.selected_sprite_id} selected.")
+
+    def deselect_sprite(self, event=None):
+        if self.selected_sprite_outline is not None:
+            self.canvas.delete(self.selected_sprite_outline)
+            self.selected_sprite_outline = None
+            self.selected_sprite_id = None
+            print("Sprite deselected.")
 
     def delete_selected_sprite(self):
         if self.selected_sprite_id is not None:
@@ -209,6 +226,11 @@ class SpritePlacerApp:
             self.placed_sprites = [sprite for sprite in self.placed_sprites if sprite[0] != self.selected_sprite_id]
             print(f"Sprite {self.selected_sprite_id} deleted.")
             self.selected_sprite_id = None
+
+            # Remove outline
+            if self.selected_sprite_outline is not None:
+                self.canvas.delete(self.selected_sprite_outline)
+                self.selected_sprite_outline = None
         else:
             print("No sprite selected.")
 
