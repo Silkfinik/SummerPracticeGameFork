@@ -1,788 +1,258 @@
 {
     "placed_sprites": [
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 0,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
-            "x": 64,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 32,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
+            "x": 64,
+            "y": 576,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_ice.png",
             "x": 96,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 128,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 160,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 192,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 224,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 256,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
-            "x": 256,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 288,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 320,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
-                32
+                16
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "1_normal_ice.png",
             "x": 352,
-            "y": 960,
+            "y": 576,
             "original_size": [
                 32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_small_.png",
+            "x": 368,
+            "y": 544,
+            "original_size": [
+                16,
                 32
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
-            "x": 384,
-            "y": 960,
+            "sprite": "2_small_.png",
+            "x": 352,
+            "y": 544,
             "original_size": [
-                32,
+                16,
                 32
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
-            "x": 416,
-            "y": 960,
+            "sprite": "2_small_.png",
+            "x": 336,
+            "y": 544,
             "original_size": [
-                32,
+                16,
                 32
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
-            "x": 416,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 448,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 480,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 512,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 544,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 544,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 608,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 608,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 576,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 640,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 672,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 704,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 736,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 768,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 800,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 832,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 864,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 896,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 928,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 960,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 960,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 992,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1056,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1056,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1024,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1088,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1120,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1184,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1216,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1152,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1248,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1280,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1376,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1408,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1344,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 1312,
-            "y": 960,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
+            "sprite": "2_small_.png",
             "x": 320,
-            "y": 928,
+            "y": 544,
             "original_size": [
-                32,
+                16,
                 32
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
+            "sprite": "2_small_.png",
+            "x": 304,
+            "y": 544,
+            "original_size": [
+                16,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_small_.png",
+            "x": 288,
+            "y": 544,
+            "original_size": [
+                16,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_small_.png",
+            "x": 272,
+            "y": 544,
+            "original_size": [
+                16,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_small_.png",
+            "x": 256,
+            "y": 544,
+            "original_size": [
+                16,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_small_.png",
+            "x": 240,
+            "y": 544,
+            "original_size": [
+                16,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_small_.png",
+            "x": 224,
+            "y": 544,
+            "original_size": [
+                16,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_small_.png",
+            "x": 368,
+            "y": 512,
+            "original_size": [
+                16,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_small_.png",
             "x": 352,
-            "y": 928,
+            "y": 512,
             "original_size": [
-                32,
+                16,
                 32
             ],
             "active": true
         },
         {
-            "sprite": "2_normal_grass.png",
-            "x": 352,
-            "y": 896,
+            "sprite": "2_small_.png",
+            "x": 336,
+            "y": 512,
             "original_size": [
-                32,
+                16,
                 32
             ],
             "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 352,
-            "y": 896,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 384,
-            "y": 864,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 384,
-            "y": 928,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 384,
-            "y": 896,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 416,
-            "y": 928,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 416,
-            "y": 896,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_normal_grass.png",
-            "x": 448,
-            "y": 928,
-            "original_size": [
-                32,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 560,
-            "y": 950,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 575,
-            "y": 945,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 590,
-            "y": 950,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 595,
-            "y": 950,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 600,
-            "y": 935,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 620,
-            "y": 940,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 640,
-            "y": 950,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 620,
-            "y": 955,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 575,
-            "y": 950,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 530,
-            "y": 950,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 535,
-            "y": 935,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 585,
-            "y": 940,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 615,
-            "y": 930,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 670,
-            "y": 935,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 715,
-            "y": 940,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 695,
-            "y": 945,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
-        },
-        {
-            "sprite": "mashroom_red.png",
-            "x": 635,
-            "y": 935,
-            "original_size": [
-                16,
-                16
-            ],
-            "active": false
         }
     ],
     "canvas_size": {
-        "width": 2397,
-        "height": 1009
+        "width": 382,
+        "height": 594
     }
 }
