@@ -1,7 +1,7 @@
 import pygame
 import sys
 import os
-from config import screen, screen_width, screen_height, debug_mode, score, bar_color, bar_position, bar_height
+from config import screen, screen_width, screen_height, debug_mode, score, bar_color, bar_position, bar_height, scale_factor
 from player import Player
 from sprites import load_images
 from sounds import load_sounds, play_sound, stop_sound, play_music, stop_music
@@ -15,14 +15,13 @@ from background import draw_background, background_image
 clock = pygame.time.Clock()
 
 # Загрузка изображений спрайта и звуков
-scale_factor = 5
 animations = load_images('sprites', scale_factor)
 sounds = load_sounds('sounds')
 
 play_music(os.path.join('sounds', 'background_music.mp3'))
 
 # Создание игрока
-player = Player(animations, sounds, 100, screen_height - 100 - bar_height, screen_width, screen_height)
+player = Player(animations, sounds, 100, screen_height - 100 - bar_height, screen_width, screen_height, scale_factor)
 
 # Группа спрайтов
 all_sprites = pygame.sprite.Group()
@@ -34,7 +33,6 @@ platform_image_path = 'img/platform.png'
 platform_width = 200
 platform_height = 50
 
-width_counter = 0
 platforms.add(Platform(platform_image_path, 0, screen_height - platform_height - bar_height, screen_width, platform_height))
 all_sprites.add(platforms)
 
