@@ -3,7 +3,7 @@
         {
             "sprite": "giant.png",
             "x": 0,
-            "y": 450,
+            "y": 500,
             "original_size": [
                 48,
                 48
@@ -13,7 +13,7 @@
         {
             "sprite": "giant.png",
             "x": 50,
-            "y": 450,
+            "y": 500,
             "original_size": [
                 48,
                 48
@@ -23,7 +23,7 @@
         {
             "sprite": "giant.png",
             "x": 100,
-            "y": 450,
+            "y": 500,
             "original_size": [
                 48,
                 48
@@ -32,148 +32,8 @@
         },
         {
             "sprite": "giant.png",
-            "x": 150,
-            "y": 450,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 200,
-            "y": 450,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 250,
-            "y": 450,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 300,
-            "y": 450,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 350,
-            "y": 450,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 350,
-            "y": 400,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 300,
-            "y": 400,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 350,
-            "y": 350,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 300,
-            "y": 350,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 250,
-            "y": 400,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 350,
-            "y": 300,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 350,
-            "y": 250,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 300,
-            "y": 250,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 300,
-            "y": 300,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 250,
-            "y": 350,
+            "x": 100,
+            "y": 500,
             "original_size": [
                 48,
                 48
@@ -183,7 +43,7 @@
         {
             "sprite": "giant.png",
             "x": 200,
-            "y": 400,
+            "y": 500,
             "original_size": [
                 48,
                 48
@@ -193,7 +53,17 @@
         {
             "sprite": "giant.png",
             "x": 250,
-            "y": 300,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 300,
+            "y": 500,
             "original_size": [
                 48,
                 48
@@ -203,16 +73,386 @@
         {
             "sprite": "giant.png",
             "x": 350,
-            "y": 200,
+            "y": 500,
             "original_size": [
                 48,
                 48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 400,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 450,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 500,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 550,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 0,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 48,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 64,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 96,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 128,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 160,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 192,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 224,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 256,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 288,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 320,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 352,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 384,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 416,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 448,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 480,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 512,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 544,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "1_normal_grass.png",
+            "x": 576,
+            "y": 480,
+            "original_size": [
+                32,
+                16
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 336,
+            "y": 448,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 368,
+            "y": 448,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 400,
+            "y": 448,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 432,
+            "y": 448,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 416,
+            "y": 432,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 432,
+            "y": 432,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 432,
+            "y": 400,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 464,
+            "y": 384,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 464,
+            "y": 368,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 496,
+            "y": 352,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 496,
+            "y": 320,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 528,
+            "y": 320,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 528,
+            "y": 288,
+            "original_size": [
+                32,
+                32
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_normal_grass.png",
+            "x": 560,
+            "y": 288,
+            "original_size": [
+                32,
+                32
             ],
             "active": true
         }
     ],
     "canvas_size": {
-        "width": 380,
-        "height": 490
+        "width": 602,
+        "height": 541
     }
 }

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog, ttk, messagebox
 import os
+import shutil  # Импортируем модуль для копирования файлов
 import json
 from PIL import Image, ImageTk
 
@@ -27,7 +28,7 @@ class SpritePlacerApp:
         self.root.bind("<Escape>", self.deselect_sprite)  # Bind Esc key to deselect sprite
         self.root.bind("<KeyPress-h>", self.show_highlight_sprites)  # Bind key press 'h'
         self.root.bind("<KeyRelease-h>", self.hide_highlight_sprites)  # Bind key release 'h'
-        self.root.bind("<KeyPress>", self.move_sprite)  # Bind arrow keys to move sprite
+        self.root.bind("<KeyPress>", self.key_press)  # Bind arrow keys to move sprite
 
         self.selected_sprite_id = None  # Track the selected sprite's ID
         self.selected_sprite_outline = None  # Track the outline rectangle ID
@@ -136,6 +137,7 @@ class SpritePlacerApp:
             return
 
         self.sprite_images.clear()
+        self.sprite_paths = {}  # Для хранения путей к изображениям спрайтов
         sprite_names = []
         max_width, max_height = 0, 0
         for root, dirs, files in os.walk(sprite_dir):
@@ -145,6 +147,7 @@ class SpritePlacerApp:
                     image = Image.open(sprite_path)
                     photo_image = ImageTk.PhotoImage(image)
                     self.sprite_images[file] = (photo_image, image.size)  # Store original size
+                    self.sprite_paths[file] = sprite_path  # Сохраняем путь к изображению
                     sprite_names.append(file)
                     max_width = max(max_width, image.size[0])
                     max_height = max(max_height, image.size[1])
@@ -199,6 +202,7 @@ class SpritePlacerApp:
         self.placed_sprites.append((sprite_id, sprite_name, grid_x, grid_y, original_size, self.active_state.get()))
 
         self.select_sprite_by_id(sprite_id)
+        self.copy_used_sprites()
 
     def select_sprite(self, event):
         # Find the item under the cursor
@@ -302,6 +306,18 @@ class SpritePlacerApp:
             json.dump(data, f, indent=4)
 
         print(f"Saved to {file_path}")
+
+    def copy_used_sprites(self):
+        used_sprites_dir = os.path.join(os.getcwd(), 'img', 'used_sprites')
+        os.makedirs(used_sprites_dir, exist_ok=True)
+        used_sprite_names = set(sprite[1] for sprite in self.placed_sprites)  # Собираем все уникальные используемые спрайты
+
+        for sprite_name in used_sprite_names:
+            if sprite_name in self.sprite_paths:
+                src_path = self.sprite_paths[sprite_name]
+                dst_path = os.path.join(used_sprites_dir, sprite_name)
+                shutil.copy2(src_path, dst_path)
+                print(f"Copied {sprite_name} to {dst_path}")
 
     def display_sprite_info(self):
         sprite_name = self.selected_sprite
