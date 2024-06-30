@@ -64,7 +64,7 @@ def load_images(sprite_dir, scale_factor=1):
 
 # Пример использования:
 pygame.init()
-sprite_dir = '/Users/kirilldrozhzha/PycharmProjects/game/sprites'  # Укажите правильный путь к вашему каталогу с анимациями
+sprite_dir = 'sprites'  # Укажите правильный путь к вашему каталогу с анимациями
 scale_factor = 1  # Масштабирование, если необходимо
 animations = load_images(sprite_dir, scale_factor)
 
