@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog, ttk, messagebox
 import os
-import shutil  # Импортируем модуль для копирования файлов
+import shutil
 import json
 from PIL import Image, ImageTk
 
@@ -13,6 +13,7 @@ class SpritePlacerApp:
         self.active_state = tk.BooleanVar(value=True)  # Default to active
 
         self.sprite_images = {}
+        self.sprite_paths = {}
         self.placed_sprites = []
         self.grid_size = 50
 
@@ -52,6 +53,9 @@ class SpritePlacerApp:
 
         self.load_sprites_button = tk.Button(self.control_frame, text="Load Sprites", command=self.load_sprites)
         self.load_sprites_button.pack(pady=10, padx=10)
+
+        self.load_map_button = tk.Button(self.control_frame, text="Load Map", command=self.load_map)
+        self.load_map_button.pack(pady=10, padx=10)
 
         self.save_button = tk.Button(self.control_frame, text="Save", command=self.save_sprites)
         self.save_button.pack(pady=10, padx=10)
@@ -137,7 +141,7 @@ class SpritePlacerApp:
             return
 
         self.sprite_images.clear()
-        self.sprite_paths = {}  # Для хранения путей к изображениям спрайтов
+        self.sprite_paths = {}
         sprite_names = []
         max_width, max_height = 0, 0
         for root, dirs, files in os.walk(sprite_dir):
@@ -318,6 +322,47 @@ class SpritePlacerApp:
                 dst_path = os.path.join(used_sprites_dir, sprite_name)
                 shutil.copy2(src_path, dst_path)
                 print(f"Copied {sprite_name} to {dst_path}")
+
+    def load_map(self):
+        file_path = filedialog.askopenfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
+        if not file_path:
+            return
+
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+
+        # Очистка текущего холста и списка спрайтов
+        self.canvas.delete("all")
+        self.placed_sprites.clear()
+
+        # Восстановление спрайтов на холсте
+        placed_sprites = data["placed_sprites"]
+        for item in placed_sprites:
+            sprite_name = item['sprite']
+            x, y = item['x'], item['y']
+            original_size = item['original_size']
+            active = item.get('active', True)  # Default to True if 'active' key is not present
+
+            if sprite_name in self.sprite_images:
+                image, _ = self.sprite_images[sprite_name]
+                sprite_id = self.canvas.create_image(x, y, image=image, anchor=tk.NW, tags="sprite")
+                self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, active))
+            else:
+                # Если спрайт не найден в текущих изображениях, загружаем его из /img/used_sprites
+                sprite_path = os.path.join('img', 'used_sprites', sprite_name)
+                if os.path.exists(sprite_path):
+                    image = Image.open(sprite_path)
+                    photo_image = ImageTk.PhotoImage(image)
+                    self.sprite_images[sprite_name] = (photo_image, original_size)
+                    sprite_id = self.canvas.create_image(x, y, image=photo_image, anchor=tk.NW, tags="sprite")
+                    self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, active))
+
+        # Установка размера холста из загруженного файла
+        if "canvas_size" in data:
+            canvas_size = data["canvas_size"]
+            self.canvas.config(width=canvas_size["width"], height=canvas_size["height"])
+
+        self.copy_used_sprites()
 
     def display_sprite_info(self):
         sprite_name = self.selected_sprite
