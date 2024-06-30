@@ -1,13 +1,25 @@
 import pygame
+import json
 
 # Инициализация Pygame
 pygame.init()
 pygame.mixer.init()
 
-# Размеры окна
+# Загрузка размеров карты из файла JSON
+with open('map.json', 'r') as f:
+    map_data = json.load(f)
+map_width = map_data["canvas_size"]["width"]
+map_height = map_data["canvas_size"]["height"]
+
+# Получение размеров экрана
 screen_info = pygame.display.Info()
-screen_width = screen_info.current_w
-screen_height = screen_info.current_h - 200
+screen_height = screen_info.current_h - 80
+
+# Вычисление коэффициента увеличения
+scale_factor = screen_height / map_height
+scaled_map_width = int(map_width * scale_factor)
+
+screen_width = scaled_map_width
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 pygame.display.set_caption("Sound Integration")

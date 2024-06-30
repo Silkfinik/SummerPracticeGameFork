@@ -3,9 +3,9 @@ import os
 from sounds import play_sound
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, animations, sounds, x, y, screen_width, screen_height):
+    def __init__(self, animations, sounds, x, y, screen_width, screen_height, scale_factor):
         super().__init__()
-        self.animations = animations
+        self.animations = self.scale_animations(animations, scale_factor)
         self.sounds = sounds
         self.current_animation = "idle_right"
         self.images = self.animations[self.current_animation]
@@ -28,6 +28,14 @@ class Player(pygame.sprite.Sprite):
         self.normal_animation_speed = 0.14
         self.sprint_animation_speed = self.normal_animation_speed / 2  # Уменьшение для увеличения скорости анимации
         self.is_walking = False
+
+    def scale_animations(self, animations, scale_factor):
+        scaled_animations = {}
+        for key, frames in animations.items():
+            scaled_frames = [pygame.transform.scale(frame,
+                            (int(frame.get_width() * scale_factor), int(frame.get_height() * scale_factor))) for frame in frames]
+            scaled_animations[key] = scaled_frames
+        return scaled_animations
 
     def update(self, dt, platforms):
         # Обновление анимации
