@@ -4,3 +4,9 @@
 # Игнорирование скомпилированных файлов Python
 __pycache__/
 *.pyc
+
+# Исключение папок sounds и sprites из игнорирования
+!sounds/
+!sprites/
+!img/
+!unused_sprites/

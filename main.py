@@ -1,47 +1,25 @@
 import pygame
 import sys
 import os
-import json
+from config import screen, screen_width, screen_height, debug_mode, score, bar_color, bar_position, bar_height
 from player import Player
 from sprites import load_images
 from sounds import load_sounds, play_sound, stop_sound, play_music, stop_music
 from game_platform import Platform
-
-# Инициализация Pygame
-pygame.init()
-pygame.mixer.init()
-
-debug_mode = True  # Включаем режим отладки для отображения хитбоксов
-
-# Размеры окна
-screen_info = pygame.display.Info()
-screen_width = screen_info.current_w
-screen_height = screen_info.current_h - 200
-screen = pygame.display.set_mode((screen_width, screen_height))
-
-pygame.display.set_caption("Sound Integration")
-
-# создание черной полосы внизу экрана
-bar_height = 15
-bar_color = (0, 0, 0)
-bar_position = (0, screen_height - bar_height)
+from platform_loader import load_sprite_positions
+from hud import draw_hud
+from menu import draw_menu
+from background import draw_background, background_image
 
 # Основной цикл
 clock = pygame.time.Clock()
 
-# Путь к директории с анимациями спрайтов и звуками
-sprite_dir = 'sprites'
-sound_dir = 'sounds'
-font_path = 'default_font.ttf'
-
-# Загрузка изображений спрайта и звуков, с изменением размера изображений
+# Загрузка изображений спрайта и звуков
 scale_factor = 5
-animations = load_images(sprite_dir, scale_factor)
-sounds = load_sounds(sound_dir)
+animations = load_images('sprites', scale_factor)
+sounds = load_sounds('sounds')
 
-print("Loaded animations:", animations.keys())
-
-play_music(os.path.join(sound_dir, 'background_music.mp3'))
+play_music(os.path.join('sounds', 'background_music.mp3'))
 
 # Создание игрока
 player = Player(animations, sounds, 100, screen_height - 100 - bar_height, screen_width, screen_height)
@@ -60,82 +38,15 @@ width_counter = 0
 platforms.add(Platform(platform_image_path, 0, screen_height - platform_height - bar_height, screen_width, platform_height))
 all_sprites.add(platforms)
 
-# Загрузка изображения фона
-def load_and_scale_background(image_path, screen_width, screen_height):
-    image = pygame.image.load(image_path).convert_alpha()
-    image_width, image_height = image.get_size()
+# Загрузка карты из json файла
+load_sprite_positions('map.json', platforms, screen_height)
+all_sprites.add(platforms)
 
-    # Вычисляем новый размер для масштабирования по высоте
-    scale_factor = screen_height / image_height
-    new_width = int(image_width * scale_factor)
-    scaled_image = pygame.transform.scale(image, (new_width, screen_height))
-
-    return scaled_image
-
-background_image_path = 'img/sky_blue.png'
-background_image = load_and_scale_background(background_image_path, screen_width, screen_height)
-
-# Счетчик очков
-score = 0
-
-# Установка шрифта по умолчанию
-font_size = 36
-font = pygame.font.Font(font_path, font_size)
-
-def draw_hud():
-    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
-    screen.blit(score_text, (10, 10))
-
-
-def draw_menu():
-    menu_text = font.render("Menu", True, (255, 255, 255))
-    quit_text = font.render("Press Q to Quit", True, (255, 255, 255))
-    screen.blit(menu_text, (screen_width // 2 - menu_text.get_width() // 2, screen_height // 2 - menu_text.get_height() // 2 - 40))
-    screen.blit(quit_text, (screen_width // 2 - quit_text.get_width() // 2, screen_height // 2 - quit_text.get_height() // 2))
-
-# Класс для платформ с масштабированием
-class ScaledPlatform(Platform):
-    def __init__(self, image_path, x, y, original_size, canvas_size, screen_height):
-        super().__init__(image_path, x, y)
-        image = pygame.image.load(image_path).convert_alpha()
-        original_width, original_height = original_size
-        canvas_width, canvas_height = canvas_size
-
-        # Масштабирование платформы по высоте экрана
-        scale_factor = screen_height / canvas_height
-        new_width = int(original_width * scale_factor)
-        new_height = int(original_height * scale_factor)
-        self.image = pygame.transform.scale(image, (new_width, new_height))
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (int(x * scale_factor), int(y * scale_factor))
-
-# Функция для загрузки и размещения платформ из .json файла
-def load_sprite_positions(json_file, platforms_group, screen_height):
-    with open(json_file, 'r') as f:
-        data = json.load(f)
-    placed_sprites = data["placed_sprites"]
-    canvas_size = data["canvas_size"]
-    for item in placed_sprites:
-        sprite_name = item['sprite']
-        x, y = item['x'], item['y']
-        original_size = item['original_size']
-        sprite_image_path = os.path.join(sprite_dir, sprite_name)
-        # Создание объекта ScaledPlatform
-        platform = ScaledPlatform(sprite_image_path, x, y, original_size, (canvas_size["width"], canvas_size["height"]), screen_height)
-        platforms_group.add(platform)
-
-
-# Основной игровой цикл
 running = True
 paused = False
 menu_active = False
 was_sprinting = False
 was_walking = False
-
-# Загрузка карты из json файла
-json_file_path = 'map.json'  # Укажите правильный путь к вашему json файлу
-load_sprite_positions(json_file_path, platforms, screen_height)
-all_sprites.add(platforms)
 
 while running:
     dt = clock.tick(60) / 1000
@@ -150,9 +61,8 @@ while running:
                 running = False
 
     if menu_active:
-        # Отрисовка меню
-        screen.fill((0, 0, 0))  # Заливка экрана черным цветом
-        draw_menu()
+        screen.fill((0, 0, 0))
+        draw_menu(screen)
         pygame.display.flip()
         continue
 
@@ -205,18 +115,15 @@ while running:
     player.update(dt, platforms)
     platforms.update()
 
-    for x in range(0, screen_width, background_image.get_width()):
-        screen.blit(background_image, (x, 0))
-
+    draw_background(screen, background_image, screen_width)
     all_sprites.draw(screen)
 
-    # Отрисовка хитбоксов
     if debug_mode:
         for sprite in all_sprites:
             if hasattr(sprite, 'rect'):
                 pygame.draw.rect(screen, (255, 0, 0), sprite.rect, 1)
 
-    draw_hud()
+    draw_hud(screen)
 
     pygame.draw.rect(screen, bar_color, (bar_position[0], bar_position[1], screen_width, bar_height))
 
