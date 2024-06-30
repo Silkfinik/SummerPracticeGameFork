@@ -29,16 +29,14 @@ all_sprites.add(player)
 
 # Создание пола (застилание платформами)
 platforms = pygame.sprite.Group()
-platform_image_path = 'img/platform.png'
-platform_width = 200
-platform_height = 50
+platforms_passive_group = pygame.sprite.Group()
 
-platforms.add(Platform(platform_image_path, 0, screen_height - platform_height - bar_height, screen_width, platform_height))
 all_sprites.add(platforms)
 
 # Загрузка карты из json файла
-load_sprite_positions('map.json', platforms, screen_height)
+load_sprite_positions('map.json', platforms, screen_height, platforms_passive_group)
 all_sprites.add(platforms)
+all_sprites.add(platforms_passive_group)
 
 running = True
 paused = False
@@ -110,6 +108,7 @@ while running:
         was_sprinting = False
         was_walking = False
 
+    platforms_passive_group.update()
     player.update(dt, platforms)
     platforms.update()
 
