@@ -20,7 +20,7 @@ scale_factor = screen_height / map_height
 scaled_map_width = int(map_width * scale_factor)
 
 screen_width = scaled_map_width
-screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((screen_width, screen_height))
 
 pygame.display.set_caption("Sound Integration")
 

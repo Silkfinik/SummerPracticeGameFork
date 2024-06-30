@@ -4,7 +4,6 @@ import os
 import json
 from PIL import Image, ImageTk
 
-
 class SpritePlacerApp:
     def __init__(self, root):
         self.root = root
@@ -12,15 +11,19 @@ class SpritePlacerApp:
 
         self.active_state = tk.BooleanVar(value=True)  # Default to active
 
-        self.setup_ui()
-
         self.sprite_images = {}
         self.placed_sprites = []
         self.grid_size = 50
 
+        self.max_sprite_width = 0
+        self.max_sprite_height = 0
+
+        self.selected_sprite = None  # Для хранения текущего выбранного спрайта
+
+        self.setup_ui()
+
         self.canvas.bind("<Button-1>", self.place_sprite)
         self.canvas.bind("<Button-3>", self.select_sprite)  # Right-click to select sprite
-        self.sprite_menu.bind("<<ComboboxSelected>>", self.display_sprite_info)
 
         self.selected_sprite_id = None  # Track the selected sprite's ID
 
@@ -49,10 +52,6 @@ class SpritePlacerApp:
         self.delete_button = tk.Button(self.control_frame, text="Delete", command=self.delete_selected_sprite)
         self.delete_button.pack(pady=10, padx=10)
 
-        self.sprite_var = tk.StringVar()
-        self.sprite_menu = ttk.Combobox(self.control_frame, textvariable=self.sprite_var)
-        self.sprite_menu.pack(pady=10, padx=10)
-
         self.active_checkbox = tk.Checkbutton(self.control_frame, text="status", variable=self.active_state)
         self.active_checkbox.pack(pady=10, padx=10)
 
@@ -66,8 +65,7 @@ class SpritePlacerApp:
         self.height_entry = tk.Entry(self.control_frame)
         self.height_entry.pack(pady=5, padx=10)
 
-        self.set_canvas_size_button = tk.Button(self.control_frame, text="Set Canvas Size",
-                                                command=self.set_canvas_size)
+        self.set_canvas_size_button = tk.Button(self.control_frame, text="Set Canvas Size", command=self.set_canvas_size)
         self.set_canvas_size_button.pack(pady=10, padx=10)
 
         self.grid_size_label = tk.Label(self.control_frame, text="Grid Size:")
@@ -82,8 +80,31 @@ class SpritePlacerApp:
         self.sprite_image_label = tk.Label(self.info_frame, bg="lightgray")
         self.sprite_image_label.pack(pady=10, padx=10)
 
+        self.sprite_name_label = tk.Label(self.info_frame, text="", bg="lightgray")
+        self.sprite_name_label.pack(pady=5, padx=10)
+
         self.sprite_size_label = tk.Label(self.info_frame, text="", bg="lightgray")
         self.sprite_size_label.pack(pady=10, padx=10)
+
+        # Divider line
+        self.divider = tk.Frame(self.info_frame, height=2, bd=1, relief=tk.SUNKEN)
+        self.divider.pack(fill=tk.X, padx=5, pady=10)
+
+        # Scrollable frame for sprite thumbnails
+        self.scrollable_frame = tk.Frame(self.info_frame)
+        self.scrollable_frame.pack(fill=tk.BOTH, expand=True)
+
+        self.scroll_canvas = tk.Canvas(self.scrollable_frame, bg="lightgray")
+        self.scroll_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self.scrollbar = ttk.Scrollbar(self.scrollable_frame, orient="vertical", command=self.scroll_canvas.yview)
+        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.scrollable_frame.bind("<Configure>", lambda e: self.scroll_canvas.configure(scrollregion=self.scroll_canvas.bbox("all")))
+        self.scroll_canvas.configure(yscrollcommand=self.scrollbar.set)
+
+        self.thumbnails_frame = tk.Frame(self.scroll_canvas, bg="lightgray")
+        self.scroll_canvas.create_window((0, 0), window=self.thumbnails_frame, anchor="nw")
 
     def set_canvas_size(self):
         try:
@@ -107,6 +128,7 @@ class SpritePlacerApp:
 
         self.sprite_images.clear()
         sprite_names = []
+        max_width, max_height = 0, 0
         for root, dirs, files in os.walk(sprite_dir):
             for file in files:
                 if file.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
@@ -115,18 +137,49 @@ class SpritePlacerApp:
                     photo_image = ImageTk.PhotoImage(image)
                     self.sprite_images[file] = (photo_image, image.size)  # Store original size
                     sprite_names.append(file)
+                    max_width = max(max_width, image.size[0])
+                    max_height = max(max_height, image.size[1])
 
-        self.sprite_menu['values'] = sprite_names
+        self.max_sprite_width = max_width + 20
+        self.max_sprite_height = max_height + 20
+
+        self.info_frame.config(width=self.max_sprite_width)
+        self.scroll_canvas.config(width=self.max_sprite_width)
+
         if sprite_names:
-            self.sprite_var.set(sprite_names[0])
+            self.selected_sprite = sprite_names[0]
 
         print("Sprites loaded:", sprite_names)
+        self.display_thumbnails()
+        self.display_sprite_info()
+
+    def display_thumbnails(self):
+        for widget in self.thumbnails_frame.winfo_children():
+            widget.destroy()
+
+        for sprite_name, (photo_image, size) in self.sprite_images.items():
+            frame = tk.Frame(self.thumbnails_frame, bg="lightgray", width=self.max_sprite_width, height=size[1] + 40)
+            frame.pack_propagate(False)
+            label = tk.Label(frame, image=photo_image, bg="lightgray")
+            label.photo_image = photo_image  # Keep a reference to avoid garbage collection
+            label.pack(pady=5, padx=5)
+            label.bind("<Button-1>", lambda e, sprite=sprite_name: self.select_sprite_by_thumbnail(sprite))
+
+            size_label = tk.Label(frame, text=f"{size[0]}x{size[1]}", bg="lightgray")
+            size_label.pack()
+
+            frame.pack(pady=5, padx=5)
+
+    def select_sprite_by_thumbnail(self, sprite_name):
+        self.selected_sprite = sprite_name
+        self.display_sprite_info()
+        print(f"Sprite {sprite_name} selected from thumbnails.")
 
     def place_sprite(self, event):
-        if not self.sprite_images or not self.sprite_var.get():
+        if not self.sprite_images or not self.selected_sprite:
             return
 
-        sprite_name = self.sprite_var.get()
+        sprite_name = self.selected_sprite
         image, original_size = self.sprite_images[sprite_name]
 
         # Привязка к пиксельной сетке
@@ -172,14 +225,14 @@ class SpritePlacerApp:
 
         print(f"Saved to {file_path}")
 
-    def display_sprite_info(self, event):
-        sprite_name = self.sprite_var.get()
+    def display_sprite_info(self):
+        sprite_name = self.selected_sprite
         if sprite_name in self.sprite_images:
             image, original_size = self.sprite_images[sprite_name]
             self.sprite_image_label.config(image=image)
             self.sprite_image_label.image = image  # Keep a reference to avoid garbage collection
+            self.sprite_name_label.config(text=sprite_name)
             self.sprite_size_label.config(text=f"Size: {original_size[0]} x {original_size[1]}")
-
 
 if __name__ == "__main__":
     root = tk.Tk()
