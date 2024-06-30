@@ -25,6 +25,7 @@ class SpritePlacerApp:
         self.canvas.bind("<Button-1>", self.place_sprite)
         self.canvas.bind("<Button-3>", self.select_sprite)  # Right-click to select sprite
         self.root.bind("<Escape>", self.deselect_sprite)  # Bind Esc key to deselect sprite
+        self.root.bind("<KeyPress>", self.move_sprite)  # Bind arrow keys to move sprite
 
         self.selected_sprite_id = None  # Track the selected sprite's ID
         self.selected_sprite_outline = None  # Track the outline rectangle ID
@@ -218,6 +219,23 @@ class SpritePlacerApp:
             self.selected_sprite_outline = None
             self.selected_sprite_id = None
             print("Sprite deselected.")
+
+    def move_sprite(self, event):
+        if self.selected_sprite_id is None:
+            return
+
+        movement = {
+            "Up": (0, -self.grid_size),
+            "Down": (0, self.grid_size),
+            "Left": (-self.grid_size, 0),
+            "Right": (self.grid_size, 0)
+        }
+
+        if event.keysym in movement:
+            dx, dy = movement[event.keysym]
+            self.canvas.move(self.selected_sprite_id, dx, dy)
+            self.canvas.move(self.selected_sprite_outline, dx, dy)
+            print(f"Sprite {self.selected_sprite_id} moved {event.keysym}.")
 
     def delete_selected_sprite(self):
         if self.selected_sprite_id is not None:
