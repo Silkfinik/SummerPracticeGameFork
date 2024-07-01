@@ -26,7 +26,7 @@ def load_sprite_positions(json_file, platforms_group, screen_height, platforms_p
     for item in placed_sprites:
         sprite_name = item['sprite']
         x, y = item['x'], item['y']
-        original_size = item['original_size']
+        original_size = item['current_size']
         active = item.get('active', True)  # Default to True if 'active' key is not present
         sprite_image_path = os.path.join('img', 'used_sprites', sprite_name)  # Новый путь к используемым спрайтам
 
