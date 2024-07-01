@@ -32,9 +32,9 @@ class SpritePlacerApp:
 
         self.canvas_border = None  # Track the canvas border ID
 
-        self.death_height = 10  # Default death line height
-        self.player_spawn_x = 50  # Default player spawn X-coordinate
-        self.player_spawn_y = 520  # Default player spawn Y-coordinate
+        self.death_height = 0  # Default death line height
+        self.player_spawn_x = 0  # Default player spawn X-coordinate
+        self.player_spawn_y = 0  # Default player spawn Y-coordinate
 
         self.setup_ui()
 
@@ -571,6 +571,13 @@ class SpritePlacerApp:
         # Очистка текущего холста и списка спрайтов
         self.canvas.delete("all")
         self.placed_sprites.clear()
+
+        player_cords = data["player_spawn"]
+        self.player_spawn_x = player_cords["x"]
+        self.player_spawn_y = player_cords["y"]
+
+        death_line = data["death_line"]
+        self.death_height = death_line["y_d"]
 
         # Восстановление спрайтов на холсте
         placed_sprites = data["placed_sprites"]
