@@ -22,6 +22,7 @@ class SpritePlacerApp:
         self.max_sprite_height = 0
 
         self.selected_sprite = None  # Для хранения текущего выбранного спрайта
+        self.scale_factor = 1.0  # Начальный масштаб
 
         self.setup_ui()
 
@@ -152,29 +153,12 @@ class SpritePlacerApp:
 
     def set_scale(self):
         try:
-            scale_factor = float(self.scale_factor_entry.get())
+            self.scale_factor = float(self.scale_factor_entry.get())
         except ValueError:
             print("Please enter a valid scale factor.")
             return
 
-        for sprite_id, sprite_name, x, y, original_size, active in self.placed_sprites:
-            # Remove the current sprite
-            self.canvas.delete(sprite_id)
-
-            # Scale the image
-            original_image = Image.open(self.sprite_paths[sprite_name])
-            new_size = (int(original_size[0] * scale_factor), int(original_size[1] * scale_factor))
-            resized_image = original_image.resize(new_size, Image.Resampling.LANCZOS)
-            photo_image = ImageTk.PhotoImage(resized_image)
-
-            # Update the sprite on the canvas
-            new_sprite_id = self.canvas.create_image(x, y, image=photo_image, anchor=tk.NW, tags="sprite")
-            self.placed_sprites = [(new_sprite_id if sid == sprite_id else sid, sname, sx, sy, original_size, act) for sid, sname, sx, sy, original_size, act in self.placed_sprites]
-
-            # Store the new image reference to avoid garbage collection
-            self.sprite_images[sprite_name] = (photo_image, original_size)
-
-            print(f"Sprite {sprite_name} resized to {new_size}.")
+        print(f"Scale factor set to {self.scale_factor}.")
 
     def load_sprites(self):
         sprite_dir = filedialog.askdirectory(title="Select Sprite Directory")
@@ -182,6 +166,7 @@ class SpritePlacerApp:
             return
 
         self.sprite_paths = {}
+        self.sprite_images = {}  # Clear previous sprite images
         sprite_names = []
         max_width, max_height = 0, 0
         for root, dirs, files in os.walk(sprite_dir):
@@ -242,8 +227,16 @@ class SpritePlacerApp:
         grid_x = (event.x // self.grid_size) * self.grid_size
         grid_y = (event.y // self.grid_size) * self.grid_size
 
-        sprite_id = self.canvas.create_image(grid_x, grid_y, image=image, anchor=tk.NW, tags="sprite")
-        self.placed_sprites.append((sprite_id, sprite_name, grid_x, grid_y, original_size, self.active_state.get()))
+        # Масштабирование изображения
+        new_size = (int(original_size[0] * self.scale_factor), int(original_size[1] * self.scale_factor))
+        resized_image = Image.open(self.sprite_paths[sprite_name]).resize(new_size, Image.Resampling.LANCZOS)
+        photo_image = ImageTk.PhotoImage(resized_image)
+
+        sprite_id = self.canvas.create_image(grid_x, grid_y, image=photo_image, anchor=tk.NW, tags="sprite")
+        self.placed_sprites.append((sprite_id, sprite_name, grid_x, grid_y, original_size, new_size, self.active_state.get()))
+
+        # Обновление отображаемого изображения
+        self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, new_size)
 
         self.select_sprite_by_id(sprite_id)
         self.copy_used_sprites()
@@ -291,11 +284,11 @@ class SpritePlacerApp:
             self.canvas.move(self.selected_sprite_outline, dx, dy)
 
             # Update the position in the placed_sprites list
-            for i, (sprite_id, sprite_name, x, y, original_size, active) in enumerate(self.placed_sprites):
+            for i, (sprite_id, sprite_name, x, y, original_size, current_size, active) in enumerate(self.placed_sprites):
                 if sprite_id == self.selected_sprite_id:
                     new_x = x + dx
                     new_y = y + dy
-                    self.placed_sprites[i] = (sprite_id, sprite_name, new_x, new_y, original_size, active)
+                    self.placed_sprites[i] = (sprite_id, sprite_name, new_x, new_y, original_size, current_size, active)
                     break
 
             print(f"Sprite {self.selected_sprite_id} moved {event.keysym} to ({new_x}, {new_y}).")
@@ -305,7 +298,7 @@ class SpritePlacerApp:
             self.canvas.delete(outline)
         self.status_outlines.clear()
 
-        for sprite_id, sprite_name, x, y, original_size, active in self.placed_sprites:
+        for sprite_id, sprite_name, x, y, original_size, current_size, active in self.placed_sprites:
             sprite_bbox = self.canvas.bbox(sprite_id)
             outline_color = "blue" if active else "green"
             outline_id = self.canvas.create_rectangle(sprite_bbox, outline=outline_color, width=2)
@@ -352,9 +345,8 @@ class SpritePlacerApp:
         if not file_path:
             return
 
-        scale_factor = float(self.scale_factor_entry.get())
-        data = {"placed_sprites": [{"sprite": sprite, "x": x, "y": y, "original_size": (int(original_size[0] * scale_factor), int(original_size[1] * scale_factor)), "active": active} for
-                                   _, sprite, x, y, original_size, active in self.placed_sprites],
+        data = {"placed_sprites": [{"sprite": sprite, "x": x, "y": y, "original_size": original_size, "current_size": current_size, "active": active} for
+                                   _, sprite, x, y, original_size, current_size, active in self.placed_sprites],
                 "canvas_size": {"width": self.canvas.winfo_width(), "height": self.canvas.winfo_height()}}
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=4)
@@ -391,21 +383,25 @@ class SpritePlacerApp:
             sprite_name = item['sprite']
             x, y = item['x'], item['y']
             original_size = item['original_size']
+            current_size = item['current_size']
             active = item.get('active', True)  # Default to True if 'active' key is not present
 
-            if sprite_name in self.sprite_images:
-                image, _ = self.sprite_images[sprite_name]
-                resized_image = image._PhotoImage__photo.zoom(original_size[0], original_size[1])
-                sprite_id = self.canvas.create_image(x, y, image=resized_image, anchor=tk.NW, tags="sprite")
-                self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, active))
+            if sprite_name in self.sprite_paths:
+                original_image = Image.open(self.sprite_paths[sprite_name])
+                resized_image = original_image.resize(current_size, Image.Resampling.LANCZOS)
+                photo_image = ImageTk.PhotoImage(resized_image)
+                sprite_id = self.canvas.create_image(x, y, image=photo_image, anchor=tk.NW, tags="sprite")
+                self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, current_size)
+                self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, current_size, active))
             else:
                 sprite_path = os.path.join('img', 'used_sprites', sprite_name)
                 if os.path.exists(sprite_path):
-                    image = Image.open(sprite_path)
-                    photo_image = ImageTk.PhotoImage(image)
-                    self.sprite_images[sprite_name] = (photo_image, original_size)
+                    original_image = Image.open(sprite_path)
+                    resized_image = original_image.resize(current_size, Image.Resampling.LANCZOS)
+                    photo_image = ImageTk.PhotoImage(resized_image)
+                    self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, current_size)
                     sprite_id = self.canvas.create_image(x, y, image=photo_image, anchor=tk.NW, tags="sprite")
-                    self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, active))
+                    self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, current_size, active))
 
         # Установка размера холста из загруженного файла
         if "canvas_size" in data:

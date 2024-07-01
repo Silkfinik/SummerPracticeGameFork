@@ -1,62 +1,44 @@
 {
     "placed_sprites": [
         {
-            "sprite": "1_normal.png",
+            "sprite": "1_normal_ice.png",
             "x": 0,
-            "y": 700,
+            "y": 600,
             "original_size": [
-                128,
-                64
+                32,
+                16
+            ],
+            "current_size": [
+                96,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal.png",
+            "sprite": "1_normal_ice.png",
             "x": 100,
-            "y": 700,
+            "y": 600,
             "original_size": [
-                128,
-                64
+                32,
+                16
+            ],
+            "current_size": [
+                96,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal.png",
-            "x": 250,
-            "y": 500,
+            "sprite": "1_normal_ice.png",
+            "x": 200,
+            "y": 600,
             "original_size": [
-                128,
-                64
+                32,
+                16
             ],
-            "active": true
-        },
-        {
-            "sprite": "1_normal.png",
-            "x": 500,
-            "y": 450,
-            "original_size": [
-                128,
-                64
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_small_.png",
-            "x": 650,
-            "y": 450,
-            "original_size": [
-                64,
-                128
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_small_.png",
-            "x": 300,
-            "y": 350,
-            "original_size": [
-                64,
-                128
+            "current_size": [
+                96,
+                48
             ],
             "active": true
         },
@@ -65,74 +47,74 @@
             "x": 300,
             "y": 600,
             "original_size": [
-                128,
-                64
+                32,
+                16
+            ],
+            "current_size": [
+                96,
+                48
             ],
             "active": true
         },
         {
             "sprite": "1_normal_ice.png",
-            "x": 300,
-            "y": 500,
+            "x": 400,
+            "y": 600,
             "original_size": [
-                128,
-                64
+                32,
+                16
+            ],
+            "current_size": [
+                96,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
+            "sprite": "2_small_.png",
+            "x": 500,
+            "y": 550,
+            "original_size": [
+                16,
+                32
+            ],
+            "current_size": [
+                48,
+                96
+            ],
+            "active": true
+        },
+        {
+            "sprite": "2_small_.png",
             "x": 550,
-            "y": 200,
+            "y": 550,
             "original_size": [
-                128,
-                64
+                16,
+                32
+            ],
+            "current_size": [
+                48,
+                96
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 750,
-            "y": 300,
+            "sprite": "2_small_.png",
+            "x": 550,
+            "y": 450,
             "original_size": [
-                128,
-                64
+                16,
+                32
             ],
-            "active": true
-        },
-        {
-            "sprite": "1_normal_ice.png",
-            "x": 650,
-            "y": 500,
-            "original_size": [
-                128,
-                64
-            ],
-            "active": true
-        },
-        {
-            "sprite": "1_normal_ice.png",
-            "x": 250,
-            "y": 150,
-            "original_size": [
-                128,
-                64
-            ],
-            "active": true
-        },
-        {
-            "sprite": "1_normal_ice.png",
-            "x": 100,
-            "y": 350,
-            "original_size": [
-                128,
-                64
+            "current_size": [
+                48,
+                96
             ],
             "active": true
         }
     ],
     "canvas_size": {
-        "width": 1002,
+        "width": 1029,
         "height": 750
     }
 }
