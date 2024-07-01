@@ -19,10 +19,9 @@ sounds = load_sounds('sounds')
 if music_on:
     play_music(os.path.join('sounds', 'background_music.mp3'))
 
-player = Player(animations, sounds, 100, screen_height - 100 - bar_height, screen_width, screen_height, scale_factor)
+player = Player(animations, sounds, 100, screen_height - 100 - bar_height, screen_width, screen_height, 2)
 
 all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
 
 platforms = pygame.sprite.Group()
 platforms_passive_group = pygame.sprite.Group()
@@ -32,6 +31,7 @@ all_sprites.add(platforms)
 load_sprite_positions('map.json', platforms, screen_height, platforms_passive_group)
 all_sprites.add(platforms)
 all_sprites.add(platforms_passive_group)
+all_sprites.add(player)
 
 running = True
 paused = False
