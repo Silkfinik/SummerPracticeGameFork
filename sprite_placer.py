@@ -66,8 +66,11 @@ class SpritePlacerApp:
         self.canvas_frame = tk.Frame(self.main_frame)
         self.canvas_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
+        self.buffer_frame = tk.Frame(self.main_frame, width=100, bg="white")  # Spacer frame for the buffer
+        self.buffer_frame.pack(side=tk.LEFT, fill=tk.Y)
+
         self.info_frame = tk.Frame(self.main_frame, width=200, bg="lightgray")
-        self.info_frame.pack(side=tk.RIGHT, fill=tk.Y)
+        self.info_frame.pack(side=tk.LEFT, fill=tk.Y)
 
         self.canvas = tk.Canvas(self.canvas_frame, bg="white")
         self.canvas.pack(fill=tk.BOTH, expand=True)
@@ -76,13 +79,15 @@ class SpritePlacerApp:
         self.load_button = tk.Button(self.control_frame, text="Load", command=self.open_load_settings)
         self.load_button.pack(pady=10, padx=10)
 
-        self.canvas_size_button = tk.Button(self.control_frame, text="Canvas Size", command=self.open_canvas_size_settings)
+        self.canvas_size_button = tk.Button(self.control_frame, text="Canvas Size",
+                                            command=self.open_canvas_size_settings)
         self.canvas_size_button.pack(pady=10, padx=10)
 
         self.grid_settings_button = tk.Button(self.control_frame, text="Grid Settings", command=self.open_grid_settings)
         self.grid_settings_button.pack(pady=10, padx=10)
 
-        self.sprite_settings_button = tk.Button(self.control_frame, text="Sprite Settings", command=self.open_sprite_settings)
+        self.sprite_settings_button = tk.Button(self.control_frame, text="Sprite Settings",
+                                                command=self.open_sprite_settings)
         self.sprite_settings_button.pack(pady=10, padx=10)
 
         self.save_button = tk.Button(self.control_frame, text="Save", command=self.save_sprites)
@@ -197,7 +202,7 @@ class SpritePlacerApp:
             self.canvas_frame.config(width=width, height=height)
             self.root.geometry(
                 f"{width + self.control_frame.winfo_width() + self.info_frame.winfo_width()}x{height + self.root.winfo_height() - self.canvas.winfo_height()}")
-            self.root.resizable(False, False)
+            self.root.resizable(False, False)  # Fix the window size
             self.draw_canvas_border()
         except ValueError:
             print("Please enter valid width and height.")
