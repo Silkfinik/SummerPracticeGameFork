@@ -15,7 +15,9 @@ class SpritePlacerApp:
         self.active_state = tk.BooleanVar(value=True)  # Default to active
 
         self.sprite_images = {}
+        self.sprite_images_for_nail = {}
         self.sprite_paths = {}
+        self.sprite_paths_for_nail = {}
         self.placed_sprites = []
         self.grid_size = 50
 
@@ -28,6 +30,8 @@ class SpritePlacerApp:
         self.grid_lines = []  # To store grid line IDs
         self.grid_opacity = 100  # Default opacity
 
+        self.canvas_border = None  # Track the canvas border ID
+
         self.setup_ui()
 
         self.canvas.bind("<Button-1>", self.place_sprite)
@@ -39,6 +43,14 @@ class SpritePlacerApp:
         self.root.bind("<KeyPress-h>", self.show_highlight_sprites)  # Bind key press 'h'
         self.root.bind("<KeyRelease-h>", self.hide_highlight_sprites)  # Bind key release 'h'
         self.root.bind("<KeyPress>", self.key_press)  # Bind arrow keys to move sprite
+        self.root.bind("<Delete>", self.delete_selected_sprite)  # Bind Delete key to delete sprite
+
+        self.root.bind("<Control-s>", self.save_sprites)  # Bind Ctrl+S to save sprites
+        self.root.bind("<Control-o>", lambda event: self.load_sprites())  # Bind Ctrl+O to load sprites
+        self.root.bind("<Control-l>", lambda event: self.load_map())  # Bind Ctrl+L to load map
+        self.root.bind("<Control-c>", lambda event: self.open_canvas_size_settings())  # Bind Ctrl+C to canvas settings
+        self.root.bind("<Control-g>", lambda event: self.open_grid_settings())  # Bind Ctrl+G to grid settings
+        self.root.bind("<Control-r>", lambda event: self.open_sprite_settings())  # Bind Ctrl+R to sprite settings
 
         self.selected_sprite_id = None  # Track the selected sprite's ID
         self.selected_sprite_outline = None  # Track the outline rectangle ID
@@ -61,11 +73,17 @@ class SpritePlacerApp:
         self.canvas.pack(fill=tk.BOTH, expand=True)
         self.canvas.bind("<Configure>", lambda e: self.draw_grid())  # Redraw grid on resize
 
-        self.load_sprites_button = tk.Button(self.control_frame, text="Load Sprites", command=self.load_sprites)
-        self.load_sprites_button.pack(pady=10, padx=10)
+        self.load_button = tk.Button(self.control_frame, text="Load", command=self.open_load_settings)
+        self.load_button.pack(pady=10, padx=10)
 
-        self.load_map_button = tk.Button(self.control_frame, text="Load Map", command=self.load_map)
-        self.load_map_button.pack(pady=10, padx=10)
+        self.canvas_size_button = tk.Button(self.control_frame, text="Canvas Size", command=self.open_canvas_size_settings)
+        self.canvas_size_button.pack(pady=10, padx=10)
+
+        self.grid_settings_button = tk.Button(self.control_frame, text="Grid Settings", command=self.open_grid_settings)
+        self.grid_settings_button.pack(pady=10, padx=10)
+
+        self.sprite_settings_button = tk.Button(self.control_frame, text="Sprite Settings", command=self.open_sprite_settings)
+        self.sprite_settings_button.pack(pady=10, padx=10)
 
         self.save_button = tk.Button(self.control_frame, text="Save", command=self.save_sprites)
         self.save_button.pack(pady=10, padx=10)
@@ -76,45 +94,6 @@ class SpritePlacerApp:
         self.active_checkbox = tk.Checkbutton(self.control_frame, text="status", variable=self.active_state,
                                               command=self.toggle_status)
         self.active_checkbox.pack(pady=10, padx=10)
-
-        self.width_label = tk.Label(self.control_frame, text="Canvas Width:")
-        self.width_label.pack(pady=5, padx=10)
-        self.width_entry = tk.Entry(self.control_frame)
-        self.width_entry.pack(pady=5, padx=10)
-
-        self.height_label = tk.Label(self.control_frame, text="Canvas Height:")
-        self.height_label.pack(pady=5, padx=10)
-        self.height_entry = tk.Entry(self.control_frame)
-        self.height_entry.pack(pady=5, padx=10)
-
-        self.set_canvas_size_button = tk.Button(self.control_frame, text="Set Canvas Size",
-                                                command=self.set_canvas_size)
-        self.set_canvas_size_button.pack(pady=10, padx=10)
-
-        self.grid_size_label = tk.Label(self.control_frame, text="Grid Size:")
-        self.grid_size_label.pack(pady=5, padx=10)
-        self.grid_size_entry = tk.Entry(self.control_frame)
-        self.grid_size_entry.insert(0, "50")
-        self.grid_size_entry.pack(pady=5, padx=10)
-
-        self.set_grid_size_button = tk.Button(self.control_frame, text="Set Grid Size", command=self.set_grid_size)
-        self.set_grid_size_button.pack(pady=10, padx=10)
-
-        self.grid_opacity_label = tk.Label(self.control_frame, text="Grid Opacity:")
-        self.grid_opacity_label.pack(pady=5, padx=10)
-        self.grid_opacity_scale = tk.Scale(self.control_frame, from_=0, to=100, orient=tk.HORIZONTAL,
-                                           command=self.update_grid_opacity)
-        self.grid_opacity_scale.set(self.grid_opacity)
-        self.grid_opacity_scale.pack(pady=5, padx=10)
-
-        self.scale_factor_label = tk.Label(self.control_frame, text="Scale Factor:")
-        self.scale_factor_label.pack(pady=5, padx=10)
-        self.scale_factor_entry = tk.Entry(self.control_frame)
-        self.scale_factor_entry.insert(0, "1.0")  # Default scale factor
-        self.scale_factor_entry.pack(pady=5, padx=10)
-
-        self.set_scale_button = tk.Button(self.control_frame, text="Set Scale", command=self.set_scale)
-        self.set_scale_button.pack(pady=10, padx=10)
 
         self.help_button = tk.Button(self.control_frame, text="Help", command=self.show_help)
         self.help_button.pack(pady=10, padx=10)
@@ -149,6 +128,67 @@ class SpritePlacerApp:
         self.thumbnails_frame = tk.Frame(self.scroll_canvas, bg="lightgray")
         self.scroll_canvas.create_window((0, 0), window=self.thumbnails_frame, anchor="nw")
 
+    def open_load_settings(self):
+        load_settings_window = tk.Toplevel(self.root)
+        load_settings_window.title("Load Settings")
+
+        self.load_sprites_button = tk.Button(load_settings_window, text="Load Sprites", command=self.load_sprites)
+        self.load_sprites_button.pack(pady=10, padx=10)
+
+        self.load_map_button = tk.Button(load_settings_window, text="Load Map", command=self.load_map)
+        self.load_map_button.pack(pady=10, padx=10)
+
+    def open_canvas_size_settings(self):
+        canvas_size_window = tk.Toplevel(self.root)
+        canvas_size_window.title("Canvas Size Settings")
+
+        self.width_label = tk.Label(canvas_size_window, text="Canvas Width:")
+        self.width_label.pack(pady=5, padx=10)
+        self.width_entry = tk.Entry(canvas_size_window)
+        self.width_entry.pack(pady=5, padx=10)
+
+        self.height_label = tk.Label(canvas_size_window, text="Canvas Height:")
+        self.height_label.pack(pady=5, padx=10)
+        self.height_entry = tk.Entry(canvas_size_window)
+        self.height_entry.pack(pady=5, padx=10)
+
+        self.set_canvas_size_button = tk.Button(canvas_size_window, text="Set Canvas Size",
+                                                command=self.set_canvas_size)
+        self.set_canvas_size_button.pack(pady=10, padx=10)
+
+    def open_grid_settings(self):
+        grid_settings_window = tk.Toplevel(self.root)
+        grid_settings_window.title("Grid Settings")
+
+        self.grid_size_label = tk.Label(grid_settings_window, text="Grid Size:")
+        self.grid_size_label.pack(pady=5, padx=10)
+        self.grid_size_entry = tk.Entry(grid_settings_window)
+        self.grid_size_entry.insert(0, str(self.grid_size))
+        self.grid_size_entry.pack(pady=5, padx=10)
+
+        self.set_grid_size_button = tk.Button(grid_settings_window, text="Set Grid Size", command=self.set_grid_size)
+        self.set_grid_size_button.pack(pady=10, padx=10)
+
+        self.grid_opacity_label = tk.Label(grid_settings_window, text="Grid Opacity:")
+        self.grid_opacity_label.pack(pady=5, padx=10)
+        self.grid_opacity_scale = tk.Scale(grid_settings_window, from_=0, to=100, orient=tk.HORIZONTAL,
+                                           command=self.update_grid_opacity)
+        self.grid_opacity_scale.set(self.grid_opacity)
+        self.grid_opacity_scale.pack(pady=5, padx=10)
+
+    def open_sprite_settings(self):
+        sprite_settings_window = tk.Toplevel(self.root)
+        sprite_settings_window.title("Sprite Settings")
+
+        self.scale_factor_label = tk.Label(sprite_settings_window, text="Scale Factor:")
+        self.scale_factor_label.pack(pady=5, padx=10)
+        self.scale_factor_entry = tk.Entry(sprite_settings_window)
+        self.scale_factor_entry.insert(0, "1.0")  # Default scale factor
+        self.scale_factor_entry.pack(pady=5, padx=10)
+
+        self.set_scale_button = tk.Button(sprite_settings_window, text="Set Scale", command=self.set_scale)
+        self.set_scale_button.pack(pady=10, padx=10)
+
     def set_canvas_size(self):
         try:
             width = int(self.width_entry.get())
@@ -158,12 +198,14 @@ class SpritePlacerApp:
             self.root.geometry(
                 f"{width + self.control_frame.winfo_width() + self.info_frame.winfo_width()}x{height + self.root.winfo_height() - self.canvas.winfo_height()}")
             self.root.resizable(False, False)
+            self.draw_canvas_border()
         except ValueError:
             print("Please enter valid width and height.")
 
     def set_grid_size(self):
         try:
             self.grid_size = int(self.grid_size_entry.get())
+            self.draw_grid()
         except ValueError:
             print("Please enter a valid grid size.")
 
@@ -189,6 +231,14 @@ class SpritePlacerApp:
             line_id = self.canvas.create_line(0, i, width, i, fill="#d3d3d3")
             self.grid_lines.append(line_id)
 
+        self.draw_canvas_border()
+
+    def draw_canvas_border(self):
+        if self.canvas_border:
+            self.canvas.delete(self.canvas_border)
+
+        self.canvas_border = self.canvas.create_rectangle(0, 0, self.canvas.winfo_width(), self.canvas.winfo_height(), outline="purple", width=2)
+
     def set_scale(self):
         try:
             self.scale_factor = float(self.scale_factor_entry.get())
@@ -199,13 +249,12 @@ class SpritePlacerApp:
         print(f"Scale factor set to {self.scale_factor}.")
 
     def load_sprites(self):
+        self.sprite_images_for_nail.clear()
         sprite_dir = filedialog.askdirectory(title="Select Sprite Directory")
         if not sprite_dir:
             return
 
         sprite_names = []
-        self.sprite_images.clear()
-        self.sprite_paths.clear()
         max_width, max_height = 0, 0
         for root, dirs, files in os.walk(sprite_dir):
             for file in files:
@@ -215,6 +264,8 @@ class SpritePlacerApp:
                     photo_image = ImageTk.PhotoImage(image)
                     self.sprite_images[file] = (photo_image, image.size)  # Store original size
                     self.sprite_paths[file] = sprite_path  # Сохраняем путь к изображению
+                    self.sprite_images_for_nail[file] = (photo_image, image.size)  # Store original size
+                    self.sprite_paths_for_nail[file] = sprite_path  # Сохраняем путь к изображению
                     sprite_names.append(file)
                     max_width = max(max_width, image.size[0])
                     max_height = max(max_height, image.size[1])
@@ -236,7 +287,7 @@ class SpritePlacerApp:
         for widget in self.thumbnails_frame.winfo_children():
             widget.destroy()
 
-        for sprite_name, (photo_image, size) in self.sprite_images.items():
+        for sprite_name, (photo_image, size) in self.sprite_images_for_nail.items():
             frame = tk.Frame(self.thumbnails_frame, bg="lightgray", width=self.max_sprite_width, height=size[1] + 40)
             frame.pack_propagate(False)
             label = tk.Label(frame, image=photo_image, bg="lightgray")
@@ -381,10 +432,17 @@ class SpritePlacerApp:
             " - Arrow Keys: Move selected sprite\n"
             " - h: Highlight sprites by status (hold)\n"
             " - Esc: Deselect sprite\n"
+            " - Delete: Delete selected sprite\n"
+            " - Ctrl+S: Save sprites\n"
+            " - Ctrl+O: Load sprites\n"
+            " - Ctrl+L: Load map\n"
+            " - Ctrl+C: Canvas settings\n"
+            " - Ctrl+G: Grid settings\n"
+            " - Ctrl+R: Sprite settings\n"
         )
         messagebox.showinfo("Help", help_text)
 
-    def delete_selected_sprite(self):
+    def delete_selected_sprite(self, event=None):
         if self.selected_sprite_id is not None:
             self.canvas.delete(self.selected_sprite_id)
             # Remove the selected sprite from the list
@@ -399,7 +457,7 @@ class SpritePlacerApp:
         else:
             print("No sprite selected.")
 
-    def save_sprites(self):
+    def save_sprites(self, event=None):
         file_path = filedialog.asksaveasfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
         if not file_path:
             return
@@ -424,6 +482,11 @@ class SpritePlacerApp:
             if sprite_name in self.sprite_paths:
                 src_path = self.sprite_paths[sprite_name]
                 dst_path = os.path.join(used_sprites_dir, sprite_name)
+
+                if os.path.abspath(src_path) == os.path.abspath(dst_path):
+                    print(f"Skipping copy for {sprite_name} as source and destination are the same.")
+                    continue
+
                 shutil.copy2(src_path, dst_path)
                 print(f"Copied {sprite_name} to {dst_path}")
 
@@ -470,7 +533,9 @@ class SpritePlacerApp:
         if "canvas_size" in data:
             canvas_size = data["canvas_size"]
             self.canvas.config(width=canvas_size["width"], height=canvas_size["height"])
+            self.draw_canvas_border()
 
+        self.copy_used_sprites()
 
     def display_sprite_info(self):
         sprite_name = self.selected_sprite
