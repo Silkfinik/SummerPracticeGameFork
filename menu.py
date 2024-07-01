@@ -1,6 +1,7 @@
 import pygame
 import os
 from config import font, screen_width, screen_height, music_on, sound_on, key_bindings
+from sounds import play_music, stop_music  # Добавлен импорт stop_music
 
 square_size = 20
 padding = 10
