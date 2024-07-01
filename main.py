@@ -10,8 +10,14 @@ from platform_loader import load_sprite_positions
 from hud import draw_hud
 from menu import draw_menu, handle_menu_click, draw_settings_menu, handle_settings_click, change_key
 from background import draw_background, background_image
+from start_screen import start_screen
 
 clock = pygame.time.Clock()
+
+# Показ стартового окна
+if not start_screen():
+    pygame.quit()
+    sys.exit()
 
 animations = load_images('sprites', scale_factor)
 sounds = load_sounds('sounds')
@@ -19,7 +25,14 @@ sounds = load_sounds('sounds')
 if music_on:
     play_music(os.path.join('sounds', 'background_music.mp3'))
 
-player = Player(animations, sounds, 100, screen_height - 100 - bar_height, screen_width, screen_height, scale_factor)
+player_spawn_x = 100
+player_spawn_y = screen_height - 100 - bar_height
+
+def reset_player(player):
+    player.rect.topleft = (player_spawn_x, player_spawn_y)
+    player.velocity = pygame.math.Vector2(0, 0)
+
+player = Player(animations, sounds, player_spawn_x, player_spawn_y, screen_width, screen_height, scale_factor)
 
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
@@ -68,6 +81,9 @@ while running:
                 if result == "settings":
                     menu_active = False
                     settings_active = True
+                elif result == "restart":
+                    reset_player(player)  # Перезапуск уровня
+                    menu_active = False  # Закрытие меню
             elif settings_active:
                 result = handle_settings_click(event.pos, key_changing)
                 if result == "menu":

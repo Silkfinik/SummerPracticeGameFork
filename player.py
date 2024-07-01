@@ -15,14 +15,14 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = (x, y)
         self.velocity = pygame.math.Vector2(0, 0)
         self.gravity = 0.5
-        self.jump_power = -10
+        self.jump_power = -7
         self.on_ground = False
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.animation_speed = 0.14
         self.animation_timer = 0
         self.direction = "right"
-        self.walk_speed = 5
+        self.walk_speed = 3
         self.sprint_multiplier = 1.7
         self.jump_multiplier = 1.3
         self.normal_animation_speed = 0.14

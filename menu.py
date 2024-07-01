@@ -13,12 +13,14 @@ quit_text = font.render("Press Q to Quit", True, (255, 255, 255))
 music_text = font.render("Music", True, (255, 255, 255))
 sound_text = font.render("Sound", True, (255, 255, 255))
 settings_text = font.render("Settings", True, (255, 255, 255))
+restart_text = font.render("Restart", True, (255, 255, 255))  # Добавлено поле "Restart"
 
-menu_text_pos = (screen_width // 2 - menu_text.get_width() // 2, screen_height // 2 - 3 * (menu_text.get_height() + padding))
+menu_text_pos = (screen_width // 2 - menu_text.get_width() // 2, screen_height // 2 - 4 * (menu_text.get_height() + padding))
 music_text_pos = (screen_width // 2 - (music_text.get_width() + square_size + padding) // 2, menu_text_pos[1] + menu_text.get_height() + padding)
 sound_text_pos = (screen_width // 2 - (sound_text.get_width() + square_size + padding) // 2, music_text_pos[1] + music_text.get_height() + padding)
 settings_text_pos = (screen_width // 2 - settings_text.get_width() // 2, sound_text_pos[1] + sound_text.get_height() + padding)
-quit_text_pos = (screen_width // 2 - quit_text.get_width() // 2, settings_text_pos[1] + settings_text.get_height() + padding)
+restart_text_pos = (screen_width // 2 - restart_text.get_width() // 2, settings_text_pos[1] + settings_text.get_height() + padding)  # Позиция для "Restart"
+quit_text_pos = (screen_width // 2 - quit_text.get_width() // 2, restart_text_pos[1] + restart_text.get_height() + padding)
 
 music_square_pos = (music_text_pos[0] + music_text.get_width() + padding, music_text_pos[1] + offset_down)
 sound_square_pos = (sound_text_pos[0] + sound_text.get_width() + padding, sound_text_pos[1] + offset_down)
@@ -29,11 +31,13 @@ def draw_menu(screen):
     music_text = font.render("Music", True, (255, 255, 255))
     sound_text = font.render("Sound", True, (255, 255, 255))
     settings_text = font.render("Settings", True, (255, 255, 255))
+    restart_text = font.render("Restart", True, (255, 255, 255))  # Добавлено поле "Restart"
 
     screen.blit(menu_text, menu_text_pos)
     screen.blit(music_text, music_text_pos)
     screen.blit(sound_text, sound_text_pos)
     screen.blit(settings_text, settings_text_pos)
+    screen.blit(restart_text, restart_text_pos)  # Отрисовка "Restart"
     screen.blit(quit_text, quit_text_pos)
 
     pygame.draw.rect(screen, (255, 255, 255), (*music_square_pos, square_size, square_size), 2)
@@ -62,6 +66,8 @@ def handle_menu_click(pos, player):
         print(f"Sound {'enabled' if sound_on else 'disabled'}")
     elif settings_text_pos[0] <= x <= settings_text_pos[0] + settings_text.get_width() and settings_text_pos[1] <= y <= settings_text_pos[1] + settings_text.get_height():
         return "settings"  # Возвращаем "settings" если был нажат пункт Settings
+    elif restart_text_pos[0] <= x <= restart_text_pos[0] + restart_text.get_width() and restart_text_pos[1] <= y <= restart_text_pos[1] + restart_text.get_height():
+        return "restart"  # Возвращаем "restart" если был нажат пункт Restart
     return None
 
 # Настройки для изменения управления
