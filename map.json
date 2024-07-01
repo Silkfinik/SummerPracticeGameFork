@@ -1,258 +1,248 @@
 {
     "placed_sprites": [
         {
-            "sprite": "1_normal_ice.png",
+            "sprite": "giant.png",
             "x": 0,
-            "y": 576,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 32,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 50,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 64,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 100,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 96,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 150,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 128,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 200,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 160,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 250,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 192,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 300,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 224,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 350,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 256,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 400,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 288,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 450,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 320,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 500,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "1_normal_ice.png",
-            "x": 352,
-            "y": 576,
+            "sprite": "giant.png",
+            "x": 550,
+            "y": 700,
             "original_size": [
-                32,
-                16
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 368,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 600,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 352,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 650,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 336,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 700,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 320,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 750,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 304,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 800,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 288,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 850,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 272,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 900,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 256,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 950,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 240,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 1000,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 224,
-            "y": 544,
+            "sprite": "giant.png",
+            "x": 1050,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 368,
-            "y": 512,
+            "sprite": "giant.png",
+            "x": 1100,
+            "y": 700,
             "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         },
         {
-            "sprite": "2_small_.png",
-            "x": 352,
-            "y": 512,
+            "sprite": "giant.png",
+            "x": 1150,
+            "y": 700,
             "original_size": [
-                16,
-                32
-            ],
-            "active": true
-        },
-        {
-            "sprite": "2_small_.png",
-            "x": 286,
-            "y": 312,
-            "original_size": [
-                16,
-                32
+                48,
+                48
             ],
             "active": true
         }
     ],
     "canvas_size": {
-        "width": 404,
-        "height": 616
+        "width": 1192,
+        "height": 750
     }
 }
