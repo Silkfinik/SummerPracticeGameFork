@@ -3,6 +3,7 @@ from tkinter import filedialog, ttk, messagebox
 import os
 import shutil
 import json
+import platform
 from PIL import Image, ImageTk
 
 class SpritePlacerApp:
@@ -25,7 +26,10 @@ class SpritePlacerApp:
         self.setup_ui()
 
         self.canvas.bind("<Button-1>", self.place_sprite)
-        self.canvas.bind("<Button-3>", self.select_sprite)  # Right-click to select sprite
+        if platform.system() == 'Darwin':
+            self.canvas.bind("<Button-2>", self.select_sprite) # Right-click to select sprite
+        else:
+            self.canvas.bind("<Button-3>", self.select_sprite) # Right-click to select sprite
         self.root.bind("<Escape>", self.deselect_sprite)  # Bind Esc key to deselect sprite
         self.root.bind("<KeyPress-h>", self.show_highlight_sprites)  # Bind key press 'h'
         self.root.bind("<KeyRelease-h>", self.hide_highlight_sprites)  # Bind key release 'h'
@@ -140,7 +144,6 @@ class SpritePlacerApp:
         if not sprite_dir:
             return
 
-        self.sprite_images.clear()
         self.sprite_paths = {}
         sprite_names = []
         max_width, max_height = 0, 0

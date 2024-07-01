@@ -249,10 +249,90 @@
                 32
             ],
             "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 100,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 150,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 50,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 0,
+            "y": 550,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 50,
+            "y": 550,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 100,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 200,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "giant.png",
+            "x": 250,
+            "y": 500,
+            "original_size": [
+                48,
+                48
+            ],
+            "active": true
         }
     ],
     "canvas_size": {
-        "width": 382,
-        "height": 594
+        "width": 394,
+        "height": 606
     }
 }
