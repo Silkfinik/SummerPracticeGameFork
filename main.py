@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import json
 from config import screen, screen_width, screen_height, debug_mode, score, bar_color, bar_position, bar_height, scale_factor, music_on, sound_on, key_bindings
 from player import Player
 from sprites import load_images
@@ -19,7 +20,14 @@ sounds = load_sounds('sounds')
 if music_on:
     play_music(os.path.join('sounds', 'background_music.mp3'))
 
-player = Player(animations, sounds, 100, screen_height - 100 - bar_height, screen_width, screen_height, 2)
+# get player start posision
+with open("map.json", 'r') as f:
+    data = json.load(f)
+player_cords = data['player_spawn']
+
+
+
+player = Player(animations, sounds, player_cords["x"], player_cords["y"], screen_width, screen_height, 2)
 
 all_sprites = pygame.sprite.Group()
 
