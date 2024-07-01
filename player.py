@@ -1,5 +1,5 @@
+# player.py
 import pygame
-import os
 from sounds import play_sound
 
 class Player(pygame.sprite.Sprite):
@@ -24,10 +24,11 @@ class Player(pygame.sprite.Sprite):
         self.direction = "right"
         self.walk_speed = 5
         self.sprint_multiplier = 1.7
-        self.jump_multiplier = 1.3  # Множитель высоты прыжка в спринте
+        self.jump_multiplier = 1.3
         self.normal_animation_speed = 0.14
-        self.sprint_animation_speed = self.normal_animation_speed / 2  # Уменьшение для увеличения скорости анимации
+        self.sprint_animation_speed = self.normal_animation_speed / 2
         self.is_walking = False
+        self.sounds_on = True  # Добавлен атрибут для контроля звуков
 
     def scale_animations(self, animations, scale_factor):
         scaled_animations = {}
@@ -38,39 +39,31 @@ class Player(pygame.sprite.Sprite):
         return scaled_animations
 
     def update(self, dt, platforms):
-        # Обновление анимации
         self.animation_timer += dt
         if self.animation_timer >= self.animation_speed:
             self.animation_timer = 0
             self.current_image = (self.current_image + 1) % len(self.images)
             self.image = self.images[self.current_image]
 
-        # Обновление положения
         self.velocity.y += self.gravity
         self.rect.y += self.velocity.y
         self.on_ground = False
 
-        # Проверка столкновения с платформами
         collisions = pygame.sprite.spritecollide(self, platforms, False)
 
         for platform in collisions:
             if self.velocity.y > 0:
-                # Обработка коллизий по вертикали (падение на платформу)
                 self.rect.bottom = platform.rect.top
                 self.velocity.y = 0
                 self.on_ground = True
             elif self.velocity.y < 0:
-                # Обработка коллизий по вертикали (удар головой о платформу)
                 self.rect.top = platform.rect.bottom
                 self.velocity.y = 0
 
-        # Ограничение по горизонтали
         if self.rect.left < 0:
             self.rect.left = 0
         if self.rect.right > self.screen_width:
             self.rect.right = self.screen_width
-
-        # Ограничение по вертикали
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > self.screen_height:
@@ -119,7 +112,8 @@ class Player(pygame.sprite.Sprite):
             self.velocity.y = jump_power
             self.on_ground = False
             self.change_animation(f"jump_{self.direction}")
-            play_sound(self.sounds, 'jump')
+            if self.sounds_on:  # Проверка состояния звуков
+                play_sound(self.sounds, 'jump')
 
     def change_animation(self, animation):
         if self.current_animation != animation:
