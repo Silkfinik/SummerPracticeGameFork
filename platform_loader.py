@@ -10,7 +10,7 @@ class ScaledPlatform(pygame.sprite.Sprite):
         canvas_width, canvas_height = canvas_size
 
         # Масштабирование платформы по высоте экрана
-        scale_factor = screen_height / canvas_height
+        scale_factor = 1
         new_width = int(original_width * scale_factor)
         new_height = int(original_height * scale_factor)
         self.image = pygame.transform.scale(image, (new_width, new_height))
