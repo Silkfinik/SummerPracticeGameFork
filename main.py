@@ -30,6 +30,7 @@ if music_on:
 with open("map.json", 'r') as f:
     data = json.load(f)
 player_cords = data['player_spawn']
+player_death_line = data["death_line"]["y_d"]
 
 def reset_player(player):
     player.rect.topleft = (player_cords["x"], player_cords["y"])
@@ -94,6 +95,9 @@ while running:
                     menu_active = True
                 else:
                     key_changing = result
+
+    if player.rect.bottom >= player_death_line:
+        reset_player(player)
 
     if menu_active:
         screen.fill((0, 0, 0))

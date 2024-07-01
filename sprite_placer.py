@@ -32,6 +32,10 @@ class SpritePlacerApp:
 
         self.canvas_border = None  # Track the canvas border ID
 
+        self.death_height = 10  # Default death line height
+        self.player_spawn_x = 50  # Default player spawn X-coordinate
+        self.player_spawn_y = 520  # Default player spawn Y-coordinate
+
         self.setup_ui()
 
         self.canvas.bind("<Button-1>", self.place_sprite)
@@ -89,6 +93,14 @@ class SpritePlacerApp:
         self.sprite_settings_button = tk.Button(self.control_frame, text="Sprite Settings",
                                                 command=self.open_sprite_settings)
         self.sprite_settings_button.pack(pady=10, padx=10)
+
+        self.death_height_button = tk.Button(self.control_frame, text="Set Death Height",
+                                             command=self.open_death_height_settings)
+        self.death_height_button.pack(pady=10, padx=10)
+
+        self.player_spawn_button = tk.Button(self.control_frame, text="Set Player Spawn",
+                                             command=self.open_player_spawn_settings)
+        self.player_spawn_button.pack(pady=10, padx=10)
 
         self.save_button = tk.Button(self.control_frame, text="Save", command=self.save_sprites)
         self.save_button.pack(pady=10, padx=10)
@@ -181,6 +193,37 @@ class SpritePlacerApp:
         self.grid_opacity_scale.set(self.grid_opacity)
         self.grid_opacity_scale.pack(pady=5, padx=10)
 
+    def open_death_height_settings(self):
+        death_height_window = tk.Toplevel(self.root)
+        death_height_window.title("Set Death Height")
+
+        self.death_height_label = tk.Label(death_height_window, text="Death Line Y-coordinate:")
+        self.death_height_label.pack(pady=5, padx=10)
+        self.death_height_entry = tk.Entry(death_height_window)
+        self.death_height_entry.pack(pady=5, padx=10)
+
+        self.set_death_height_button = tk.Button(death_height_window, text="Set Death Height",
+                                                 command=self.set_death_height)
+        self.set_death_height_button.pack(pady=10, padx=10)
+
+    def open_player_spawn_settings(self):
+        player_spawn_window = tk.Toplevel(self.root)
+        player_spawn_window.title("Set Player Spawn")
+
+        self.player_spawn_x_label = tk.Label(player_spawn_window, text="Player Spawn X-coordinate:")
+        self.player_spawn_x_label.pack(pady=5, padx=10)
+        self.player_spawn_x_entry = tk.Entry(player_spawn_window)
+        self.player_spawn_x_entry.pack(pady=5, padx=10)
+
+        self.player_spawn_y_label = tk.Label(player_spawn_window, text="Player Spawn Y-coordinate:")
+        self.player_spawn_y_label.pack(pady=5, padx=10)
+        self.player_spawn_y_entry = tk.Entry(player_spawn_window)
+        self.player_spawn_y_entry.pack(pady=5, padx=10)
+
+        self.set_player_spawn_button = tk.Button(player_spawn_window, text="Set Player Spawn",
+                                                 command=self.set_player_spawn)
+        self.set_player_spawn_button.pack(pady=10, padx=10)
+
     def open_sprite_settings(self):
         sprite_settings_window = tk.Toplevel(self.root)
         sprite_settings_window.title("Sprite Settings")
@@ -193,6 +236,21 @@ class SpritePlacerApp:
 
         self.set_scale_button = tk.Button(sprite_settings_window, text="Set Scale", command=self.set_scale)
         self.set_scale_button.pack(pady=10, padx=10)
+
+    def set_death_height(self):
+        try:
+            self.death_height = int(self.death_height_entry.get())
+            print(f"Death line Y-coordinate set to {self.death_height}")
+        except ValueError:
+            print("Please enter a valid Y-coordinate for the death line.")
+
+    def set_player_spawn(self):
+        try:
+            self.player_spawn_x = int(self.player_spawn_x_entry.get())
+            self.player_spawn_y = int(self.player_spawn_y_entry.get())
+            print(f"Player spawn set to ({self.player_spawn_x}, {self.player_spawn_y})")
+        except ValueError:
+            print("Please enter valid coordinates for player spawn.")
 
     def set_canvas_size(self):
         try:
@@ -467,11 +525,17 @@ class SpritePlacerApp:
         if not file_path:
             return
 
-        data = {"placed_sprites": [
-            {"sprite": sprite, "x": x, "y": y, "original_size": original_size, "current_size": current_size,
-             "active": active} for
-            _, sprite, x, y, original_size, current_size, active in self.placed_sprites],
-                "canvas_size": {"width": self.canvas.winfo_width(), "height": self.canvas.winfo_height()}}
+        data = {
+            "placed_sprites": [
+                {"sprite": sprite, "x": x, "y": y, "original_size": original_size, "current_size": current_size,
+                 "active": active}
+                for _, sprite, x, y, original_size, current_size, active in self.placed_sprites
+            ],
+            "canvas_size": {"width": self.canvas.winfo_width(), "height": self.canvas.winfo_height()},
+            "death_line": {"y_d": self.death_height if hasattr(self, 'death_height') else 0},
+            "player_spawn": {"x": self.player_spawn_x if hasattr(self, 'player_spawn_x') else 0,
+                             "y": self.player_spawn_y if hasattr(self, 'player_spawn_y') else 0}
+        }
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=4)
 

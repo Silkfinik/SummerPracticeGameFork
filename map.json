@@ -3571,16 +3571,13 @@
             "active": false
         }
     ],
-
     "canvas_size": {
         "width": 1500,
         "height": 750
     },
-
     "death_line": {
-        "y_d": 10
+        "y_d": 650
     },
-
     "player_spawn": {
         "x": 50,
         "y": 520
