@@ -92,6 +92,15 @@ class SpritePlacerApp:
         self.set_grid_size_button = tk.Button(self.control_frame, text="Set Grid Size", command=self.set_grid_size)
         self.set_grid_size_button.pack(pady=10, padx=10)
 
+        self.scale_factor_label = tk.Label(self.control_frame, text="Scale Factor:")
+        self.scale_factor_label.pack(pady=5, padx=10)
+        self.scale_factor_entry = tk.Entry(self.control_frame)
+        self.scale_factor_entry.insert(0, "1.0")  # Default scale factor
+        self.scale_factor_entry.pack(pady=5, padx=10)
+
+        self.set_scale_button = tk.Button(self.control_frame, text="Set Scale", command=self.set_scale)
+        self.set_scale_button.pack(pady=10, padx=10)
+
         self.help_button = tk.Button(self.control_frame, text="Help", command=self.show_help)
         self.help_button.pack(pady=10, padx=10)
 
@@ -140,6 +149,32 @@ class SpritePlacerApp:
             self.grid_size = int(self.grid_size_entry.get())
         except ValueError:
             print("Please enter a valid grid size.")
+
+    def set_scale(self):
+        try:
+            scale_factor = float(self.scale_factor_entry.get())
+        except ValueError:
+            print("Please enter a valid scale factor.")
+            return
+
+        for sprite_id, sprite_name, x, y, original_size, active in self.placed_sprites:
+            # Remove the current sprite
+            self.canvas.delete(sprite_id)
+
+            # Scale the image
+            original_image = Image.open(self.sprite_paths[sprite_name])
+            new_size = (int(original_size[0] * scale_factor), int(original_size[1] * scale_factor))
+            resized_image = original_image.resize(new_size, Image.Resampling.LANCZOS)
+            photo_image = ImageTk.PhotoImage(resized_image)
+
+            # Update the sprite on the canvas
+            new_sprite_id = self.canvas.create_image(x, y, image=photo_image, anchor=tk.NW, tags="sprite")
+            self.placed_sprites = [(new_sprite_id if sid == sprite_id else sid, sname, sx, sy, original_size, act) for sid, sname, sx, sy, original_size, act in self.placed_sprites]
+
+            # Store the new image reference to avoid garbage collection
+            self.sprite_images[sprite_name] = (photo_image, original_size)
+
+            print(f"Sprite {sprite_name} resized to {new_size}.")
 
     def load_sprites(self):
         sprite_dir = filedialog.askdirectory(title="Select Sprite Directory")
@@ -317,7 +352,8 @@ class SpritePlacerApp:
         if not file_path:
             return
 
-        data = {"placed_sprites": [{"sprite": sprite, "x": x, "y": y, "original_size": original_size, "active": active} for
+        scale_factor = float(self.scale_factor_entry.get())
+        data = {"placed_sprites": [{"sprite": sprite, "x": x, "y": y, "original_size": (int(original_size[0] * scale_factor), int(original_size[1] * scale_factor)), "active": active} for
                                    _, sprite, x, y, original_size, active in self.placed_sprites],
                 "canvas_size": {"width": self.canvas.winfo_width(), "height": self.canvas.winfo_height()}}
         with open(file_path, 'w') as f:
@@ -359,10 +395,10 @@ class SpritePlacerApp:
 
             if sprite_name in self.sprite_images:
                 image, _ = self.sprite_images[sprite_name]
-                sprite_id = self.canvas.create_image(x, y, image=image, anchor=tk.NW, tags="sprite")
+                resized_image = image._PhotoImage__photo.zoom(original_size[0], original_size[1])
+                sprite_id = self.canvas.create_image(x, y, image=resized_image, anchor=tk.NW, tags="sprite")
                 self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, active))
             else:
-                # Если спрайт не найден в текущих изображениях, загружаем его из /img/used_sprites
                 sprite_path = os.path.join('img', 'used_sprites', sprite_name)
                 if os.path.exists(sprite_path):
                     image = Image.open(sprite_path)
