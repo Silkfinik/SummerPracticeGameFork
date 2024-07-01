@@ -69,7 +69,8 @@ class SpritePlacerApp:
         self.delete_button = tk.Button(self.control_frame, text="Delete", command=self.delete_selected_sprite)
         self.delete_button.pack(pady=10, padx=10)
 
-        self.active_checkbox = tk.Checkbutton(self.control_frame, text="status", variable=self.active_state)
+        self.active_checkbox = tk.Checkbutton(self.control_frame, text="status", variable=self.active_state,
+                                              command=self.toggle_status)
         self.active_checkbox.pack(pady=10, padx=10)
 
         self.width_label = tk.Label(self.control_frame, text="Canvas Width:")
@@ -252,6 +253,17 @@ class SpritePlacerApp:
         if selected_items:
             self.select_sprite_by_id(selected_items[0])
 
+    def toggle_status(self):
+        if self.selected_sprite_id is not None:
+            for i, (sprite_id, sprite_name, x, y, original_size, current_size, active) in enumerate(
+                    self.placed_sprites):
+                if sprite_id == self.selected_sprite_id:
+                    self.placed_sprites[i] = (
+                    sprite_id, sprite_name, x, y, original_size, current_size, self.active_state.get())
+                    print(
+                        f"Статус спрайта {sprite_id} обновлен на {'активный' if self.active_state.get() else 'неактивный'}.")
+                    break
+
     def select_sprite_by_id(self, sprite_id):
         # Deselect previous sprite
         if self.selected_sprite_outline is not None:
@@ -265,11 +277,18 @@ class SpritePlacerApp:
         self.selected_sprite_outline = self.canvas.create_rectangle(sprite_bbox, outline="red", width=2)
         print(f"Sprite {self.selected_sprite_id} selected.")
 
+        # Update the active_state checkbox
+        for sprite_id, sprite_name, x, y, original_size, current_size, active in self.placed_sprites:
+            if sprite_id == self.selected_sprite_id:
+                self.active_state.set(active)
+                break
+
     def deselect_sprite(self, event=None):
         if self.selected_sprite_outline is not None:
             self.canvas.delete(self.selected_sprite_outline)
             self.selected_sprite_outline = None
             self.selected_sprite_id = None
+            self.active_state.set(True)  # Reset to default state
             print("Sprite deselected.")
 
     def move_sprite(self, event):
