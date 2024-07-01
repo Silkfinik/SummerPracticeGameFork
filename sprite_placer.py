@@ -130,6 +130,8 @@ class SpritePlacerApp:
             height = int(self.height_entry.get())
             self.canvas.config(width=width, height=height)
             self.canvas_frame.config(width=width, height=height)
+            self.root.geometry(f"{width + self.control_frame.winfo_width() + self.info_frame.winfo_width()}x{height + self.root.winfo_height() - self.canvas.winfo_height()}")
+            self.root.resizable(False, False)
         except ValueError:
             print("Please enter valid width and height.")
 
