@@ -242,97 +242,17 @@
         },
         {
             "sprite": "2_small_.png",
-            "x": 336,
-            "y": 512,
+            "x": 286,
+            "y": 312,
             "original_size": [
                 16,
                 32
             ],
             "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 100,
-            "y": 500,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 150,
-            "y": 500,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 50,
-            "y": 500,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 0,
-            "y": 550,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 50,
-            "y": 550,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 100,
-            "y": 500,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 200,
-            "y": 500,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
-        },
-        {
-            "sprite": "giant.png",
-            "x": 250,
-            "y": 500,
-            "original_size": [
-                48,
-                48
-            ],
-            "active": true
         }
     ],
     "canvas_size": {
-        "width": 394,
-        "height": 606
+        "width": 404,
+        "height": 616
     }
 }
