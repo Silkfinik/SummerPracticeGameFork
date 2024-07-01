@@ -1,3 +1,4 @@
+# config.py
 import pygame
 import json
 
@@ -12,10 +13,8 @@ map_width = map_data["canvas_size"]["width"]
 map_height = map_data["canvas_size"]["height"]
 
 # Получение размеров экрана
-
 screen_height = map_height
 screen_width = map_width
-
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 
@@ -39,3 +38,15 @@ font_size = 36
 font = pygame.font.Font(font_path, font_size)
 
 debug_mode = True  # Включаем режим отладки для отображения хитбоксов
+
+# Добавляем переменные для отслеживания состояния звука и музыки
+music_on = True
+sound_on = True
+
+# Настройки клавиш управления
+key_bindings = {
+    "left": pygame.K_LEFT,
+    "right": pygame.K_RIGHT,
+    "jump": pygame.K_SPACE,
+    "sprint": pygame.K_LSHIFT
+}
