@@ -7,10 +7,9 @@ pygame.init()
 pygame.mixer.init()
 
 # Загрузка размеров карты из файла JSON
-with open('map.json', 'r') as f:
-    map_data = json.load(f)
-map_width = map_data["canvas_size"]["width"]
-map_height = map_data["canvas_size"]["height"]
+
+map_width = 1500
+map_height = 750
 
 # Получение размеров экрана
 screen_height = map_height
