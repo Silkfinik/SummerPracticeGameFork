@@ -24,10 +24,10 @@ if music_on:
 with open("map.json", 'r') as f:
     data = json.load(f)
 player_cords = data['player_spawn']
-print(player_cords)
 
 
-player = Player(animations, sounds, 50, screen_height - 100 - bar_height, screen_width, screen_height, 2)
+
+player = Player(animations, sounds, player_cords["x"], player_cords["y"], screen_width, screen_height, 2)
 
 all_sprites = pygame.sprite.Group()
 
