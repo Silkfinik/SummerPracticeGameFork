@@ -23,32 +23,66 @@ if not start_screen():
 animations = load_images('sprites', scale_factor)
 sounds = load_sounds('sounds')
 
+level = 1
+
+
+def get_level():
+    global level
+    return level
+
+
+levels = {
+    1: "map_danik",
+    2: "map_vika",
+    3: "map_kirill",
+    4: "map_stas"
+}
+
+
 if music_on:
     play_music(os.path.join('sounds', 'background_music.mp3'))
 
 # get player start posision
-with open("map.json", 'r') as f:
-    data = json.load(f)
-player_cords = data['player_spawn']
-player_death_line = data["death_line"]["y_d"]
+
+
+player_cords = 0
+player_death_line = 0
+
 
 def reset_player(player):
-    player.rect.topleft = (player_cords["x"], player_cords["y"])
-    player.velocity = pygame.math.Vector2(0, 0)
+    global level
+    level = 1
+    create_map()
 
-player = Player(animations, sounds, player_cords["x"], player_cords["y"], screen_width, screen_height, 2)
 
 all_sprites = pygame.sprite.Group()
-
 platforms = pygame.sprite.Group()
 platforms_passive_group = pygame.sprite.Group()
+player = Player(animations, sounds, 0, 0, screen_width, screen_height, 2)
 
-all_sprites.add(platforms)
 
-load_sprite_positions('map.json', platforms, screen_height, platforms_passive_group)
-all_sprites.add(platforms)
-all_sprites.add(platforms_passive_group)
-all_sprites.add(player)
+def create_map():
+    global player
+    global player_cords
+    global player_death_line
+    all_sprites.empty()
+    platforms.empty()
+    platforms_passive_group.empty()
+    with open(f"maps/{levels[level]}.json", 'r') as f:
+        data = json.load(f)
+    player_cords = data['player_spawn']
+    player_death_line = data["death_line"]["y_d"]
+    f.close()
+
+    load_sprite_positions(f'{levels[level]}.json', platforms, screen_height, platforms_passive_group, levels[level])
+    player = Player(animations, sounds, player_cords["x"], player_cords["y"], screen_width, screen_height, 2)
+
+    all_sprites.add(platforms)
+    all_sprites.add(platforms_passive_group)
+    all_sprites.add(player)
+
+
+create_map()
 
 running = True
 paused = False
@@ -62,8 +96,10 @@ while running:
     dt = clock.tick(60) / 1000
 
     for event in pygame.event.get():
+
         if event.type == pygame.QUIT:
             running = False
+
         elif event.type == pygame.KEYDOWN:
             if menu_active:
                 if event.key == pygame.K_ESCAPE:
@@ -78,6 +114,11 @@ while running:
                     key_changing = change_key(event, key_changing, key_bindings)
             elif event.key == pygame.K_ESCAPE:
                 menu_active = not menu_active
+            elif event.key == pygame.K_g:  # Проверка нажатия клавиши 'g'
+                if level != 4:
+                    level += 1
+                    create_map()
+                    print("i am here")
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if menu_active:
@@ -97,7 +138,9 @@ while running:
                     key_changing = result
 
     if player.rect.bottom >= player_death_line:
-        reset_player(player)
+        level = 1
+        create_map()
+
 
     if menu_active:
         screen.fill((0, 0, 0))

@@ -2,6 +2,7 @@
 import pygame
 from sounds import play_sound
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, animations, sounds, x, y, screen_width, screen_height, scale_factor):
         super().__init__()

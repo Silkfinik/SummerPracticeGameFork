@@ -542,7 +542,7 @@ class SpritePlacerApp:
         print(f"Saved to {file_path}")
 
     def copy_used_sprites(self):
-        used_sprites_dir = os.path.join(os.getcwd(), 'img', 'used_sprites')
+        used_sprites_dir = os.path.join(os.getcwd(), 'img', 'used_sprites', 'map_kirill')
         os.makedirs(used_sprites_dir, exist_ok=True)
         used_sprite_names = set(
             sprite[1] for sprite in self.placed_sprites)  # Собираем все уникальные используемые спрайты
@@ -561,6 +561,7 @@ class SpritePlacerApp:
 
     def load_map(self):
         file_path = filedialog.askopenfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
+        print(file_path)
         if not file_path:
             return
 
@@ -588,7 +589,7 @@ class SpritePlacerApp:
                 self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, current_size)
                 self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, current_size, active))
             else:
-                sprite_path = os.path.join('img', 'used_sprites', sprite_name)
+                sprite_path = os.path.join('img', 'map_kirill', 'used_sprites', sprite_name)
                 self.sprite_paths[sprite_name] = sprite_path
                 if os.path.exists(sprite_path):
                     original_image = Image.open(sprite_path)

@@ -2,6 +2,14 @@ import os
 import json
 import pygame
 
+
+levels = {
+    1: "map_danik",
+    2: "map_vika",
+    3: "map_kirill",
+    4: "map_stas"
+}
+
 class ScaledPlatform(pygame.sprite.Sprite):
     def __init__(self, image_path, x, y, original_size, canvas_size, screen_height):
         super().__init__()
@@ -17,8 +25,9 @@ class ScaledPlatform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = (int(x * scale_factor), int(y * scale_factor))
 
-def load_sprite_positions(json_file, platforms_group, screen_height, platforms_passive_group):
-    with open(json_file, 'r') as f:
+
+def load_sprite_positions(json_file, platforms_group, screen_height, platforms_passive_group, dir1):
+    with open('maps/' + json_file, 'r') as f:
         data = json.load(f)
     placed_sprites = data["placed_sprites"]
     canvas_size = data["canvas_size"]
@@ -28,7 +37,7 @@ def load_sprite_positions(json_file, platforms_group, screen_height, platforms_p
         x, y = item['x'], item['y']
         original_size = item['current_size']
         active = item.get('active', True)  # Default to True if 'active' key is not present
-        sprite_image_path = os.path.join('img', 'used_sprites', sprite_name)  # Новый путь к используемым спрайтам
+        sprite_image_path = os.path.join('img', f'{dir1}', 'used_sprites', sprite_name)  # Новый путь к используемым спрайтам
 
         # Создание объекта ScaledPlatform
         platform = ScaledPlatform(sprite_image_path, x, y, original_size, (canvas_size["width"], canvas_size["height"]),
