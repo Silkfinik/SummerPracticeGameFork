@@ -252,7 +252,16 @@ class SpritePlacerApp:
             dx, dy = movement[event.keysym]
             self.canvas.move(self.selected_sprite_id, dx, dy)
             self.canvas.move(self.selected_sprite_outline, dx, dy)
-            print(f"Sprite {self.selected_sprite_id} moved {event.keysym}.")
+
+            # Update the position in the placed_sprites list
+            for i, (sprite_id, sprite_name, x, y, original_size, active) in enumerate(self.placed_sprites):
+                if sprite_id == self.selected_sprite_id:
+                    new_x = x + dx
+                    new_y = y + dy
+                    self.placed_sprites[i] = (sprite_id, sprite_name, new_x, new_y, original_size, active)
+                    break
+
+            print(f"Sprite {self.selected_sprite_id} moved {event.keysym} to ({new_x}, {new_y}).")
 
     def highlight_sprites(self):
         for outline in self.status_outlines:
