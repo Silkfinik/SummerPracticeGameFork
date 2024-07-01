@@ -31,6 +31,9 @@ with open("map.json", 'r') as f:
     data = json.load(f)
 player_cords = data['player_spawn']
 
+def reset_player(player):
+    player.rect.topleft = (player_cords["x"], player_cords["y"])
+    player.velocity = pygame.math.Vector2(0, 0)
 
 player = Player(animations, sounds, player_cords["x"], player_cords["y"], screen_width, screen_height, 2)
 
