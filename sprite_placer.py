@@ -25,6 +25,9 @@ class SpritePlacerApp:
         self.selected_sprite = None  # Для хранения текущего выбранного спрайта
         self.scale_factor = 1.0  # Начальный масштаб
 
+        self.grid_lines = []  # To store grid line IDs
+        self.grid_opacity = 100  # Default opacity
+
         self.setup_ui()
 
         self.canvas.bind("<Button-1>", self.place_sprite)
@@ -56,6 +59,7 @@ class SpritePlacerApp:
 
         self.canvas = tk.Canvas(self.canvas_frame, bg="white")
         self.canvas.pack(fill=tk.BOTH, expand=True)
+        self.canvas.bind("<Configure>", lambda e: self.draw_grid())  # Redraw grid on resize
 
         self.load_sprites_button = tk.Button(self.control_frame, text="Load Sprites", command=self.load_sprites)
         self.load_sprites_button.pack(pady=10, padx=10)
@@ -95,6 +99,13 @@ class SpritePlacerApp:
 
         self.set_grid_size_button = tk.Button(self.control_frame, text="Set Grid Size", command=self.set_grid_size)
         self.set_grid_size_button.pack(pady=10, padx=10)
+
+        self.grid_opacity_label = tk.Label(self.control_frame, text="Grid Opacity:")
+        self.grid_opacity_label.pack(pady=5, padx=10)
+        self.grid_opacity_scale = tk.Scale(self.control_frame, from_=0, to=100, orient=tk.HORIZONTAL,
+                                           command=self.update_grid_opacity)
+        self.grid_opacity_scale.set(self.grid_opacity)
+        self.grid_opacity_scale.pack(pady=5, padx=10)
 
         self.scale_factor_label = tk.Label(self.control_frame, text="Scale Factor:")
         self.scale_factor_label.pack(pady=5, padx=10)
@@ -155,6 +166,28 @@ class SpritePlacerApp:
             self.grid_size = int(self.grid_size_entry.get())
         except ValueError:
             print("Please enter a valid grid size.")
+
+    def update_grid_opacity(self, value):
+        alpha = int(value) * 255 // 100
+        color = f'#{alpha:02x}{alpha:02x}{alpha:02x}'
+        for line_id in self.grid_lines:
+            self.canvas.itemconfig(line_id, fill=color)
+
+    def draw_grid(self):
+        for line_id in self.grid_lines:
+            self.canvas.delete(line_id)
+        self.grid_lines.clear()
+
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+
+        for i in range(0, width, self.grid_size):
+            line_id = self.canvas.create_line(i, 0, i, height, fill="#d3d3d3")
+            self.grid_lines.append(line_id)
+
+        for i in range(0, height, self.grid_size):
+            line_id = self.canvas.create_line(0, i, width, i, fill="#d3d3d3")
+            self.grid_lines.append(line_id)
 
     def set_scale(self):
         try:
