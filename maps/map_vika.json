@@ -45,7 +45,7 @@
         {
             "sprite": "1_normal_cover.png",
             "x": 55,
-            "y": 605,
+            "y": 607,
             "original_size": [
                 32,
                 16
@@ -787,21 +787,7 @@
         {
             "sprite": "fence.png",
             "x": 384,
-            "y": 456,
-            "original_size": [
-                18,
-                15
-            ],
-            "current_size": [
-                54,
-                45
-            ],
-            "active": false
-        },
-        {
-            "sprite": "fence.png",
-            "x": 241,
-            "y": 489,
+            "y": 468,
             "original_size": [
                 18,
                 15
@@ -940,8 +926,8 @@
         },
         {
             "sprite": "orange_tree.png",
-            "x": 245,
-            "y": 387,
+            "x": 249,
+            "y": 383,
             "original_size": [
                 14,
                 47
@@ -982,8 +968,8 @@
         },
         {
             "sprite": "small_ocen_mushroom.png",
-            "x": 9,
-            "y": 540,
+            "x": 61,
+            "y": 564,
             "original_size": [
                 14,
                 15
@@ -1682,8 +1668,8 @@
         },
         {
             "sprite": "normal_orange_bush.png",
-            "x": 108,
-            "y": 573,
+            "x": 106,
+            "y": 575,
             "original_size": [
                 14,
                 12
@@ -1836,8 +1822,8 @@
         },
         {
             "sprite": "fence.png",
-            "x": 336,
-            "y": 456,
+            "x": 334,
+            "y": 468,
             "original_size": [
                 18,
                 15
@@ -1850,8 +1836,8 @@
         },
         {
             "sprite": "large_orange_bush.png",
-            "x": 342,
-            "y": 462,
+            "x": 362,
+            "y": 474,
             "original_size": [
                 14,
                 14
@@ -2001,90 +1987,6 @@
                 27
             ],
             "active": true
-        },
-        {
-            "sprite": "portal_open.png",
-            "x": 1370,
-            "y": 560,
-            "original_size": [
-                42,
-                33
-            ],
-            "current_size": [
-                126,
-                99
-            ],
-            "active": false
-        },
-        {
-            "sprite": "coin__01.png",
-            "x": 0,
-            "y": 220,
-            "original_size": [
-                16,
-                16
-            ],
-            "current_size": [
-                48,
-                48
-            ],
-            "active": false
-        },
-        {
-            "sprite": "coin__01.png",
-            "x": 1580,
-            "y": 270,
-            "original_size": [
-                16,
-                16
-            ],
-            "current_size": [
-                48,
-                48
-            ],
-            "active": false
-        },
-        {
-            "sprite": "coin__01.png",
-            "x": 1580,
-            "y": 230,
-            "original_size": [
-                16,
-                16
-            ],
-            "current_size": [
-                48,
-                48
-            ],
-            "active": false
-        },
-        {
-            "sprite": "coin__01.png",
-            "x": 670,
-            "y": 460,
-            "original_size": [
-                16,
-                16
-            ],
-            "current_size": [
-                48,
-                48
-            ],
-            "active": false
-        },
-        {
-            "sprite": "coin__01.png",
-            "x": 1320,
-            "y": 380,
-            "original_size": [
-                16,
-                16
-            ],
-            "current_size": [
-                48,
-                48
-            ],
-            "active": false
         },
         {
             "sprite": "orange_wave_foreground_22.png",
@@ -3585,9 +3487,97 @@
             "active": true
         }
     ],
+    "coins": [
+        {
+            "sprite": "coin__01.png",
+            "x": 0,
+            "y": 220,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": false
+        },
+        {
+            "sprite": "coin__01.png",
+            "x": 1580,
+            "y": 270,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": false
+        },
+        {
+            "sprite": "coin__01.png",
+            "x": 1580,
+            "y": 230,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": false
+        },
+        {
+            "sprite": "coin__01.png",
+            "x": 670,
+            "y": 460,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": false
+        },
+        {
+            "sprite": "coin__01.png",
+            "x": 1320,
+            "y": 380,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": false
+        }
+    ],
+    "portals": [
+        {
+            "sprite": "portal_open.png",
+            "x": 1370,
+            "y": 560,
+            "original_size": [
+                42,
+                33
+            ],
+            "current_size": [
+                126,
+                99
+            ],
+            "active": false
+        }
+    ],
     "canvas_size": {
-        "width": 1569,
-        "height": 778
+        "width": 1571,
+        "height": 780
     },
     "death_line": {
         "y_d": 700

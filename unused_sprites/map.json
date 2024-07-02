@@ -1,0 +1,14 @@
+{
+    "placed_sprites": [],
+    "canvas_size": {
+        "width": 1502,
+        "height": 750
+    },
+    "death_line": {
+        "y_d": 0
+    },
+    "player_spawn": {
+        "x": 0,
+        "y": 0
+    }
+}

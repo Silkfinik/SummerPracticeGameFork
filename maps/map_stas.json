@@ -2675,20 +2675,6 @@
             "active": false
         },
         {
-            "sprite": "portal_open.png",
-            "x": 290,
-            "y": 28,
-            "original_size": [
-                42,
-                33
-            ],
-            "current_size": [
-                126,
-                99
-            ],
-            "active": false
-        },
-        {
             "sprite": "small_green_bush.png",
             "x": 235,
             "y": 12,
@@ -2857,9 +2843,83 @@
             "active": true
         }
     ],
+    "coins": [
+        {
+            "sprite": "coin__01.png",
+            "x": 456,
+            "y": 592,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": false
+        },
+        {
+            "sprite": "coin__01.png",
+            "x": 96,
+            "y": 328,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": false
+        },
+        {
+            "sprite": "coin__01.png",
+            "x": 1104,
+            "y": 520,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": false
+        },
+        {
+            "sprite": "coin__01.png",
+            "x": 624,
+            "y": 320,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": false
+        }
+    ],
+    "portals": [
+        {
+            "sprite": "portal_open.png",
+            "x": 288,
+            "y": 30,
+            "original_size": [
+                42,
+                33
+            ],
+            "current_size": [
+                126,
+                99
+            ],
+            "active": false
+        }
+    ],
     "canvas_size": {
-        "width": 1522,
-        "height": 772
+        "width": 1524,
+        "height": 774
     },
     "death_line": {
         "y_d": 700

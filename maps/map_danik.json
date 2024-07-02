@@ -2563,20 +2563,6 @@
             "active": true
         },
         {
-            "sprite": "portal_open.png",
-            "x": 1368,
-            "y": 528,
-            "original_size": [
-                42,
-                33
-            ],
-            "current_size": [
-                126,
-                99
-            ],
-            "active": false
-        },
-        {
             "sprite": "1_normal_grass.png",
             "x": 1440,
             "y": 624,
@@ -2661,9 +2647,69 @@
             "active": true
         }
     ],
+    "coins": [
+        {
+            "sprite": "coin__01.png",
+            "x": 1408,
+            "y": 280,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "coin__01.png",
+            "x": 0,
+            "y": 304,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": true
+        },
+        {
+            "sprite": "coin__01.png",
+            "x": 1056,
+            "y": 384,
+            "original_size": [
+                16,
+                16
+            ],
+            "current_size": [
+                48,
+                48
+            ],
+            "active": true
+        }
+    ],
+    "portals": [
+        {
+            "sprite": "portal_open.png",
+            "x": 1376,
+            "y": 528,
+            "original_size": [
+                42,
+                33
+            ],
+            "current_size": [
+                126,
+                99
+            ],
+            "active": true
+        }
+    ],
     "canvas_size": {
-        "width": 1514,
-        "height": 762
+        "width": 1518,
+        "height": 766
     },
     "death_line": {
         "y_d": 700
