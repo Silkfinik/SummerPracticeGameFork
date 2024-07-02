@@ -54,7 +54,7 @@ class SpritePlacerApp:
         self.root.bind("<KeyPress-h>", self.show_highlight_sprites)  # Bind key press 'h'
         self.root.bind("<KeyRelease-h>", self.hide_highlight_sprites)  # Bind key release 'h'
         self.root.bind("<KeyPress>", self.key_press)  # Bind arrow keys to move sprite
-        self.root.bind("<Delete>", self.delete_selected_sprite)  # Bind Delete key to delete sprite
+        self.root.bind("<y  >", self.delete_selected_sprite)  # Bind Delete key to delete sprite
 
         self.root.bind("<Control-s>", self.save_sprites)  # Bind Ctrl+S to save sprites
         self.root.bind("<Control-o>", lambda event: self.load_sprites())  # Bind Ctrl+O to load sprites
@@ -533,17 +533,37 @@ class SpritePlacerApp:
         if not file_path:
             return
 
+        placed_sprites_data = []
+        coins_data = []
+        portals_data = []
+
+        for _, sprite, x, y, original_size, current_size, active in self.placed_sprites:
+            sprite_data = {
+                "sprite": sprite,
+                "x": x,
+                "y": y,
+                "original_size": original_size,
+                "current_size": current_size,
+                "active": active
+            }
+
+            if sprite == "coin__01.png":
+                coins_data.append(sprite_data)
+            elif sprite == "portal_open.png":
+                portals_data.append(sprite_data)
+            else:
+                placed_sprites_data.append(sprite_data)
+
         data = {
-            "placed_sprites": [
-                {"sprite": sprite, "x": x, "y": y, "original_size": original_size, "current_size": current_size,
-                 "active": active}
-                for _, sprite, x, y, original_size, current_size, active in self.placed_sprites
-            ],
+            "placed_sprites": placed_sprites_data,
+            "coins": coins_data,
+            "portals": portals_data,
             "canvas_size": {"width": self.canvas.winfo_width(), "height": self.canvas.winfo_height()},
             "death_line": {"y_d": self.death_height if hasattr(self, 'death_height') else 0},
             "player_spawn": {"x": self.player_spawn_x if hasattr(self, 'player_spawn_x') else 0,
                              "y": self.player_spawn_y if hasattr(self, 'player_spawn_y') else 0}
         }
+
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=4)
 
