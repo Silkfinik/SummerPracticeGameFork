@@ -10,7 +10,7 @@ from sprites import load_images
 from sounds import load_sounds, play_sound, stop_sound, play_music, stop_music
 from platform_loader import load_sprite_positions
 from hud import draw_hud
-from menu import draw_menu, handle_menu_click, draw_settings_menu, handle_settings_click, change_key
+from menu import draw_menu, handle_menu_click, draw_settings_menu, handle_settings_click, change_key, draw_end_screen
 from background import draw_background, background_image
 from start_screen import start_screen
 
@@ -130,13 +130,13 @@ def create_map():
         all_sprites.add(portal)
 
 
-
 create_map()
 
 running = True
 paused = False
 menu_active = False
 settings_active = False
+end_game_active = False  # Новый флаг для экрана конца игры
 was_sprinting = False
 was_walking = False
 key_changing = None  # Для отслеживания изменения клавиши
@@ -161,11 +161,14 @@ while running:
                     key_changing = change_key(event, key_changing, key_bindings)
             elif event.key == pygame.K_ESCAPE:
                 menu_active = not menu_active
+            elif event.key == pygame.K_q and end_game_active:
+                running = False  # Закрытие игры при нажатии "Q" на экране конца игры
             elif event.key == pygame.K_g:  # Проверка нажатия клавиши 'g'
-                if level != 4:
-                    level += 1
+                level += 1
+                if level != 5:
                     create_map()
-                    print("i am here")
+                else:
+                    end_game_active = True  # Активируем экран конца игры
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if menu_active:
                 result = handle_menu_click(event.pos, player)
@@ -186,6 +189,10 @@ while running:
     if player.rect.bottom >= player_death_line:
         level = 1
         create_map()
+
+    if end_game_active:
+        draw_end_screen(screen, coin_counter)
+        continue
 
     if menu_active:
         screen.fill((0, 0, 0))
@@ -264,9 +271,10 @@ while running:
     # Проверяем столкновение игрока с порталом
     if pygame.sprite.spritecollideany(player, portals):
         level += 1
-        if level > len(levels):  # Если уровней больше нет, сбрасываем на первый уровень
-            level = 1
-        create_map()
+        if level != 5:
+            create_map()
+        else:
+            end_game_active = True  # Активируем экран конца игры
 
     draw_background(screen, background_image, screen_width)
     all_sprites.draw(screen)
