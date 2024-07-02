@@ -2,7 +2,8 @@ import pygame
 import sys
 import os
 import json
-from config import screen, screen_width, screen_height, debug_mode, score, bar_color, bar_position, bar_height, scale_factor, music_on, sound_on, key_bindings
+from config import (screen, screen_width, screen_height, debug_mode, score, bar_color, bar_position, bar_height,
+                    scale_factor, music_on, sound_on, key_bindings)
 from player import Player
 from coin import Coin
 from portal import Portal
@@ -10,7 +11,8 @@ from sprites import load_images
 from sounds import load_sounds, play_sound, stop_sound, play_music, stop_music
 from platform_loader import load_sprite_positions
 from hud import draw_hud
-from menu import draw_menu, handle_menu_click, draw_settings_menu, handle_settings_click, change_key, draw_end_screen
+from menu import (draw_menu, handle_menu_click, draw_settings_menu, handle_settings_click, change_key, draw_end_screen,
+                  Get_high_graphics_on)
 from background import draw_background, background_image
 from start_screen import start_screen
 
@@ -38,6 +40,7 @@ levels = {
     3: "map_kirill",
     4: "map_stas"
 }
+
 
 if music_on:
     play_music(os.path.join('sounds', 'background_music.mp3'))
@@ -71,13 +74,13 @@ def load_all_sprites(directory, scale_factor=3):
     return sprites_coin
 
 
-
 all_sprites = pygame.sprite.Group()
 platforms = pygame.sprite.Group()
 portals = pygame.sprite.Group()  # Группа для порталов
 platforms_passive_group = pygame.sprite.Group()
 coins = pygame.sprite.Group()  # Группа для монеток
 player = Player(animations, sounds, 0, 0, screen_width, screen_height, 2)
+
 
 def create_map():
     global player
@@ -129,6 +132,12 @@ def create_map():
         portals.add(portal)
         all_sprites.add(portal)
 
+    all_sprites.remove(*platforms_passive_group)
+    if Get_high_graphics_on():
+        all_sprites.remove(player)
+        all_sprites.add(*platforms_passive_group)
+        all_sprites.add(player)
+
 
 create_map()
 
@@ -178,6 +187,15 @@ while running:
                 elif result == "restart":
                     reset_player(player)  # Перезапуск уровня
                     menu_active = False  # Закрытие меню
+                elif result == "graphics":
+                    all_sprites.remove(*platforms_passive_group)
+                    if Get_high_graphics_on():
+                        all_sprites.remove(player)
+                        all_sprites.add(*platforms_passive_group)
+                        all_sprites.add(player)
+
+
+
             elif settings_active:
                 result = handle_settings_click(event.pos, key_changing)
                 if result == "menu":
