@@ -7,6 +7,11 @@ import platform
 from PIL import Image, ImageTk
 
 
+def extract_text(filepath):
+    filename = os.path.basename(filepath)
+    return filename.replace('.json', '')
+
+
 class SpritePlacerApp:
     def __init__(self, root):
         self.root = root
@@ -35,6 +40,8 @@ class SpritePlacerApp:
         self.death_height = 0  # Default death line height
         self.player_spawn_x = 0  # Default player spawn X-coordinate
         self.player_spawn_y = 0  # Default player spawn Y-coordinate
+
+        self.path_to_img = ""
 
         self.setup_ui()
 
@@ -205,6 +212,7 @@ class SpritePlacerApp:
         self.set_death_height_button = tk.Button(death_height_window, text="Set Death Height",
                                                  command=self.set_death_height)
         self.set_death_height_button.pack(pady=10, padx=10)
+
 
     def open_player_spawn_settings(self):
         player_spawn_window = tk.Toplevel(self.root)
@@ -542,7 +550,7 @@ class SpritePlacerApp:
         print(f"Saved to {file_path}")
 
     def copy_used_sprites(self):
-        used_sprites_dir = os.path.join(os.getcwd(), 'img', 'used_sprites', 'map_kirill')
+        used_sprites_dir = os.path.join(os.getcwd(), 'img', f'{self.path_to_img}', 'used_sprites',)
         os.makedirs(used_sprites_dir, exist_ok=True)
         used_sprite_names = set(
             sprite[1] for sprite in self.placed_sprites)  # Собираем все уникальные используемые спрайты
@@ -561,12 +569,13 @@ class SpritePlacerApp:
 
     def load_map(self):
         file_path = filedialog.askopenfilename(defaultextension=".json", filetypes=[("JSON files", "*.json")])
-        print(file_path)
+        self.path_to_img = extract_text(file_path)
         if not file_path:
             return
 
         with open(file_path, 'r') as f:
             data = json.load(f)
+
 
         # Очистка текущего холста и списка спрайтов
         self.canvas.delete("all")
@@ -596,7 +605,7 @@ class SpritePlacerApp:
                 self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, current_size)
                 self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, current_size, active))
             else:
-                sprite_path = os.path.join('img', 'map_kirill', 'used_sprites', sprite_name)
+                sprite_path = os.path.join('img', f'{self.path_to_img}', 'used_sprites', sprite_name)
                 self.sprite_paths[sprite_name] = sprite_path
                 if os.path.exists(sprite_path):
                     original_image = Image.open(sprite_path)
