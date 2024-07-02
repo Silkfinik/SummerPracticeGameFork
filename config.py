@@ -42,6 +42,7 @@ debug_mode = False  # Включаем режим отладки для отоб
 music_on = True
 sound_on = True
 
+
 # Настройки клавиш управления
 key_bindings = {
     "left": pygame.K_LEFT,

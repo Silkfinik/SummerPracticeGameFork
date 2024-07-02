@@ -564,6 +564,7 @@ class SpritePlacerApp:
                              "y": self.player_spawn_y if hasattr(self, 'player_spawn_y') else 0}
         }
 
+
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=4)
 
