@@ -1,3 +1,4 @@
+# coin.py
 import pygame
 
 
@@ -10,6 +11,7 @@ class Coin(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(x, y))
         self.animation_speed = 0.1  # Скорость анимации
         self.last_update = pygame.time.get_ticks()
+        self.id = None  # Добавляем уникальный идентификатор монетки
 
     def update(self):
         now = pygame.time.get_ticks()

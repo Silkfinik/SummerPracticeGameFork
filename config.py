@@ -42,11 +42,25 @@ debug_mode = False  # Включаем режим отладки для отоб
 music_on = True
 sound_on = True
 
-
 # Настройки клавиш управления
 key_bindings = {
-    "left": pygame.K_LEFT,
-    "right": pygame.K_RIGHT,
+    "left": pygame.K_a,
+    "right": pygame.K_d,
     "jump": pygame.K_SPACE,
     "sprint": pygame.K_LSHIFT
 }
+
+# Добавляем переменные для уровней сложности
+difficulty_levels = {
+    "easy": 3,
+    "medium": 2,
+    "hard": 1
+}
+
+# Переменные для здоровья и временного счетчика монет
+current_difficulty = None
+current_health = None
+temp_coin = 0
+
+# Путь к спрайту сердечка
+heart_sprite_path = 'unused_sprites/items/heart.png'

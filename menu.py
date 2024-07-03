@@ -15,7 +15,7 @@ music_text = font.render("Music", True, (255, 255, 255))
 sound_text = font.render("Sound", True, (255, 255, 255))
 settings_text = font.render("Settings", True, (255, 255, 255))
 restart_text = font.render("Restart", True, (255, 255, 255))  # Добавлено поле "Restart"
-graphics_text = font.render("High Graphics", True, (255, 255, 255))  # Добавлено поле "High Graphics"
+graphics_text = font.render("Graphics: ", True, (255, 255, 255))  # Добавлено поле "High Graphics"
 
 menu_text_pos = (screen_width // 2 - menu_text.get_width() // 2, screen_height // 2 - 5 * (menu_text.get_height() + padding))
 music_text_pos = (screen_width // 2 - (music_text.get_width() + square_size + padding) // 2, menu_text_pos[1] + menu_text.get_height() + padding)
@@ -27,7 +27,7 @@ quit_text_pos = (screen_width // 2 - quit_text.get_width() // 2, graphics_text_p
 
 music_square_pos = (music_text_pos[0] + music_text.get_width() + padding, music_text_pos[1] + offset_down)
 sound_square_pos = (sound_text_pos[0] + sound_text.get_width() + padding, sound_text_pos[1] + offset_down)
-graphics_square_pos = (graphics_text_pos[0] + graphics_text.get_width() + padding, graphics_text_pos[1] + offset_down)
+graphics_square_pos = (graphics_text_pos[0] + graphics_text.get_width(), graphics_text_pos[1] + offset_down)
 
 
 
@@ -37,28 +37,32 @@ def draw_menu(screen):
     music_text = font.render("Music", True, (255, 255, 255))
     sound_text = font.render("Sound", True, (255, 255, 255))
     settings_text = font.render("Settings", True, (255, 255, 255))
-    restart_text = font.render("Restart", True, (255, 255, 255))  # Добавлено поле "Restart"
-    graphics_text = font.render("High Graphics", True, (255, 255, 255))  # Добавлено поле "High Graphics"
+    restart_text = font.render("Restart", True, (255, 255, 255))  
+    graphics_text = font.render("Graphics: ", True, (255, 255, 255))  
     global high_graphics_on
 
     screen.blit(menu_text, menu_text_pos)
     screen.blit(music_text, music_text_pos)
     screen.blit(sound_text, sound_text_pos)
     screen.blit(settings_text, settings_text_pos)
-    screen.blit(restart_text, restart_text_pos)  # Отрисовка "Restart"
-    screen.blit(graphics_text, graphics_text_pos)  # Отрисовка "High Graphics"
+    screen.blit(restart_text, restart_text_pos)  
+    screen.blit(graphics_text, graphics_text_pos)  
     screen.blit(quit_text, quit_text_pos)
 
     pygame.draw.rect(screen, (255, 255, 255), (*music_square_pos, square_size, square_size), 2)
     pygame.draw.rect(screen, (255, 255, 255), (*sound_square_pos, square_size, square_size), 2)
-    pygame.draw.rect(screen, (255, 255, 255), (*graphics_square_pos, square_size, square_size), 2)
 
     if music_on:
         pygame.draw.rect(screen, (0, 255, 0), (*music_square_pos, square_size, square_size))
     if sound_on:
         pygame.draw.rect(screen, (0, 255, 0), (*sound_square_pos, square_size, square_size))
-    if high_graphics_on:
-        pygame.draw.rect(screen, (0, 255, 0), (*graphics_square_pos, square_size, square_size))
+
+    # Вместо отрисовки чекбокса для графики, отрисовываем текст "Potato" или "Ultra"
+    graphics_state_text = font.render("ultra" if high_graphics_on else "potato", True, (0, 255, 0))
+    #graphics_square_pos = (graphics_text_pos[0] + graphics_text.get_width() + padding, graphics_text_pos[1] + offset_down)
+    graphics_state_text_pos = (graphics_square_pos[0], graphics_text_pos[1])
+    screen.blit(graphics_state_text, graphics_state_text_pos)
+
 
 
 def handle_menu_click(pos, player):
@@ -152,4 +156,3 @@ def draw_end_screen(screen, coin_counter):
     screen.blit(quit_text, quit_text_pos)
 
     pygame.display.flip()
-
