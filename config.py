@@ -17,11 +17,6 @@ pygame.display.set_caption("Sound Integration")
 # Масштабирование
 scale_factor = 1
 
-# Черная полоса внизу экрана
-bar_height = 15
-bar_color = (0, 0, 0)
-bar_position = (0, screen_height - bar_height)
-
 # Директории ресурсов
 sprite_dir = 'sprites'
 sound_dir = 'sounds'

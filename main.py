@@ -5,8 +5,7 @@ import json
 import pygame
 
 from config import (
-    screen, screen_width, screen_height, debug_mode, bar_color, 
-    bar_position, bar_height, scale_factor, music_on, sound_on, 
+    screen, screen_width, screen_height, debug_mode, scale_factor, music_on, sound_on, 
     key_bindings, difficulty_levels, heart_sprite_path
 )
 import config  # Для обновления переменных конфигурации
@@ -222,7 +221,7 @@ while running:
                     update_hearts()
                 else:
                     running = False
-            elif event.key == pygame.K_g:
+            elif event.key == pygame.K_g and debug_mode:
                 level += 1
                 if level != 5:
                     create_map()
@@ -366,7 +365,6 @@ while running:
                 pygame.draw.rect(screen, (255, 0, 0), sprite.rect, 1)
 
     draw_hud(screen, heart_image)
-    pygame.draw.rect(screen, bar_color, (bar_position[0], bar_position[1], screen_width, bar_height))
 
     pygame.display.flip()
 
