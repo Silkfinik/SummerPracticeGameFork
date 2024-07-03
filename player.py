@@ -1,10 +1,19 @@
-# player.py
 import pygame
 from sounds import play_sound
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, animations, sounds, x, y, screen_width, screen_height, scale_factor):
+        """
+        Инициализация объекта Player.
+
+        :param animations: Словарь с анимациями игрока.
+        :param sounds: Словарь со звуками игрока.
+        :param x: Координата X начальной позиции игрока.
+        :param y: Координата Y начальной позиции игрока.
+        :param screen_width: Ширина экрана.
+        :param screen_height: Высота экрана.
+        :param scale_factor: Коэффициент масштабирования анимаций.
+        """
         super().__init__()
         self.animations = self.scale_animations(animations, scale_factor)
         self.sounds = sounds
@@ -12,8 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.images = self.animations[self.current_animation]
         self.current_image = 0
         self.image = self.images[self.current_image]
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
+        self.rect = self.image.get_rect(topleft=(x, y))
         self.velocity = pygame.math.Vector2(0, 0)
         self.gravity = 0.5
         self.jump_power = -7
@@ -29,9 +37,16 @@ class Player(pygame.sprite.Sprite):
         self.normal_animation_speed = 0.14
         self.sprint_animation_speed = self.normal_animation_speed / 2
         self.is_walking = False
-        self.sounds_on = True  # Добавлен атрибут для контроля звуков
+        self.sounds_on = True  # Атрибут для контроля звуков
 
     def scale_animations(self, animations, scale_factor):
+        """
+        Масштабирование анимаций.
+
+        :param animations: Словарь с анимациями.
+        :param scale_factor: Коэффициент масштабирования.
+        :return: Масштабированные анимации.
+        """
         scaled_animations = {}
         for key, frames in animations.items():
             scaled_frames = [pygame.transform.scale(frame,
@@ -40,6 +55,12 @@ class Player(pygame.sprite.Sprite):
         return scaled_animations
 
     def update(self, dt, platforms):
+        """
+        Обновление состояния игрока.
+
+        :param dt: Дельта времени.
+        :param platforms: Группа платформ для проверки столкновений.
+        """
         self.animation_timer += dt
         if self.animation_timer >= self.animation_speed:
             self.animation_timer = 0
@@ -72,6 +93,12 @@ class Player(pygame.sprite.Sprite):
             self.on_ground = True
 
     def move_left(self, platforms, sprinting):
+        """
+        Движение игрока влево.
+
+        :param platforms: Группа платформ для проверки столкновений.
+        :param sprinting: Флаг ускоренного бега.
+        """
         speed = self.walk_speed * self.sprint_multiplier if sprinting else self.walk_speed
         self.rect.x -= speed
         self.animation_speed = self.sprint_animation_speed if sprinting else self.normal_animation_speed
@@ -90,6 +117,12 @@ class Player(pygame.sprite.Sprite):
             self.change_animation("jump_left")
 
     def move_right(self, platforms, sprinting):
+        """
+        Движение игрока вправо.
+
+        :param platforms: Группа платформ для проверки столкновений.
+        :param sprinting: Флаг ускоренного бега.
+        """
         speed = self.walk_speed * self.sprint_multiplier if sprinting else self.walk_speed
         self.rect.x += speed
         self.animation_speed = self.sprint_animation_speed if sprinting else self.normal_animation_speed
@@ -108,15 +141,25 @@ class Player(pygame.sprite.Sprite):
             self.change_animation("jump_right")
 
     def jump(self, sprinting=False):
+        """
+        Прыжок игрока.
+
+        :param sprinting: Флаг ускоренного бега.
+        """
         jump_power = self.jump_power * self.jump_multiplier if sprinting else self.jump_power
         if self.on_ground:
             self.velocity.y = jump_power
             self.on_ground = False
             self.change_animation(f"jump_{self.direction}")
-            if self.sounds_on:  # Проверка состояния звуков
+            if self.sounds_on:
                 play_sound(self.sounds, 'jump')
 
     def change_animation(self, animation):
+        """
+        Смена анимации игрока.
+
+        :param animation: Название новой анимации.
+        """
         if self.current_animation != animation:
             self.current_animation = animation
             self.images = self.animations[self.current_animation]
@@ -125,4 +168,7 @@ class Player(pygame.sprite.Sprite):
             self.image = self.images[self.current_image]
 
     def reset_animation_speed(self):
+        """
+        Сброс скорости анимации до нормальной.
+        """
         self.animation_speed = self.normal_animation_speed

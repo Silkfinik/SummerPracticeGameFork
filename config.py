@@ -1,30 +1,28 @@
-# config.py
 import pygame
-import json
 
 # Инициализация Pygame
 pygame.init()
 pygame.mixer.init()
 
-# Загрузка размеров карты из файла JSON
-
+# Конфигурация карты
 map_width = 1500
 map_height = 750
 
-# Получение размеров экрана
-screen_height = map_height
+# Размеры экрана
 screen_width = map_width
-
+screen_height = map_height
 screen = pygame.display.set_mode((screen_width, screen_height))
-
 pygame.display.set_caption("Sound Integration")
+
+# Масштабирование
 scale_factor = 1
 
-# создание черной полосы внизу экрана
+# Черная полоса внизу экрана
 bar_height = 15
 bar_color = (0, 0, 0)
 bar_position = (0, screen_height - bar_height)
 
+# Директории ресурсов
 sprite_dir = 'sprites'
 sound_dir = 'sounds'
 font_path = 'default_font.ttf'
@@ -32,13 +30,14 @@ font_path = 'default_font.ttf'
 # Счетчик очков
 score = 0
 
-# Установка шрифта по умолчанию
+# Настройка шрифта
 font_size = 36
 font = pygame.font.Font(font_path, font_size)
 
-debug_mode = False  # Включаем режим отладки для отображения хитбоксов
+# Режим отладки
+debug_mode = False
 
-# Добавляем переменные для отслеживания состояния звука и музыки
+# Настройки звука и музыки
 music_on = True
 sound_on = True
 
@@ -50,14 +49,14 @@ key_bindings = {
     "sprint": pygame.K_LSHIFT
 }
 
-# Добавляем переменные для уровней сложности
+# Уровни сложности
 difficulty_levels = {
     "easy": 3,
     "medium": 2,
     "hard": 1
 }
 
-# Переменные для здоровья и временного счетчика монет
+# Переменные состояния игры
 current_difficulty = None
 current_health = None
 temp_coin = 0

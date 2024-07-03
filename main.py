@@ -1,22 +1,34 @@
 # main.py
-import pygame
-import sys
 import os
+import sys
 import json
-from config import screen, screen_width, screen_height, debug_mode, bar_color, bar_position, bar_height, scale_factor, music_on, sound_on, key_bindings, difficulty_levels, heart_sprite_path
-import config  # Импортируем конфигурацию для обновления переменных
+import pygame
+
+from config import (
+    screen, screen_width, screen_height, debug_mode, bar_color, 
+    bar_position, bar_height, scale_factor, music_on, sound_on, 
+    key_bindings, difficulty_levels, heart_sprite_path
+)
+import config  # Для обновления переменных конфигурации
 from player import Player
 from coin import Coin
 from portal import Portal
 from heart import Heart  # Импортируем класс Heart
 from sprites import load_images
-from sounds import load_sounds, play_sound, stop_sound, play_music, stop_music
+from sounds import (
+    load_sounds, play_sound, stop_sound, play_music, stop_music
+)
 from platform_loader import load_sprite_positions
 from hud import draw_hud
-from menu import draw_menu, handle_menu_click, draw_settings_menu, handle_settings_click, change_key, draw_end_screen, Get_high_graphics_on
+from menu import (
+    draw_menu, handle_menu_click, draw_settings_menu, 
+    handle_settings_click, change_key, draw_end_screen, 
+    Get_high_graphics_on
+)
 from background import draw_background, background_image
 from start_screen import start_screen, draw_death_screen
 
+pygame.init()
 clock = pygame.time.Clock()
 
 # Загрузка спрайта сердечка
@@ -26,12 +38,14 @@ try:
     print("Heart sprite loaded successfully")
 except pygame.error as e:
     print(f"Failed to load heart sprite: {e}")
+    pygame.quit()
+    sys.exit()
 
 # Показ стартового окна
 selected_difficulty = start_screen()
 if selected_difficulty:
-    config.current_difficulty = selected_difficulty  # Обновляем значение в config
-    config.current_health = difficulty_levels[config.current_difficulty]  # Обновляем значение в config
+    config.current_difficulty = selected_difficulty
+    config.current_health = difficulty_levels[config.current_difficulty]
 else:
     pygame.quit()
     sys.exit()
@@ -40,11 +54,6 @@ animations = load_images('sprites', scale_factor)
 sounds = load_sounds('sounds')
 
 level = 1
-
-def get_level():
-    global level
-    return level
-
 levels = {
     1: "map_kirill",
     2: "map_danik",
@@ -52,24 +61,31 @@ levels = {
     4: "map_stas"
 }
 
-
 if music_on:
     play_music(os.path.join('sounds', 'background_music.mp3'))
 
 player_cords = 0
 player_death_line = 0
-collected_coins = {level: [] for level in levels}  # Словарь для отслеживания собранных монеток
+collected_coins = {level: [] for level in levels}  # Для отслеживания собранных монеток
+
+all_sprites = pygame.sprite.Group()
+platforms = pygame.sprite.Group()
+portals = pygame.sprite.Group()
+platforms_passive_group = pygame.sprite.Group()
+coins = pygame.sprite.Group()
+hearts = pygame.sprite.Group()
+player = Player(animations, sounds, 0, 0, screen_width, screen_height, 2)
 
 
-def reset_player(player):
-    global level
-    global temp_coin
+def reset_player():
+    global level, temp_coin
     level = 1
-    config.current_health = difficulty_levels[config.current_difficulty]  # Обновляем значение в config
+    config.current_health = difficulty_levels[config.current_difficulty]
     temp_coin = 0
-    config.score = 0  # Обнуляем глобальный счетчик
+    config.score = 0
     create_map()
-    update_hearts()  # Обновляем сердечки
+    update_hearts()
+
 
 def load_all_sprites(directory, scale_factor=3):
     sprites_coin = {}
@@ -83,7 +99,9 @@ def load_all_sprites(directory, scale_factor=3):
                 image = pygame.image.load(img_path).convert_alpha()
                 if scale_factor != 1:
                     width, height = image.get_size()
-                    image = pygame.transform.scale(image, (int(width * scale_factor), int(height * scale_factor)))
+                    image = pygame.transform.scale(
+                        image, (int(width * scale_factor), int(height * scale_factor))
+                    )
                 sprites_coin[os.path.splitext(img_file)[0]] = image
             except pygame.error as e:
                 print(f"Could not load image {img_file}: {e}")
@@ -91,64 +109,53 @@ def load_all_sprites(directory, scale_factor=3):
     return sprites_coin
 
 
-all_sprites = pygame.sprite.Group()
-platforms = pygame.sprite.Group()
-portals = pygame.sprite.Group()  # Группа для порталов
-platforms_passive_group = pygame.sprite.Group()
-coins = pygame.sprite.Group()  # Группа для монеток
-hearts = pygame.sprite.Group()  # Группа для сердечек
-player = Player(animations, sounds, 0, 0, screen_width, screen_height, 2)
-
-
 def create_map():
-    global player
-    global player_cords
-    global player_death_line
-    global temp_coin
+    global player, player_cords, player_death_line, temp_coin
     temp_coin = 0
     all_sprites.empty()
     platforms.empty()
     platforms_passive_group.empty()
-    coins.empty()  # Очищаем группу монеток
-    portals.empty()  # Очищаем группу порталов
-    hearts.empty()  # Очищаем группу сердечек
+    coins.empty()
+    portals.empty()
+    hearts.empty()
 
     with open(f"maps/{levels[level]}.json", 'r') as f:
         data = json.load(f)
+    
     player_cords = data['player_spawn']
     player_death_line = data["death_line"]["y_d"]
-    f.close()
 
-    load_sprite_positions(f'{levels[level]}.json', platforms, screen_height, platforms_passive_group, levels[level])
-    player = Player(animations, sounds, player_cords["x"], player_cords["y"], screen_width, screen_height, 2)
+    load_sprite_positions(
+        f'{levels[level]}.json', platforms, screen_height, 
+        platforms_passive_group, levels[level]
+    )
+    player = Player(
+        animations, sounds, player_cords["x"], player_cords["y"], 
+        screen_width, screen_height, 2
+    )
 
     all_sprites.add(platforms)
     all_sprites.add(platforms_passive_group)
     all_sprites.add(player)
 
-    # Загружаем все спрайты из директории
     all_sprites_dict = load_all_sprites('img/coin_sprites', 3)
-
-    # Проверка загруженных спрайтов
     if not all_sprites_dict:
         print("Error: No sprites loaded.")
         return
 
-    # Добавляем монетки на карту
-    coin_animations = [all_sprites_dict[key] for key in sorted(all_sprites_dict.keys()) if 'coin' in key.lower()]  # Преобразуем в список
+    coin_animations = [
+        all_sprites_dict[key] for key in sorted(all_sprites_dict.keys()) if 'coin' in key.lower()
+    ]
 
     for coin_data in data.get("coins", []):
         coin = Coin(coin_data["x"], coin_data["y"], coin_animations)
         coins.add(coin)
         all_sprites.add(coin)
 
-
-    # Загружаем изображение портала
     portal_image = pygame.image.load('img/portal_open.png').convert_alpha()
     width, height = portal_image.get_size()
     portal_image = pygame.transform.scale(portal_image, (int(width * 3), int(height * 3)))
 
-    # Добавляем порталы на карту
     for portal_data in data.get("portals", []):
         portal = Portal(portal_data["x"], portal_data["y"], portal_image)
         portals.add(portal)
@@ -160,27 +167,26 @@ def create_map():
         all_sprites.add(player)
 
 
-
-# Функция для обновления сердечек
 def update_hearts():
-    hearts.empty()  # Очищаем группу сердечек
+    hearts.empty()
     for i in range(config.current_health):
         heart = Heart(heart_image, 10 + i * (heart_image.get_width() + 5), 40)
         hearts.add(heart)
         all_sprites.add(heart)
 
+
 create_map()
-update_hearts()  # Обновляем сердечки при создании карты
+update_hearts()
 
 running = True
 paused = False
 menu_active = False
 settings_active = False
-end_game_active = False  # Новый флаг для экрана конца игры
-death_screen_active = False  # Новый флаг для экрана смерти
+end_game_active = False
+death_screen_active = False
 was_sprinting = False
 was_walking = False
-key_changing = None  # Для отслеживания изменения клавиши
+key_changing = None
 
 while running:
     dt = clock.tick(60) / 1000
@@ -203,26 +209,26 @@ while running:
             elif event.key == pygame.K_ESCAPE:
                 menu_active = not menu_active
             elif event.key == pygame.K_q and end_game_active:
-                running = False  # Закрытие игры при нажатии "Q" на экране конца игры
+                running = False
             elif event.key == pygame.K_q and death_screen_active:
-                running = False  # Закрытие игры при нажатии "Q" на экране смерти
+                running = False
             elif event.key == pygame.K_RETURN and death_screen_active:
                 selected_difficulty = start_screen()
                 if selected_difficulty:
-                    config.current_difficulty = selected_difficulty  # Обновляем значение в config
-                    config.current_health = difficulty_levels[config.current_difficulty]  # Обновляем значение в config
+                    config.current_difficulty = selected_difficulty
+                    config.current_health = difficulty_levels[config.current_difficulty]
                     death_screen_active = False
-                    reset_player(player)
-                    update_hearts()  # Обновляем сердечки
+                    reset_player()
+                    update_hearts()
                 else:
                     running = False
-            elif event.key == pygame.K_g:  # Проверка нажатия клавиши 'g'
+            elif event.key == pygame.K_g:
                 level += 1
                 if level != 5:
                     create_map()
-                    update_hearts()  # Обновляем сердечки
+                    update_hearts()
                 else:
-                    end_game_active = True  # Активируем экран конца игры
+                    end_game_active = True
                     
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if menu_active:
@@ -231,9 +237,9 @@ while running:
                     menu_active = False
                     settings_active = True
                 elif result == "restart":
-                    reset_player(player)  # Перезапуск уровня
-                    update_hearts()  # Обновляем сердечки
-                    menu_active = False  # Закрытие меню
+                    reset_player()
+                    update_hearts()
+                    menu_active = False
                 elif result == "graphics":
                     all_sprites.remove(*platforms_passive_group)
                     if Get_high_graphics_on():
@@ -250,14 +256,13 @@ while running:
                     key_changing = result
 
     if player.rect.bottom >= player_death_line:
-        config.current_health -= 1  # Обновляем значение в config
-        config.score -= temp_coin  # Уменьшаем глобальный счетчик при смерти
-        temp_coin = 0  # Обнуляем временные монеты при смерти
+        config.current_health -= 1
+        config.score -= temp_coin
+        temp_coin = 0
         if config.current_health > 0:
             create_map()
-            update_hearts()  # Обновляем сердечки
+            update_hearts()
         else:
-            # Экран смерти
             death_screen_active = True
 
     if death_screen_active:
@@ -266,7 +271,7 @@ while running:
         continue
 
     if end_game_active:
-        draw_end_screen(screen, config.score)  # Передаем счетчик монет в draw_end_screen
+        draw_end_screen(screen, config.score)
         pygame.display.flip()
         continue
 
@@ -306,25 +311,25 @@ while running:
             player.jump(sprinting)
             stop_sound(sounds, 'walk')
             stop_sound(sounds, 'sprint')
-            if player.sounds_on:  # Проверка состояния звуков
+            if player.sounds_on:
                 play_sound(sounds, 'jump')
 
     if is_moving and player.on_ground:
         if sprinting:
             if not was_sprinting:
                 stop_sound(sounds, 'walk')
-                if player.sounds_on:  # Проверка состояния звуков
+                if player.sounds_on:
                     play_sound(sounds, 'sprint', -1)
                 was_sprinting = True
             was_walking = False
         else:
             if was_sprinting:
                 stop_sound(sounds, 'sprint')
-                if player.sounds_on:  # Проверка состояния звуков
+                if player.sounds_on:
                     play_sound(sounds, 'walk', -1)
                 was_sprinting = False
             elif not was_walking:
-                if player.sounds_on:  # Проверка состояния звуков
+                if player.sounds_on:
                     play_sound(sounds, 'walk', -1)
                 was_walking = True
         player.is_walking = True
@@ -336,25 +341,21 @@ while running:
     player.update(dt, platforms)
     platforms.update()
 
-    # Обновляем монетки и порталы 
     coins.update()
     portals.update()
 
-    # Проверяем столкновение игрока с монетками
     collected_coins = pygame.sprite.spritecollide(player, coins, dokill=True)
-    temp_coin += len(collected_coins)  # Добавляем количество собранных монеток во временный счетчик
+    temp_coin += len(collected_coins)
     config.score += len(collected_coins)
 
-    # Проверяем столкновение игрока с порталом
     if pygame.sprite.spritecollideany(player, portals):
         level += 1
-
-        temp_coin = 0  # Обнуляем временные монеты
+        temp_coin = 0
         if level != 5:
             create_map()
-            update_hearts()  # Обновляем сердечки
+            update_hearts()
         else:
-            end_game_active = True  # Активируем экран конца игры
+            end_game_active = True
 
     draw_background(screen, background_image, screen_width)
     all_sprites.draw(screen)
@@ -364,7 +365,7 @@ while running:
             if hasattr(sprite, 'rect'):
                 pygame.draw.rect(screen, (255, 0, 0), sprite.rect, 1)
 
-    draw_hud(screen, heart_image)  # Передаем heart_image в draw_hud
+    draw_hud(screen, heart_image)
     pygame.draw.rect(screen, bar_color, (bar_position[0], bar_position[1], screen_width, bar_height))
 
     pygame.display.flip()

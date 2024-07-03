@@ -1,9 +1,15 @@
-# start_screen.py
 import sys
 import pygame
 from config import font, screen_width, screen_height, difficulty_levels
 
 def draw_start_screen(screen, button_rect, hover):
+    """
+    Отрисовка стартового экрана с кнопкой начала игры.
+
+    :param screen: Экран Pygame.
+    :param button_rect: Прямоугольник кнопки начала игры.
+    :param hover: Флаг наведения на кнопку.
+    """
     screen.fill((0, 0, 0))  # Заполняем экран черным цветом
     text = font.render("Start Game", True, (255, 255, 255))
 
@@ -14,6 +20,13 @@ def draw_start_screen(screen, button_rect, hover):
     screen.blit(text, text_rect)
 
 def draw_difficulty_screen(screen, buttons, hover_index):
+    """
+    Отрисовка экрана выбора уровня сложности.
+
+    :param screen: Экран Pygame.
+    :param buttons: Словарь с кнопками уровней сложности и их координатами.
+    :param hover_index: Индекс кнопки, на которую наведена мышь.
+    """
     screen.fill((0, 0, 0))  # Заполняем экран черным цветом
     title_text = font.render("Select Difficulty", True, (255, 255, 255))
     screen.blit(title_text, (screen_width // 2 - title_text.get_width() // 2, screen_height // 4))
@@ -26,6 +39,11 @@ def draw_difficulty_screen(screen, buttons, hover_index):
         screen.blit(text, text_rect)
 
 def draw_death_screen(screen):
+    """
+    Отрисовка экрана смерти.
+
+    :param screen: Экран Pygame.
+    """
     screen.fill((0, 0, 0))  # Заполняем экран черным цветом
     death_text = font.render("You died", True, (255, 0, 0))
     restart_text = font.render("Press ENTER to restart", True, (255, 255, 255))
@@ -40,6 +58,11 @@ def draw_death_screen(screen):
     screen.blit(quit_text, quit_text_rect)
 
 def start_screen():
+    """
+    Запуск экрана начала игры и выбор уровня сложности.
+
+    :return: Выбранный уровень сложности.
+    """
     pygame.init()
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Game Start Screen")

@@ -2,6 +2,13 @@ import pygame
 import os
 
 def load_images(sprite_dir, scale_factor=1):
+    """
+    Загрузка изображений спрайтов из указанной директории и их масштабирование.
+
+    :param sprite_dir: Директория с изображениями спрайтов.
+    :param scale_factor: Коэффициент масштабирования изображений.
+    :return: Словарь с анимациями и их кадрами.
+    """
     animations = {}
     supported_extensions = {".png", ".jpg", ".jpeg", ".bmp", ".gif"}
 
@@ -20,7 +27,8 @@ def load_images(sprite_dir, scale_factor=1):
                     max_width = max(max_width, width)
                     max_height = max(max_height, height)
                 except pygame.error:
-                    pass
+                    print(f"Failed to load image: {img_path}")
+                    continue
 
         # Приводим все кадры к одному размеру
         for img_file in sorted(os.listdir(directory)):
@@ -35,7 +43,8 @@ def load_images(sprite_dir, scale_factor=1):
                     new_image = pygame.transform.scale(new_image, (int(max_width * scale_factor), int(max_height * scale_factor)))
                     frames.append(new_image)
                 except pygame.error:
-                    pass
+                    print(f"Failed to process image: {img_path}")
+                    continue
 
         return frames
 
@@ -46,7 +55,6 @@ def load_images(sprite_dir, scale_factor=1):
                 new_prefix = f"{prefix}_{entry}" if prefix else entry
                 load_animation_paths(entry_path, new_prefix)
             else:
-                # Пропускаем файлы в корневом каталоге
                 continue
 
         # Загружаем кадры из текущего каталога, если это каталог с изображениями
@@ -55,7 +63,6 @@ def load_images(sprite_dir, scale_factor=1):
             if frames:
                 animations[prefix] = frames
 
-    # Проверка существования директории
     if not os.path.exists(sprite_dir):
         raise FileNotFoundError(f"Directory '{sprite_dir}' does not exist.")
 
@@ -63,10 +70,11 @@ def load_images(sprite_dir, scale_factor=1):
     return animations
 
 # Пример использования:
-pygame.init()
-sprite_dir = 'sprites'  # Укажите правильный путь к вашему каталогу с анимациями
-scale_factor = 1  # Масштабирование, если необходимо
-animations = load_images(sprite_dir, scale_factor)
+if __name__ == "__main__":
+    pygame.init()
+    sprite_dir = 'sprites'  # Укажите правильный путь к вашему каталогу с анимациями
+    scale_factor = 1  # Масштабирование, если необходимо
+    animations = load_images(sprite_dir, scale_factor)
 
-# Выводим названия загруженных анимаций
-print("Loaded animations:", animations.keys())
+    # Выводим названия загруженных анимаций
+    print("Loaded animations:", animations.keys())
