@@ -26,6 +26,8 @@ class SpritePlacerApp:
         self.sprite_paths = {}
         self.sprite_paths_for_nail = {}
         self.placed_sprites = []
+        self.coins = []
+        self.portals = []
         self.grid_size = 50
 
         self.max_sprite_width = 0
@@ -298,13 +300,18 @@ class SpritePlacerApp:
         height = self.canvas.winfo_height()
 
         for i in range(0, width, self.grid_size):
-            line_id = self.canvas.create_line(i, 0, i, height, fill="#d3d3d3")
+            line_id = self.canvas.create_line(i, 0, i, height, fill="#d3d3d3", tags="grid_line", width=1)
+            self.canvas.tag_lower(line_id)
             self.grid_lines.append(line_id)
 
         for i in range(0, height, self.grid_size):
-            line_id = self.canvas.create_line(0, i, width, i, fill="#d3d3d3")
+            line_id = self.canvas.create_line(0, i, width, i, fill="#d3d3d3", tags="grid_line", width=1)
+            self.canvas.tag_lower(line_id)
             self.grid_lines.append(line_id)
 
+        self.canvas.tag_bind("grid_line", "<Button-1>", lambda e: "break")  # Прекращение обработки событий для линий сетки
+        self.canvas.tag_bind("grid_line", "<Button-2>", lambda e: "break")  # Прекращение обработки событий для линий сетки
+        self.canvas.tag_bind("grid_line", "<Button-3>", lambda e: "break")  # Прекращение обработки событий для линий сетки
         self.draw_canvas_border()
 
     def draw_canvas_border(self):
@@ -527,6 +534,8 @@ class SpritePlacerApp:
         if self.selected_sprite_id is not None:
             self.canvas.delete(self.selected_sprite_id)
             self.placed_sprites = [sprite for sprite in self.placed_sprites if sprite[0] != self.selected_sprite_id]
+            self.coins = [coin for coin in self.coins if coin[0] != self.selected_sprite_id]
+            self.portals = [portal for portal in self.portals if portal[0] != self.selected_sprite_id]
             print(f"Sprite {self.selected_sprite_id} deleted.")
             self.selected_sprite_id = None
 
@@ -556,12 +565,29 @@ class SpritePlacerApp:
                 "active": active
             }
 
-            if sprite == "coin__01.png":
-                coins_data.append(sprite_data)
-            elif sprite == "portal_open.png":
-                portals_data.append(sprite_data)
-            else:
-                placed_sprites_data.append(sprite_data)
+            placed_sprites_data.append(sprite_data)
+
+        for _, sprite, x, y, original_size, current_size, active in self.coins:
+            sprite_data = {
+                "sprite": sprite,
+                "x": x,
+                "y": y,
+                "original_size": original_size,
+                "current_size": current_size,
+                "active": active
+            }
+            coins_data.append(sprite_data)
+
+        for _, sprite, x, y, original_size, current_size, active in self.portals:
+            sprite_data = {
+                "sprite": sprite,
+                "x": x,
+                "y": y,
+                "original_size": original_size,
+                "current_size": current_size,
+                "active": active
+            }
+            portals_data.append(sprite_data)
 
         data = {
             "placed_sprites": placed_sprites_data,
@@ -582,7 +608,7 @@ class SpritePlacerApp:
         """Копирование использованных спрайтов в директорию used_sprites."""
         used_sprites_dir = os.path.join(os.getcwd(), 'img', f'{self.path_to_img}', 'used_sprites')
         os.makedirs(used_sprites_dir, exist_ok=True)
-        used_sprite_names = set(sprite[1] for sprite in self.placed_sprites)
+        used_sprite_names = set(sprite[1] for sprite in self.placed_sprites + self.coins + self.portals)
 
         for sprite_name in used_sprite_names:
             if sprite_name in self.sprite_paths:
@@ -608,6 +634,8 @@ class SpritePlacerApp:
 
         self.canvas.delete("all")
         self.placed_sprites.clear()
+        self.coins.clear()
+        self.portals.clear()
 
         player_cords = data["player_spawn"]
         self.player_spawn_x = player_cords["x"]
@@ -642,12 +670,65 @@ class SpritePlacerApp:
                     self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, current_size)
                     self.placed_sprites.append((sprite_id, sprite_name, x, y, original_size, current_size, active))
 
+        coins = data.get("coins", [])
+        for item in coins:
+            sprite_name = item['sprite']
+            x, y = item['x'], item['y']
+            original_size = item['original_size']
+            current_size = item['current_size']
+            active = item.get('active', True)
+
+            if sprite_name in self.sprite_paths:
+                original_image = Image.open(self.sprite_paths[sprite_name])
+                resized_image = original_image.resize(current_size, Image.Resampling.LANCZOS)
+                photo_image = ImageTk.PhotoImage(resized_image)
+                sprite_id = self.canvas.create_image(x, y, image=photo_image, anchor=tk.NW, tags="sprite")
+                self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, current_size)
+                self.coins.append((sprite_id, sprite_name, x, y, original_size, current_size, active))
+            else:
+                sprite_path = os.path.join('img', f'{self.path_to_img}', 'used_sprites', sprite_name)
+                self.sprite_paths[sprite_name] = sprite_path
+                if os.path.exists(sprite_path):
+                    original_image = Image.open(sprite_path)
+                    resized_image = original_image.resize(current_size, Image.Resampling.LANCZOS)
+                    photo_image = ImageTk.PhotoImage(resized_image)
+                    sprite_id = self.canvas.create_image(x, y, image=photo_image, anchor=tk.NW, tags="sprite")
+                    self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, current_size)
+                    self.coins.append((sprite_id, sprite_name, x, y, original_size, current_size, active))
+
+        portals = data.get("portals", [])
+        for item in portals:
+            sprite_name = item['sprite']
+            x, y = item['x'], item['y']
+            original_size = item['original_size']
+            current_size = item['current_size']
+            active = item.get('active', True)
+
+            if sprite_name in self.sprite_paths:
+                original_image = Image.open(self.sprite_paths[sprite_name])
+                resized_image = original_image.resize(current_size, Image.Resampling.LANCZOS)
+                photo_image = ImageTk.PhotoImage(resized_image)
+                sprite_id = self.canvas.create_image(x, y, image=photo_image, anchor=tk.NW, tags="sprite")
+                self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, current_size)
+                self.portals.append((sprite_id, sprite_name, x, y, original_size, current_size, active))
+            else:
+                sprite_path = os.path.join('img', f'{self.path_to_img}', 'used_sprites', sprite_name)
+                self.sprite_paths[sprite_name] = sprite_path
+                if os.path.exists(sprite_path):
+                    original_image = Image.open(sprite_path)
+                    resized_image = original_image.resize(current_size, Image.Resampling.LANCZOS)
+                    photo_image = ImageTk.PhotoImage(resized_image)
+                    sprite_id = self.canvas.create_image(x, y, image=photo_image, anchor=tk.NW, tags="sprite")
+                    self.sprite_images[sprite_name + "_" + str(sprite_id)] = (photo_image, current_size)
+                    self.portals.append((sprite_id, sprite_name, x, y, original_size, current_size, active))
+
         if "canvas_size" in data:
             canvas_size = data["canvas_size"]
             self.canvas.config(width=canvas_size["width"], height=canvas_size["height"])
             self.draw_canvas_border()
 
         self.copy_used_sprites()
+        self.draw_grid()
 
     def display_sprite_info(self):
         """Отображение информации о спрайте."""
