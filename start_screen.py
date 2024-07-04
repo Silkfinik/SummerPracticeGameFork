@@ -1,5 +1,6 @@
 import sys
 import pygame
+import subprocess  # Для запуска внешнего скрипта
 from config import font, screen_width, screen_height, difficulty_levels
 
 def draw_start_screen(screen, button_rect, hover):
@@ -18,6 +19,11 @@ def draw_start_screen(screen, button_rect, hover):
 
     text_rect = text.get_rect(center=button_rect.center)
     screen.blit(text, text_rect)
+
+    # Добавляем сообщение о сочетании клавиш
+    info_text = font.render("Press Ctrl+B to launch the level editor", True, (255, 255, 255))
+    info_rect = info_text.get_rect(center=(screen_width // 2, screen_height // 2 + 100))
+    screen.blit(info_text, info_rect)
 
 def draw_difficulty_screen(screen, buttons, hover_index):
     """
@@ -102,14 +108,26 @@ def start_screen():
                     for difficulty, rect in difficulty_buttons.items():
                         if rect.collidepoint(mouse_pos):
                             return difficulty
-            elif event.type == pygame.KEYDOWN and selecting_difficulty:
-                if event.key == pygame.K_UP:
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP and selecting_difficulty:
                     hover_index = (hover_index - 1) % len(difficulty_buttons)
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN and selecting_difficulty:
                     hover_index = (hover_index + 1) % len(difficulty_buttons)
-                elif event.key == pygame.K_RETURN:
+                elif event.key == pygame.K_RETURN and selecting_difficulty:
                     selected_difficulty = list(difficulty_buttons.keys())[hover_index]
                     return selected_difficulty
+                elif event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+                    if not selecting_difficulty:
+                        selecting_difficulty = True
+                elif event.key == pygame.K_b and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                    subprocess.Popen(['python3', 'sprite_placer.py'])
+                elif selecting_difficulty:
+                    if event.key == pygame.K_e:
+                        return "easy"
+                    elif event.key == pygame.K_m:
+                        return "medium"
+                    elif event.key == pygame.K_h:
+                        return "hard"
 
         if not selecting_difficulty:
             draw_start_screen(screen, button_rect, hover)
