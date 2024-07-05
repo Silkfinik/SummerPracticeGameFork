@@ -58,7 +58,7 @@ class SpritePlacerApp:
         self.root.bind("<KeyPress-h>", self.show_highlight_sprites)  # Клавиша h для выделения спрайтов
         self.root.bind("<KeyRelease-h>", self.hide_highlight_sprites)  # Отпускание клавиши h
         self.root.bind("<KeyPress>", self.key_press)  # Клавиши стрелок для перемещения спрайта
-        self.root.bind("<y  >", self.delete_selected_sprite)  # Клавиша Delete для удаления спрайта
+        self.root.bind("<Delete>", self.delete_selected_sprite)  # Клавиша Delete для удаления спрайта
 
         self.root.bind("<Control-s>", self.save_sprites)  # Ctrl+S для сохранения спрайтов
         self.root.bind("<Control-o>", lambda event: self.load_sprites())  # Ctrl+O для загрузки спрайтов
@@ -426,11 +426,12 @@ class SpritePlacerApp:
     def toggle_status(self):
         """Переключение статуса спрайта."""
         if self.selected_sprite_id is not None:
-            for i, (sprite_id, sprite_name, x, y, original_size, current_size, active) in enumerate(self.placed_sprites):
-                if sprite_id == self.selected_sprite_id:
-                    self.placed_sprites[i] = (sprite_id, sprite_name, x, y, original_size, current_size, self.active_state.get())
-                    print(f"Статус спрайта {sprite_id} обновлен на {'активный' if self.active_state.get() else 'неактивный'}.")
-                    break
+            for sprite_list in [self.placed_sprites, self.coins, self.portals]:
+                for i, (sprite_id, sprite_name, x, y, original_size, current_size, active) in enumerate(sprite_list):
+                    if sprite_id == self.selected_sprite_id:
+                        sprite_list[i] = (sprite_id, sprite_name, x, y, original_size, current_size, self.active_state.get())
+                        print(f"Статус спрайта {sprite_id} обновлен на {'активный' if self.active_state.get() else 'неактивный'}.")
+                        break
 
     def select_sprite_by_id(self, sprite_id):
         """Выбор спрайта по ID."""
@@ -444,10 +445,11 @@ class SpritePlacerApp:
         self.selected_sprite_outline = self.canvas.create_rectangle(sprite_bbox, outline="red", width=2)
         print(f"Sprite {self.selected_sprite_id} selected.")
 
-        for sprite_id, sprite_name, x, y, original_size, current_size, active in self.placed_sprites:
-            if sprite_id == self.selected_sprite_id:
-                self.active_state.set(active)
-                break
+        for sprite_list in [self.placed_sprites, self.coins, self.portals]:
+            for sprite_id, sprite_name, x, y, original_size, current_size, active in sprite_list:
+                if sprite_id == self.selected_sprite_id:
+                    self.active_state.set(active)
+                    break
 
     def deselect_sprite(self, event=None):
         """Снятие выбора спрайта."""
@@ -476,12 +478,13 @@ class SpritePlacerApp:
             self.canvas.move(self.selected_sprite_id, dx, dy)
             self.canvas.move(self.selected_sprite_outline, dx, dy)
 
-            for i, (sprite_id, sprite_name, x, y, original_size, current_size, active) in enumerate(self.placed_sprites):
-                if sprite_id == self.selected_sprite_id:
-                    new_x = x + dx
-                    new_y = y + dy
-                    self.placed_sprites[i] = (sprite_id, sprite_name, new_x, new_y, original_size, current_size, active)
-                    break
+            for sprite_list in [self.placed_sprites, self.coins, self.portals]:
+                for i, (sprite_id, sprite_name, x, y, original_size, current_size, active) in enumerate(sprite_list):
+                    if sprite_id == self.selected_sprite_id:
+                        new_x = x + dx
+                        new_y = y + dy
+                        sprite_list[i] = (sprite_id, sprite_name, new_x, new_y, original_size, current_size, active)
+                        break
 
             print(f"Sprite {self.selected_sprite_id} moved {event.keysym} to ({new_x}, {new_y}).")
 
@@ -491,11 +494,12 @@ class SpritePlacerApp:
             self.canvas.delete(outline)
         self.status_outlines.clear()
 
-        for sprite_id, sprite_name, x, y, original_size, current_size, active in self.placed_sprites:
-            sprite_bbox = self.canvas.bbox(sprite_id)
-            outline_color = "blue" if active else "green"
-            outline_id = self.canvas.create_rectangle(sprite_bbox, outline=outline_color, width=2)
-            self.status_outlines.append(outline_id)
+        for sprite_list in [self.placed_sprites, self.coins, self.portals]:
+            for sprite_id, sprite_name, x, y, original_size, current_size, active in sprite_list:
+                sprite_bbox = self.canvas.bbox(sprite_id)
+                outline_color = "blue" if active else "green"
+                outline_id = self.canvas.create_rectangle(sprite_bbox, outline=outline_color, width=2)
+                self.status_outlines.append(outline_id)
 
     def show_highlight_sprites(self, event):
         """Отображение выделенных спрайтов."""
@@ -533,9 +537,8 @@ class SpritePlacerApp:
         """Удаление выбранного спрайта."""
         if self.selected_sprite_id is not None:
             self.canvas.delete(self.selected_sprite_id)
-            self.placed_sprites = [sprite for sprite in self.placed_sprites if sprite[0] != self.selected_sprite_id]
-            self.coins = [coin for coin in self.coins if coin[0] != self.selected_sprite_id]
-            self.portals = [portal for portal in self.portals if portal[0] != self.selected_sprite_id]
+            for sprite_list in [self.placed_sprites, self.coins, self.portals]:
+                sprite_list[:] = [sprite for sprite in sprite_list if sprite[0] != self.selected_sprite_id]
             print(f"Sprite {self.selected_sprite_id} deleted.")
             self.selected_sprite_id = None
 
