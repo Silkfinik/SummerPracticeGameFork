@@ -1,6 +1,6 @@
 import sys
 import pygame
-from sprite_placer import run_sprite_placer
+import subprocess  # Для запуска внешнего скрипта
 from config import font, screen_width, screen_height, difficulty_levels
 
 def draw_start_screen(screen, button_rect, hover):
@@ -120,7 +120,7 @@ def start_screen():
                     if not selecting_difficulty:
                         selecting_difficulty = True
                 elif event.key == pygame.K_b and pygame.key.get_mods() & pygame.KMOD_CTRL:
-                    run_sprite_placer()
+                    subprocess.Popen(['python3', 'sprite_placer.py'])
                 elif selecting_difficulty:
                     if event.key == pygame.K_e:
                         return "easy"

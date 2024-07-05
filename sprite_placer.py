@@ -6,10 +6,12 @@ import json
 import platform
 from PIL import Image, ImageTk
 
+
 def extract_text(filepath):
     """Извлечение имени файла без расширения."""
     filename = os.path.basename(filepath)
     return filename.replace('.json', '')
+
 
 class SpritePlacerApp:
     def __init__(self, root):
@@ -738,8 +740,8 @@ class SpritePlacerApp:
             self.sprite_name_label.config(text=sprite_name)
             self.sprite_size_label.config(text=f"Size: {original_size[0]} x {original_size[1]}")
 
-def run_sprite_placer():
-    """Запуск приложения Sprite Placer."""
+
+if __name__ == "__main__":
     root = tk.Tk()
     app = SpritePlacerApp(root)
     root.mainloop()
